@@ -1,0 +1,939 @@
+2026-10-26 10:24:40,334 - flipkart-crawler - INFO - [MONGO] Connecting to MongoDB (38.45.64.201:27017/?authSource=admin) -> Database: 'flipkart', Collection: 'products'...
+2026-10-26 10:24:43,371 - flipkart-crawler - INFO - [MONGO OK] Connected! Index on 'id' verified for 'products'.
+2026-10-26 10:24:43,841 - flipkart-crawler - INFO - Launching Chromium browser (Headless: True)...
+2026-10-26 10:24:44,198 - flipkart-crawler - INFO - 
+[PAGE 1] Navigating to: https://www.flipkart.com/search?q=perfume&otracker=search&otracker1=search&marketplace=FLIPKART&as-show=on&as=off
+2026-10-26 10:24:45,707 - flipkart-crawler - INFO - Scrolling down page to trigger lazy loaded product cards & images...
+2026-10-26 10:24:48,911 - flipkart-crawler - INFO - [PAGE 1] In-browser JS extracted 40 product cards.
+2026-10-26 10:24:48,936 - flipkart-crawler - INFO - [PAGE 1] Extracted 40 valid perfume items.
+2026-10-26 10:25:02,926 - flipkart-crawler - INFO - [MONGO SUCCESS] Synced 40 products to 'flipkart.products' (Matched: 38, Modified: 38, Upserted: 2)
+2026-10-26 10:25:02,926 - flipkart-crawler - INFO - [PAGE 1 SUMMARY] +38 new unique items (Total crawled: 38). Saved to Mongo: 40.
+2026-10-26 10:25:02,926 - flipkart-crawler - INFO - Waiting 3.95s before fetching page 2...
+2026-10-26 10:25:06,892 - flipkart-crawler - INFO - 
+[PAGE 2] Navigating to: https://www.flipkart.com/search?q=perfume&otracker=search&otracker1=search&marketplace=FLIPKART&as-show=on&as=off&page=2
+2026-10-26 10:25:07,711 - flipkart-crawler - INFO - Scrolling down page to trigger lazy loaded product cards & images...
+2026-10-26 10:25:10,844 - flipkart-crawler - INFO - [PAGE 2] In-browser JS extracted 40 product cards.
+2026-10-26 10:25:10,848 - flipkart-crawler - INFO - [PAGE 2] Extracted 40 valid perfume items.
+2026-10-26 10:25:23,878 - flipkart-crawler - INFO -   [PRICE HIKE] Flipkart PID PERGHC2RHHYKMGSD 'VIWA SOMETHING SOMETHING 100 ML PERFUME ...': ₹202 -> ₹214 (+₹12)
+2026-10-26 10:25:24,540 - flipkart-crawler - INFO - [MONGO SUCCESS] Synced 40 products to 'flipkart.products' (Matched: 40, Modified: 40, Upserted: 0)
+2026-10-26 10:25:24,540 - flipkart-crawler - INFO - [PAGE 2 SUMMARY] +27 new unique items (Total crawled: 65). Saved to Mongo: 40.
+2026-10-26 10:25:24,540 - flipkart-crawler - INFO - Waiting 3.78s before fetching page 3...
+2026-10-26 10:25:28,326 - flipkart-crawler - INFO - 
+[PAGE 3] Navigating to: https://www.flipkart.com/search?q=perfume&otracker=search&otracker1=search&marketplace=FLIPKART&as-show=on&as=off&page=3
+2026-10-26 10:25:29,063 - flipkart-crawler - INFO - Scrolling down page to trigger lazy loaded product cards & images...
+2026-10-26 10:25:32,196 - flipkart-crawler - INFO - [PAGE 3] In-browser JS extracted 40 product cards.
+2026-10-26 10:25:32,200 - flipkart-crawler - INFO - [PAGE 3] Extracted 40 valid perfume items.
+2026-10-26 10:25:33,796 - flipkart-crawler - INFO -   [PRICE HIKE] Flipkart PID PERFAS9JBT6TVJ3Y 'Sapil Solid Blue Eau de Toilette - 100 m...': ₹1065 -> ₹1124 (+₹59)
+2026-10-26 10:25:46,068 - flipkart-crawler - INFO - [MONGO SUCCESS] Synced 40 products to 'flipkart.products' (Matched: 40, Modified: 40, Upserted: 0)
+2026-10-26 10:25:46,068 - flipkart-crawler - INFO - [PAGE 3 SUMMARY] +24 new unique items (Total crawled: 89). Saved to Mongo: 40.
+2026-10-26 10:25:46,068 - flipkart-crawler - INFO - Waiting 4.31s before fetching page 4...
+2026-10-26 10:25:50,383 - flipkart-crawler - INFO - 
+[PAGE 4] Navigating to: https://www.flipkart.com/search?q=perfume&otracker=search&otracker1=search&marketplace=FLIPKART&as-show=on&as=off&page=4
+2026-10-26 10:25:51,089 - flipkart-crawler - INFO - Scrolling down page to trigger lazy loaded product cards & images...
+2026-10-26 10:25:54,243 - flipkart-crawler - INFO - [PAGE 4] In-browser JS extracted 40 product cards.
+2026-10-26 10:25:54,249 - flipkart-crawler - INFO - [PAGE 4] Extracted 40 valid perfume items.
+2026-10-26 10:26:08,226 - flipkart-crawler - INFO - [MONGO SUCCESS] Synced 40 products to 'flipkart.products' (Matched: 38, Modified: 38, Upserted: 2)
+2026-10-26 10:26:08,226 - flipkart-crawler - INFO - [PAGE 4 SUMMARY] +16 new unique items (Total crawled: 105). Saved to Mongo: 40.
+2026-10-26 10:26:08,227 - flipkart-crawler - INFO - Waiting 4.19s before fetching page 5...
+2026-10-26 10:26:12,428 - flipkart-crawler - INFO - 
+[PAGE 5] Navigating to: https://www.flipkart.com/search?q=perfume&otracker=search&otracker1=search&marketplace=FLIPKART&as-show=on&as=off&page=5
+2026-10-26 10:26:13,316 - flipkart-crawler - INFO - Scrolling down page to trigger lazy loaded product cards & images...
+2026-10-26 10:26:16,468 - flipkart-crawler - INFO - [PAGE 5] In-browser JS extracted 40 product cards.
+2026-10-26 10:26:16,472 - flipkart-crawler - INFO - [PAGE 5] Extracted 40 valid perfume items.
+2026-10-26 10:26:19,354 - flipkart-crawler - INFO -   [PRICE HIKE] Flipkart PID PERH6T6FNAUJJDF5 'PARK AVENUE Oud Eau de Parfum - 100 ml...': ₹319 -> ₹376 (+₹57)
+2026-10-26 10:26:28,189 - flipkart-crawler - INFO -   [PRICE HIKE] Flipkart PID PERGZWDCVQUGZWTY 'BRIT ACCENT Combo Pack Of 2|Depth Of Oce...': ₹167 -> ₹178 (+₹11)
+2026-10-26 10:26:30,373 - flipkart-crawler - INFO - [MONGO SUCCESS] Synced 40 products to 'flipkart.products' (Matched: 39, Modified: 39, Upserted: 1)
+2026-10-26 10:26:30,375 - flipkart-crawler - INFO - [PAGE 5 SUMMARY] +20 new unique items (Total crawled: 125). Saved to Mongo: 40.
+2026-10-26 10:26:30,375 - flipkart-crawler - INFO - Waiting 3.17s before fetching page 6...
+2026-10-26 10:26:33,548 - flipkart-crawler - INFO - 
+[PAGE 6] Navigating to: https://www.flipkart.com/search?q=perfume&otracker=search&otracker1=search&marketplace=FLIPKART&as-show=on&as=off&page=6
+2026-10-26 10:26:34,386 - flipkart-crawler - INFO - Scrolling down page to trigger lazy loaded product cards & images...
+2026-10-26 10:26:37,523 - flipkart-crawler - INFO - [PAGE 6] In-browser JS extracted 40 product cards.
+2026-10-26 10:26:37,527 - flipkart-crawler - INFO - [PAGE 6] Extracted 40 valid perfume items.
+2026-10-26 10:26:42,069 - flipkart-crawler - INFO -   [PRICE HIKE] Flipkart PID PERHN687NWP2AZPN 'DA RAKE Classio Vibes Perfume for 12 Hou...': ₹807 -> ₹824 (+₹17)
+2026-10-26 10:26:51,423 - flipkart-crawler - INFO - [MONGO SUCCESS] Synced 40 products to 'flipkart.products' (Matched: 40, Modified: 40, Upserted: 0)
+2026-10-26 10:26:51,424 - flipkart-crawler - INFO - [PAGE 6 SUMMARY] +19 new unique items (Total crawled: 144). Saved to Mongo: 40.
+2026-10-26 10:26:51,424 - flipkart-crawler - INFO - Waiting 3.73s before fetching page 7...
+2026-10-26 10:26:55,160 - flipkart-crawler - INFO - 
+[PAGE 7] Navigating to: https://www.flipkart.com/search?q=perfume&otracker=search&otracker1=search&marketplace=FLIPKART&as-show=on&as=off&page=7
+2026-10-26 10:26:56,129 - flipkart-crawler - INFO - Scrolling down page to trigger lazy loaded product cards & images...
+2026-10-26 10:26:59,282 - flipkart-crawler - INFO - [PAGE 7] In-browser JS extracted 40 product cards.
+2026-10-26 10:26:59,285 - flipkart-crawler - INFO - [PAGE 7] Extracted 40 valid perfume items.
+2026-10-26 10:27:13,199 - flipkart-crawler - INFO - [MONGO SUCCESS] Synced 40 products to 'flipkart.products' (Matched: 40, Modified: 40, Upserted: 0)
+2026-10-26 10:27:13,199 - flipkart-crawler - INFO - [PAGE 7 SUMMARY] +19 new unique items (Total crawled: 163). Saved to Mongo: 40.
+2026-10-26 10:27:13,199 - flipkart-crawler - INFO - Waiting 4.03s before fetching page 8...
+2026-10-26 10:27:17,238 - flipkart-crawler - INFO - 
+[PAGE 8] Navigating to: https://www.flipkart.com/search?q=perfume&otracker=search&otracker1=search&marketplace=FLIPKART&as-show=on&as=off&page=8
+2026-10-26 10:27:18,124 - flipkart-crawler - INFO - Scrolling down page to trigger lazy loaded product cards & images...
+2026-10-26 10:27:21,281 - flipkart-crawler - INFO - [PAGE 8] In-browser JS extracted 40 product cards.
+2026-10-26 10:27:21,288 - flipkart-crawler - INFO - [PAGE 8] Extracted 40 valid perfume items.
+2026-10-26 10:27:25,558 - flipkart-crawler - INFO -   [PRICE HIKE] Flipkart PID PERH7CXYQ8MNNGNY 'NASEEM Aura Aqua Parfum – Alcohol-Free, ...': ₹835 -> ₹881 (+₹46)
+2026-10-26 10:27:26,202 - flipkart-crawler - INFO -   [PRICE DROP] Flipkart PID PERHN7AMZC4HS2PH 'NEXT Velvet Oud Long Lasting Perfume for...': ₹430 -> ₹334 (Save ₹96)
+2026-10-26 10:27:34,030 - flipkart-crawler - INFO -   [PRICE HIKE] Flipkart PID PERH6GT66PAZHQFJ 'Nisara Perfume Gift Set For Women - Pack...': ₹563 -> ₹575 (+₹12)
+2026-10-26 10:27:35,204 - flipkart-crawler - INFO - [MONGO SUCCESS] Synced 40 products to 'flipkart.products' (Matched: 39, Modified: 39, Upserted: 1)
+2026-10-26 10:27:35,204 - flipkart-crawler - INFO - [PAGE 8 SUMMARY] +21 new unique items (Total crawled: 184). Saved to Mongo: 40.
+2026-10-26 10:27:35,205 - flipkart-crawler - INFO - Waiting 3.78s before fetching page 9...
+2026-10-26 10:27:38,998 - flipkart-crawler - INFO - 
+[PAGE 9] Navigating to: https://www.flipkart.com/search?q=perfume&otracker=search&otracker1=search&marketplace=FLIPKART&as-show=on&as=off&page=9
+2026-10-26 10:27:39,654 - flipkart-crawler - INFO - Scrolling down page to trigger lazy loaded product cards & images...
+2026-10-26 10:27:42,808 - flipkart-crawler - INFO - [PAGE 9] In-browser JS extracted 40 product cards.
+2026-10-26 10:27:42,812 - flipkart-crawler - INFO - [PAGE 9] Extracted 40 valid perfume items.
+2026-10-26 10:27:45,706 - flipkart-crawler - INFO -   [PRICE HIKE] Flipkart PID PERHGPJHZYHAJUQH 'YOUNICK Garlic Oil 12ml (Prank Edition) ...': ₹188 -> ₹192 (+₹4)
+2026-10-26 10:27:55,792 - flipkart-crawler - INFO -   [PRICE HIKE] Flipkart PID PERGP4HTZSFMNHKW 'imperial perfumes Copper 60 ML Perfume -...': ₹324 -> ₹331 (+₹7)
+2026-10-26 10:27:57,009 - flipkart-crawler - INFO - [MONGO SUCCESS] Synced 40 products to 'flipkart.products' (Matched: 39, Modified: 39, Upserted: 1)
+2026-10-26 10:27:57,009 - flipkart-crawler - INFO - [PAGE 9 SUMMARY] +20 new unique items (Total crawled: 204). Saved to Mongo: 40.
+2026-10-26 10:27:57,009 - flipkart-crawler - INFO - Waiting 4.20s before fetching page 10...
+2026-10-26 10:28:01,216 - flipkart-crawler - INFO - 
+[PAGE 10] Navigating to: https://www.flipkart.com/search?q=perfume&otracker=search&otracker1=search&marketplace=FLIPKART&as-show=on&as=off&page=10
+2026-10-26 10:28:01,872 - flipkart-crawler - INFO - Scrolling down page to trigger lazy loaded product cards & images...
+2026-10-26 10:28:04,990 - flipkart-crawler - INFO - [PAGE 10] In-browser JS extracted 40 product cards.
+2026-10-26 10:28:04,994 - flipkart-crawler - INFO - [PAGE 10] Extracted 40 valid perfume items.
+2026-10-26 10:28:06,649 - flipkart-crawler - INFO -   [PRICE HIKE] Flipkart PID PERG7ZVETDX3AUAU 'Plum BodyLovin' Hawaiian Rumba | Long La...': ₹276 -> ₹292 (+₹16)
+2026-10-26 10:28:06,984 - flipkart-crawler - INFO -   [PRICE HIKE] Flipkart PID PERHEDHZNAQQDUXF 'MOSA ITALIA Blue Wave Long Lasting Perfu...': ₹262 -> ₹280 (+₹18)
+2026-10-26 10:28:10,299 - flipkart-crawler - INFO -   [PRICE HIKE] Flipkart PID PERFZ5HXFBZPQPJY 'PATEL HOLIDAY Perfume - 30 ml...': ₹220 -> ₹225 (+₹5)
+2026-10-26 10:28:16,580 - flipkart-crawler - INFO -   [PRICE HIKE] Flipkart PID PEREFGGJXUWHVXRN 'OSR Boy spray perfume Unisex Eau de Parf...': ₹173 -> ₹195 (+₹22)
+2026-10-26 10:28:16,915 - flipkart-crawler - INFO -   [PRICE HIKE] Flipkart PID PERG268UNYTPTPRM 'Sapil Solid Blue Perfume (Imported From ...': ₹1136 -> ₹1212 (+₹76)
+2026-10-26 10:28:19,094 - flipkart-crawler - INFO - [MONGO SUCCESS] Synced 40 products to 'flipkart.products' (Matched: 39, Modified: 39, Upserted: 1)
+2026-10-26 10:28:19,094 - flipkart-crawler - INFO - [PAGE 10 SUMMARY] +23 new unique items (Total crawled: 227). Saved to Mongo: 40.
+2026-10-26 10:28:19,094 - flipkart-crawler - INFO - Waiting 4.42s before fetching page 11...
+2026-10-26 10:28:23,519 - flipkart-crawler - INFO - 
+[PAGE 11] Navigating to: https://www.flipkart.com/search?q=perfume&otracker=search&otracker1=search&marketplace=FLIPKART&as-show=on&as=off&page=11
+2026-10-26 10:28:24,146 - flipkart-crawler - INFO - Scrolling down page to trigger lazy loaded product cards & images...
+2026-10-26 10:28:27,289 - flipkart-crawler - INFO - [PAGE 11] In-browser JS extracted 40 product cards.
+2026-10-26 10:28:27,292 - flipkart-crawler - INFO - [PAGE 11] Extracted 40 valid perfume items.
+2026-10-26 10:28:35,026 - flipkart-crawler - INFO -   [PRICE HIKE] Flipkart PID PERGW9DSHA5RVYXE 'AGN Tulip Perfume EDP 150ml for men & wo...': ₹226 -> ₹255 (+₹29)
+2026-10-26 10:28:36,444 - flipkart-crawler - INFO -   [PRICE HIKE] Flipkart PID PERGXZ8GCYFGTK3Z 'BRIT ACCENT High Street|Depth of Ocean| ...': ₹82 -> ₹88 (+₹6)
+2026-10-26 10:28:39,500 - flipkart-crawler - INFO -   [PRICE HIKE] Flipkart PID PERGSX7PUVGVGKHT 'FORMLESS Rajani Gandha Spray Perfume - 4...': ₹136 -> ₹144 (+₹8)
+2026-10-26 10:28:41,669 - flipkart-crawler - INFO - [MONGO SUCCESS] Synced 40 products to 'flipkart.products' (Matched: 38, Modified: 38, Upserted: 2)
+2026-10-26 10:28:41,669 - flipkart-crawler - INFO - [PAGE 11 SUMMARY] +25 new unique items (Total crawled: 252). Saved to Mongo: 40.
+2026-10-26 10:28:41,670 - flipkart-crawler - INFO - Waiting 4.40s before fetching page 12...
+2026-10-26 10:28:46,078 - flipkart-crawler - INFO - 
+[PAGE 12] Navigating to: https://www.flipkart.com/search?q=perfume&otracker=search&otracker1=search&marketplace=FLIPKART&as-show=on&as=off&page=12
+2026-10-26 10:28:46,875 - flipkart-crawler - INFO - Scrolling down page to trigger lazy loaded product cards & images...
+2026-10-26 10:28:50,056 - flipkart-crawler - INFO - [PAGE 12] In-browser JS extracted 40 product cards.
+2026-10-26 10:28:50,063 - flipkart-crawler - INFO - [PAGE 12] Extracted 40 valid perfume items.
+2026-10-26 10:28:57,518 - flipkart-crawler - INFO -   [PRICE HIKE] Flipkart PID PERHNDJRGZ9NKVH9 'XLNC ADONIS Perfume - 100 ml...': ₹1708 -> ₹1822 (+₹114)
+2026-10-26 10:28:58,183 - flipkart-crawler - INFO -   [PRICE HIKE] Flipkart PID PERFG95QKFWNWKZR 'MONET PASSPORT Perfume - 60 ml...': ₹277 -> ₹283 (+₹6)
+2026-10-26 10:29:03,998 - flipkart-crawler - INFO - [MONGO SUCCESS] Synced 40 products to 'flipkart.products' (Matched: 40, Modified: 40, Upserted: 0)
+2026-10-26 10:29:03,999 - flipkart-crawler - INFO - [PAGE 12 SUMMARY] +24 new unique items (Total crawled: 276). Saved to Mongo: 40.
+2026-10-26 10:29:03,999 - flipkart-crawler - INFO - Waiting 3.03s before fetching page 13...
+2026-10-26 10:29:07,034 - flipkart-crawler - INFO - 
+[PAGE 13] Navigating to: https://www.flipkart.com/search?q=perfume&otracker=search&otracker1=search&marketplace=FLIPKART&as-show=on&as=off&page=13
+2026-10-26 10:29:07,796 - flipkart-crawler - INFO - Scrolling down page to trigger lazy loaded product cards & images...
+2026-10-26 10:29:10,944 - flipkart-crawler - INFO - [PAGE 13] In-browser JS extracted 40 product cards.
+2026-10-26 10:29:10,947 - flipkart-crawler - INFO - [PAGE 13] Extracted 40 valid perfume items.
+2026-10-26 10:29:15,615 - flipkart-crawler - INFO -   [PRICE HIKE] Flipkart PID PERFS73WUJSHRZYJ 'Byond Club House Hyde & Tao (Combo) 140m...': ₹232 -> ₹244 (+₹12)
+2026-10-26 10:29:19,538 - flipkart-crawler - INFO -   [PRICE DROP] Flipkart PID PERGB568BSXBGKG6 'Yardley London Autumn Bloom Floral Scent...': ₹528 -> ₹470 (Save ₹58)
+2026-10-26 10:29:22,480 - flipkart-crawler - INFO -   [PRICE HIKE] Flipkart PID PEREYJAYYZABQXJ9 'Sapil Nice Feelings Black Perfume (Impor...': ₹1090 -> ₹1212 (+₹122)
+2026-10-26 10:29:25,301 - flipkart-crawler - INFO - [MONGO SUCCESS] Synced 40 products to 'flipkart.products' (Matched: 40, Modified: 40, Upserted: 0)
+2026-10-26 10:29:25,301 - flipkart-crawler - INFO - [PAGE 13 SUMMARY] +23 new unique items (Total crawled: 299). Saved to Mongo: 40.
+2026-10-26 10:29:25,301 - flipkart-crawler - INFO - Waiting 3.02s before fetching page 14...
+2026-10-26 10:29:28,328 - flipkart-crawler - INFO - 
+[PAGE 14] Navigating to: https://www.flipkart.com/search?q=perfume&otracker=search&otracker1=search&marketplace=FLIPKART&as-show=on&as=off&page=14
+2026-10-26 10:29:29,042 - flipkart-crawler - INFO - Scrolling down page to trigger lazy loaded product cards & images...
+2026-10-26 10:29:32,177 - flipkart-crawler - INFO - [PAGE 14] In-browser JS extracted 40 product cards.
+2026-10-26 10:29:32,181 - flipkart-crawler - INFO - [PAGE 14] Extracted 40 valid perfume items.
+2026-10-26 10:29:33,747 - flipkart-crawler - INFO -   [PRICE HIKE] Flipkart PID PERHFXZVAZXJUE4D 'Plum BodyLovin' Hawaiian Rumba | Long La...': ₹679 -> ₹719 (+₹40)
+2026-10-26 10:29:39,965 - flipkart-crawler - INFO -   [PRICE HIKE] Flipkart PID PERFEEGQTFGHX5XC 'OSSUM 2 perfume ROMANCE,DELIGHT Perfume ...': ₹529 -> ₹540 (+₹11)
+2026-10-26 10:29:43,914 - flipkart-crawler - INFO -   [PRICE DROP] Flipkart PID PERGFH6FE9MXF2US 'RAMCO VIP 919 Gold Perfume 50ml Perfume ...': ₹280 -> ₹278 (Save ₹2)
+2026-10-26 10:29:46,100 - flipkart-crawler - INFO - [MONGO SUCCESS] Synced 40 products to 'flipkart.products' (Matched: 39, Modified: 39, Upserted: 1)
+2026-10-26 10:29:46,100 - flipkart-crawler - INFO - [PAGE 14 SUMMARY] +23 new unique items (Total crawled: 322). Saved to Mongo: 40.
+2026-10-26 10:29:46,101 - flipkart-crawler - INFO - Waiting 3.71s before fetching page 15...
+2026-10-26 10:29:49,829 - flipkart-crawler - INFO - 
+[PAGE 15] Navigating to: https://www.flipkart.com/search?q=perfume&otracker=search&otracker1=search&marketplace=FLIPKART&as-show=on&as=off&page=15
+2026-10-26 10:29:50,586 - flipkart-crawler - INFO - Scrolling down page to trigger lazy loaded product cards & images...
+2026-10-26 10:29:53,746 - flipkart-crawler - INFO - [PAGE 15] In-browser JS extracted 40 product cards.
+2026-10-26 10:29:53,750 - flipkart-crawler - INFO - [PAGE 15] Extracted 40 valid perfume items.
+2026-10-26 10:29:56,972 - flipkart-crawler - INFO -   [PRICE HIKE] Flipkart PID PERF4QNFRZYHUCNZ 'VAN 66 Apparel Spray Perfume-Fragrance D...': ₹318 -> ₹325 (+₹7)
+2026-10-26 10:29:58,300 - flipkart-crawler - INFO -   [PRICE HIKE] Flipkart PID PERFCSFF3CJAPCEK 'VAN 66 VAN 100 Perfume - 100 ml...': ₹282 -> ₹288 (+₹6)
+2026-10-26 10:30:00,312 - flipkart-crawler - INFO -   [PRICE HIKE] Flipkart PID PERHJFKVKC6EWZF9 'Plum BodyLovin' Vanilla Vibes On-The-Go ...': ₹639 -> ₹679 (+₹40)
+2026-10-26 10:30:01,308 - flipkart-crawler - INFO -   [PRICE HIKE] Flipkart PID PERHMEY5Q3VGSGFZ 'SHIKI Long Lasting Fragrance ! Cleanly C...': ₹162 -> ₹180 (+₹18)
+2026-10-26 10:30:01,998 - flipkart-crawler - INFO -   [PRICE HIKE] Flipkart PID PERHKE7NWVY8GPYH 'Rue Broca Theoreme Pour Homme Eau de Par...': ₹1903 -> ₹2030 (+₹127)
+2026-10-26 10:30:04,762 - flipkart-crawler - INFO -   [PRICE HIKE] Flipkart PID PERH6EGWH2JHW298 'NASEEM Lamsa Aqua Parfum Alcohol Free Lo...': ₹518 -> ₹529 (+₹11)
+2026-10-26 10:30:07,957 - flipkart-crawler - INFO - [MONGO SUCCESS] Synced 40 products to 'flipkart.products' (Matched: 40, Modified: 40, Upserted: 0)
+2026-10-26 10:30:07,957 - flipkart-crawler - INFO - [PAGE 15 SUMMARY] +23 new unique items (Total crawled: 345). Saved to Mongo: 40.
+2026-10-26 10:30:07,958 - flipkart-crawler - INFO - Waiting 3.96s before fetching page 16...
+2026-10-26 10:30:11,923 - flipkart-crawler - INFO - 
+[PAGE 16] Navigating to: https://www.flipkart.com/search?q=perfume&otracker=search&otracker1=search&marketplace=FLIPKART&as-show=on&as=off&page=16
+2026-10-26 10:30:12,843 - flipkart-crawler - INFO - Scrolling down page to trigger lazy loaded product cards & images...
+2026-10-26 10:30:15,999 - flipkart-crawler - INFO - [PAGE 16] In-browser JS extracted 40 product cards.
+2026-10-26 10:30:16,003 - flipkart-crawler - INFO - [PAGE 16] Extracted 40 valid perfume items.
+2026-10-26 10:30:18,961 - flipkart-crawler - INFO -   [PRICE HIKE] Flipkart PID PERHC2ZSUBFVUJ6Y 'Signature Rizz Range - COCKTAIL | Long L...': ₹168 -> ₹190 (+₹22)
+2026-10-26 10:30:28,842 - flipkart-crawler - INFO -   [PRICE HIKE] Flipkart PID PERHHDRNBAD9TBYF 'Polchem Night Angel Apparel Premium Perf...': ₹217 -> ₹221 (+₹4)
+2026-10-26 10:30:30,049 - flipkart-crawler - INFO - [MONGO SUCCESS] Synced 40 products to 'flipkart.products' (Matched: 39, Modified: 39, Upserted: 1)
+2026-10-26 10:30:30,050 - flipkart-crawler - INFO - [PAGE 16 SUMMARY] +24 new unique items (Total crawled: 369). Saved to Mongo: 40.
+2026-10-26 10:30:30,050 - flipkart-crawler - INFO - Waiting 3.61s before fetching page 17...
+2026-10-26 10:30:33,656 - flipkart-crawler - INFO - 
+[PAGE 17] Navigating to: https://www.flipkart.com/search?q=perfume&otracker=search&otracker1=search&marketplace=FLIPKART&as-show=on&as=off&page=17
+2026-10-26 10:30:34,447 - flipkart-crawler - INFO - Scrolling down page to trigger lazy loaded product cards & images...
+2026-10-26 10:30:37,591 - flipkart-crawler - INFO - [PAGE 17] In-browser JS extracted 40 product cards.
+2026-10-26 10:30:37,595 - flipkart-crawler - INFO - [PAGE 17] Extracted 40 valid perfume items.
+2026-10-26 10:30:51,769 - flipkart-crawler - INFO - [MONGO SUCCESS] Synced 40 products to 'flipkart.products' (Matched: 38, Modified: 38, Upserted: 2)
+2026-10-26 10:30:51,770 - flipkart-crawler - INFO - [PAGE 17 SUMMARY] +24 new unique items (Total crawled: 393). Saved to Mongo: 40.
+2026-10-26 10:30:51,770 - flipkart-crawler - INFO - Waiting 4.49s before fetching page 18...
+2026-10-26 10:30:56,270 - flipkart-crawler - INFO - 
+[PAGE 18] Navigating to: https://www.flipkart.com/search?q=perfume&otracker=search&otracker1=search&marketplace=FLIPKART&as-show=on&as=off&page=18
+2026-10-26 10:30:57,039 - flipkart-crawler - INFO - Scrolling down page to trigger lazy loaded product cards & images...
+2026-10-26 10:31:00,189 - flipkart-crawler - INFO - [PAGE 18] In-browser JS extracted 40 product cards.
+2026-10-26 10:31:00,194 - flipkart-crawler - INFO - [PAGE 18] Extracted 40 valid perfume items.
+2026-10-26 10:31:01,795 - flipkart-crawler - INFO -   [PRICE HIKE] Flipkart PID PERHFZAMJUND8HGA 'Oriflame eclat toujours parfume Eau de T...': ₹854 -> ₹901 (+₹47)
+2026-10-26 10:31:03,104 - flipkart-crawler - INFO -   [PRICE HIKE] Flipkart PID PERGHYTC8RHXH8EN 'Jean Philippe INTIMATE NATURAL SPRAY EAU...': ₹1101 -> ₹1175 (+₹74)
+2026-10-26 10:31:03,433 - flipkart-crawler - INFO -   [PRICE HIKE] Flipkart PID PERGV6YZQSSVSFPR 'AGN Tulip perfume 150ml Eau de Parfum - ...': ₹229 -> ₹259 (+₹30)
+2026-10-26 10:31:09,943 - flipkart-crawler - INFO -   [PRICE HIKE] Flipkart PID PERGVN6HUGQKNHMN 'Oriflame amber elixir parfume Eau de Par...': ₹1268 -> ₹1338 (+₹70)
+2026-10-26 10:31:14,121 - flipkart-crawler - INFO - [MONGO SUCCESS] Synced 40 products to 'flipkart.products' (Matched: 40, Modified: 40, Upserted: 0)
+2026-10-26 10:31:14,122 - flipkart-crawler - INFO - [PAGE 18 SUMMARY] +24 new unique items (Total crawled: 417). Saved to Mongo: 40.
+2026-10-26 10:31:14,122 - flipkart-crawler - INFO - Waiting 3.15s before fetching page 19...
+2026-10-26 10:31:17,279 - flipkart-crawler - INFO - 
+[PAGE 19] Navigating to: https://www.flipkart.com/search?q=perfume&otracker=search&otracker1=search&marketplace=FLIPKART&as-show=on&as=off&page=19
+2026-10-26 10:31:18,111 - flipkart-crawler - INFO - Scrolling down page to trigger lazy loaded product cards & images...
+2026-10-26 10:31:21,296 - flipkart-crawler - INFO - [PAGE 19] In-browser JS extracted 40 product cards.
+2026-10-26 10:31:21,300 - flipkart-crawler - INFO - [PAGE 19] Extracted 40 valid perfume items.
+2026-10-26 10:31:26,122 - flipkart-crawler - INFO -   [PRICE HIKE] Flipkart PID PERHCTV5HGQ5FXQX 'PARK AVENUE NEO PREMIUM BODY SPRAY Perfu...': ₹167 -> ₹186 (+₹19)
+2026-10-26 10:31:26,450 - flipkart-crawler - INFO -   [PRICE DROP] Flipkart PID PERFGFA2R7ABSHDD 'HAVOC GOLD PERFUME MOST SELLING PRODUCT ...': ₹824 -> ₹432 (Save ₹392)
+2026-10-26 10:31:27,761 - flipkart-crawler - INFO -   [PRICE HIKE] Flipkart PID PERFWATEYFQKGZCN 'BN Romeo Juliet Eau De Toilette 100 ML E...': ₹348 -> ₹367 (+₹19)
+2026-10-26 10:31:29,071 - flipkart-crawler - INFO -   [PRICE HIKE] Flipkart PID PEREYJ5667GYVCEP 'Sapil Solid Blue EDT Perfume For Men (Im...': ₹1112 -> ₹1173 (+₹61)
+2026-10-26 10:31:30,722 - flipkart-crawler - INFO -   [PRICE HIKE] Flipkart PID PERHNA9H86UZRACZ 'manish Jeans Long Lasting Perfumes for M...': ₹254 -> ₹268 (+₹14)
+2026-10-26 10:31:35,206 - flipkart-crawler - INFO - [MONGO SUCCESS] Synced 40 products to 'flipkart.products' (Matched: 36, Modified: 36, Upserted: 4)
+2026-10-26 10:31:35,207 - flipkart-crawler - INFO - [PAGE 19 SUMMARY] +24 new unique items (Total crawled: 441). Saved to Mongo: 40.
+2026-10-26 10:31:35,207 - flipkart-crawler - INFO - Waiting 3.78s before fetching page 20...
+2026-10-26 10:31:38,991 - flipkart-crawler - INFO - 
+[PAGE 20] Navigating to: https://www.flipkart.com/search?q=perfume&otracker=search&otracker1=search&marketplace=FLIPKART&as-show=on&as=off&page=20
+2026-10-26 10:31:39,743 - flipkart-crawler - INFO - Scrolling down page to trigger lazy loaded product cards & images...
+2026-10-26 10:31:42,913 - flipkart-crawler - INFO - [PAGE 20] In-browser JS extracted 40 product cards.
+2026-10-26 10:31:42,916 - flipkart-crawler - INFO - [PAGE 20] Extracted 40 valid perfume items.
+2026-10-26 10:31:47,504 - flipkart-crawler - INFO -   [PRICE HIKE] Flipkart PID PERHNFT3UTYJCUS2 'IKA 6Pm Aqua Eau De Parfum For Men & Wom...': ₹273 -> ₹288 (+₹15)
+2026-10-26 10:31:47,834 - flipkart-crawler - INFO -   [PRICE HIKE] Flipkart PID PERH8GF4EQANBGAH 'AFNAN 9 PM Rebel Eau de Parfum - 100 ml...': ₹3564 -> ₹3810 (+₹246)
+2026-10-26 10:31:57,256 - flipkart-crawler - INFO - [MONGO SUCCESS] Synced 40 products to 'flipkart.products' (Matched: 39, Modified: 39, Upserted: 1)
+2026-10-26 10:31:57,256 - flipkart-crawler - INFO - [PAGE 20 SUMMARY] +24 new unique items (Total crawled: 465). Saved to Mongo: 40.
+2026-10-26 10:31:57,257 - flipkart-crawler - INFO - Waiting 3.17s before fetching page 21...
+2026-10-26 10:32:00,432 - flipkart-crawler - INFO - 
+[PAGE 21] Navigating to: https://www.flipkart.com/search?q=perfume&otracker=search&otracker1=search&marketplace=FLIPKART&as-show=on&as=off&page=21
+2026-10-26 10:32:01,219 - flipkart-crawler - INFO - Scrolling down page to trigger lazy loaded product cards & images...
+2026-10-26 10:32:04,366 - flipkart-crawler - INFO - [PAGE 21] In-browser JS extracted 40 product cards.
+2026-10-26 10:32:04,371 - flipkart-crawler - INFO - [PAGE 21] Extracted 40 valid perfume items.
+2026-10-26 10:32:08,650 - flipkart-crawler - INFO -   [PRICE HIKE] Flipkart PID PERG7ZVR7CB2GVZK 'Plum BodyLovin' Trippin' Mimosas | Long ...': ₹276 -> ₹292 (+₹16)
+2026-10-26 10:32:09,624 - flipkart-crawler - INFO -   [PRICE HIKE] Flipkart PID PERFWH6JZSTZWCNK 'PIK Product Solid Perfume Javadhu Flavou...': ₹90 -> ₹100 (+₹10)
+2026-10-26 10:32:10,933 - flipkart-crawler - INFO -   [PRICE HIKE] Flipkart PID PERHFXPTH4SH6EF6 'Plum BodyLovin' Vanilla Vibes | Long Las...': ₹679 -> ₹719 (+₹40)
+2026-10-26 10:32:18,814 - flipkart-crawler - INFO - [MONGO SUCCESS] Synced 40 products to 'flipkart.products' (Matched: 37, Modified: 37, Upserted: 3)
+2026-10-26 10:32:18,814 - flipkart-crawler - INFO - [PAGE 21 SUMMARY] +24 new unique items (Total crawled: 489). Saved to Mongo: 40.
+2026-10-26 10:32:18,815 - flipkart-crawler - INFO - Waiting 3.11s before fetching page 22...
+2026-10-26 10:32:21,940 - flipkart-crawler - INFO - 
+[PAGE 22] Navigating to: https://www.flipkart.com/search?q=perfume&otracker=search&otracker1=search&marketplace=FLIPKART&as-show=on&as=off&page=22
+2026-10-26 10:32:22,836 - flipkart-crawler - INFO - Scrolling down page to trigger lazy loaded product cards & images...
+2026-10-26 10:32:26,025 - flipkart-crawler - INFO - [PAGE 22] In-browser JS extracted 40 product cards.
+2026-10-26 10:32:26,039 - flipkart-crawler - INFO - [PAGE 22] Extracted 40 valid perfume items.
+2026-10-26 10:32:34,152 - flipkart-crawler - INFO -   [PRICE HIKE] Flipkart PID PERHGACRWSVTTJNT 'cieal Solid Perfume Set of 3 Pink Bloom ...': ₹316 -> ₹334 (+₹18)
+2026-10-26 10:32:39,955 - flipkart-crawler - INFO - [MONGO SUCCESS] Synced 40 products to 'flipkart.products' (Matched: 40, Modified: 40, Upserted: 0)
+2026-10-26 10:32:39,955 - flipkart-crawler - INFO - [PAGE 22 SUMMARY] +24 new unique items (Total crawled: 513). Saved to Mongo: 40.
+2026-10-26 10:32:39,955 - flipkart-crawler - INFO - Waiting 3.81s before fetching page 23...
+2026-10-26 10:32:43,779 - flipkart-crawler - INFO - 
+[PAGE 23] Navigating to: https://www.flipkart.com/search?q=perfume&otracker=search&otracker1=search&marketplace=FLIPKART&as-show=on&as=off&page=23
+2026-10-26 10:32:44,521 - flipkart-crawler - INFO - Scrolling down page to trigger lazy loaded product cards & images...
+2026-10-26 10:32:47,792 - flipkart-crawler - INFO - [PAGE 23] In-browser JS extracted 40 product cards.
+2026-10-26 10:32:47,797 - flipkart-crawler - INFO - [PAGE 23] Extracted 40 valid perfume items.
+2026-10-26 10:32:55,973 - flipkart-crawler - INFO -   [PRICE HIKE] Flipkart PID PERHK8MFE7ARBFV4 'RIAN Night Safari Eau de Parfum Eau de P...': ₹449 -> ₹474 (+₹25)
+2026-10-26 10:32:56,294 - flipkart-crawler - INFO -   [PRICE DROP] Flipkart PID PERHPSCGZ9X9HZTM 'SONAAR On million Eau de Toilette - 100 ...': ₹941 -> ₹939 (Save ₹2)
+2026-10-26 10:32:57,264 - flipkart-crawler - INFO -   [PRICE HIKE] Flipkart PID PERG7ZVFZQDKUZH8 'Plum BodyLovin' Orchid-You-Not | Long La...': ₹276 -> ₹292 (+₹16)
+2026-10-26 10:33:01,767 - flipkart-crawler - INFO - [MONGO SUCCESS] Synced 40 products to 'flipkart.products' (Matched: 36, Modified: 36, Upserted: 4)
+2026-10-26 10:33:01,767 - flipkart-crawler - INFO - [PAGE 23 SUMMARY] +24 new unique items (Total crawled: 537). Saved to Mongo: 40.
+2026-10-26 10:33:01,767 - flipkart-crawler - INFO - Waiting 3.16s before fetching page 24...
+2026-10-26 10:33:04,941 - flipkart-crawler - INFO - 
+[PAGE 24] Navigating to: https://www.flipkart.com/search?q=perfume&otracker=search&otracker1=search&marketplace=FLIPKART&as-show=on&as=off&page=24
+2026-10-26 10:33:05,788 - flipkart-crawler - INFO - Scrolling down page to trigger lazy loaded product cards & images...
+2026-10-26 10:33:08,934 - flipkart-crawler - INFO - [PAGE 24] In-browser JS extracted 40 product cards.
+2026-10-26 10:33:08,943 - flipkart-crawler - INFO - [PAGE 24] Extracted 40 valid perfume items.
+2026-10-26 10:33:10,855 - flipkart-crawler - INFO -   [PRICE HIKE] Flipkart PID PERHEKZJBZZZMZ6P 'AFNAN Supremacy Collector's Edition Eau ...': ₹4860 -> ₹5250 (+₹390)
+2026-10-26 10:33:19,760 - flipkart-crawler - INFO -   [PRICE HIKE] Flipkart PID PERHMTT4VBGSBH2N 'RIO RABBIT RAWAS ICE Extrait De Parfum -...': ₹313 -> ₹331 (+₹18)
+2026-10-26 10:33:20,083 - flipkart-crawler - INFO -   [PRICE HIKE] Flipkart PID PERGQKHCSCXBGTDR 'Plum BodyLovin' Smokin' Vanilla | Long L...': ₹293 -> ₹310 (+₹17)
+2026-10-26 10:33:22,934 - flipkart-crawler - INFO - [MONGO SUCCESS] Synced 40 products to 'flipkart.products' (Matched: 36, Modified: 36, Upserted: 4)
+2026-10-26 10:33:22,934 - flipkart-crawler - INFO - [PAGE 24 SUMMARY] +24 new unique items (Total crawled: 561). Saved to Mongo: 40.
+2026-10-26 10:33:22,934 - flipkart-crawler - INFO - Waiting 3.41s before fetching page 25...
+2026-10-26 10:33:26,344 - flipkart-crawler - INFO - 
+[PAGE 25] Navigating to: https://www.flipkart.com/search?q=perfume&otracker=search&otracker1=search&marketplace=FLIPKART&as-show=on&as=off&page=25
+2026-10-26 10:33:27,101 - flipkart-crawler - INFO - Scrolling down page to trigger lazy loaded product cards & images...
+2026-10-26 10:33:30,295 - flipkart-crawler - INFO - [PAGE 25] In-browser JS extracted 40 product cards.
+2026-10-26 10:33:30,300 - flipkart-crawler - INFO - [PAGE 25] Extracted 40 valid perfume items.
+2026-10-26 10:33:38,507 - flipkart-crawler - INFO -   [PRICE HIKE] Flipkart PID PERHMRPZVGG6EGJP 'RIO RABBIT King 2.0 100ML Extrait De Par...': ₹495 -> ₹522 (+₹27)
+2026-10-26 10:33:41,462 - flipkart-crawler - INFO -   [PRICE HIKE] Flipkart PID PERHHW7XY6GFBBWX 'St. Louis White Street London Eau de Par...': ₹311 -> ₹328 (+₹17)
+2026-10-26 10:33:44,552 - flipkart-crawler - INFO - [MONGO SUCCESS] Synced 40 products to 'flipkart.products' (Matched: 38, Modified: 38, Upserted: 2)
+2026-10-26 10:33:44,552 - flipkart-crawler - INFO - [PAGE 25 SUMMARY] +24 new unique items (Total crawled: 585). Saved to Mongo: 40.
+2026-10-26 10:33:44,552 - flipkart-crawler - INFO - Reached configured max pages limit (25).
+2026-10-26 10:33:44,707 - flipkart-crawler - INFO - 
+==========================================
+2026-10-26 10:33:44,708 - flipkart-crawler - INFO - FLIPKART CRAWL FINISHED!
+2026-10-26 10:33:44,708 - flipkart-crawler - INFO - Total Unique Products: 585
+2026-10-26 10:33:44,978 - flipkart-crawler - INFO - Total in MongoDB: 1102
+2026-10-26 10:33:44,978 - flipkart-crawler - INFO - ==========================================
+
+2026-10-26 15:30:06,001 - dotenv.main - WARNING - Python-dotenv could not parse statement starting at line 19
+2026-10-26 15:30:06,003 - dotenv.main - WARNING - Python-dotenv could not parse statement starting at line 19
+2026-10-26 15:30:06,006 - flipkart-crawler - INFO - [MONGO] Connecting to MongoDB (38.45.64.201:27017/?authSource=admin) -> Database: 'flipkart', Collection: 'products'...
+2026-10-26 15:30:09,059 - flipkart-crawler - INFO - [MONGO OK] Connected! Index on 'id' verified for 'products'.
+2026-10-26 15:30:20,682 - flipkart-crawler - INFO - Launching Chromium browser (Headless: True)...
+2026-10-26 15:30:21,060 - flipkart-crawler - INFO - 
+[PAGE 1] Navigating to: https://www.flipkart.com/search?q=perfume&otracker=search&otracker1=search&marketplace=FLIPKART&as-show=on&as=off
+2026-10-26 15:30:22,261 - flipkart-crawler - INFO - Scrolling down page to trigger lazy loaded product cards & images...
+2026-10-26 15:30:25,416 - flipkart-crawler - INFO - [PAGE 1] In-browser JS extracted 40 product cards.
+2026-10-26 15:30:25,422 - flipkart-crawler - INFO - [PAGE 1] Extracted 40 valid perfume items.
+2026-10-26 15:30:35,070 - flipkart-crawler - INFO -   [PRICE HIKE] Flipkart PID PERGRHEVHNDPDTSN 'THE MAN COMPANY Black EDT & Night EDP Co...': ₹299 -> ₹512 (+₹213)
+2026-10-26 15:30:35,798 - flipkart-crawler - INFO -   [PRICE DROP] Flipkart PID PERFGRQJQRAS7PGT 'OMSR Evening in paris Eau de Parfum - 10...': ₹204 -> ₹198 (Save ₹6)
+2026-10-26 15:30:40,188 - flipkart-crawler - INFO - [MONGO SUCCESS] Synced 40 products to 'flipkart.products' (Matched: 39, Modified: 39, Upserted: 1)
+2026-10-26 15:30:40,189 - flipkart-crawler - INFO - [PAGE 1 SUMMARY] +38 new unique items (Total crawled: 38). Saved to Mongo: 40.
+2026-10-26 15:30:40,189 - flipkart-crawler - INFO - Waiting 3.96s before fetching page 2...
+2026-10-26 15:30:44,159 - flipkart-crawler - INFO - 
+[PAGE 2] Navigating to: https://www.flipkart.com/search?q=perfume&otracker=search&otracker1=search&marketplace=FLIPKART&as-show=on&as=off&page=2
+2026-10-26 15:30:44,764 - flipkart-crawler - INFO - Scrolling down page to trigger lazy loaded product cards & images...
+2026-10-26 15:30:47,909 - flipkart-crawler - INFO - [PAGE 2] In-browser JS extracted 40 product cards.
+2026-10-26 15:30:47,914 - flipkart-crawler - INFO - [PAGE 2] Extracted 40 valid perfume items.
+2026-10-26 15:30:59,528 - flipkart-crawler - INFO -   [PRICE HIKE] Flipkart PID PERHRFHMEASBGC3D 'MENDRDO Apex Eau De Parfum | Luxury Prem...': ₹898 -> ₹920 (+₹22)
+2026-10-26 15:31:02,544 - flipkart-crawler - INFO - [MONGO SUCCESS] Synced 40 products to 'flipkart.products' (Matched: 40, Modified: 40, Upserted: 0)
+2026-10-26 15:31:02,545 - flipkart-crawler - INFO - [PAGE 2 SUMMARY] +26 new unique items (Total crawled: 64). Saved to Mongo: 40.
+2026-10-26 15:31:02,545 - flipkart-crawler - INFO - Waiting 4.40s before fetching page 3...
+2026-10-26 15:31:06,955 - flipkart-crawler - INFO - 
+[PAGE 3] Navigating to: https://www.flipkart.com/search?q=perfume&otracker=search&otracker1=search&marketplace=FLIPKART&as-show=on&as=off&page=3
+2026-10-26 15:31:07,553 - flipkart-crawler - INFO - Scrolling down page to trigger lazy loaded product cards & images...
+2026-10-26 15:31:10,690 - flipkart-crawler - INFO - [PAGE 3] In-browser JS extracted 40 product cards.
+2026-10-26 15:31:10,693 - flipkart-crawler - INFO - [PAGE 3] Extracted 40 valid perfume items.
+2026-10-26 15:31:15,850 - flipkart-crawler - INFO -   [PRICE HIKE] Flipkart PID PERGDAWB4SAZZYP3 'BELLAVITA Luxury Unisex Perfume Gift Set...': ₹479 -> ₹485 (+₹6)
+2026-10-26 15:31:25,488 - flipkart-crawler - INFO - [MONGO SUCCESS] Synced 40 products to 'flipkart.products' (Matched: 37, Modified: 37, Upserted: 3)
+2026-10-26 15:31:25,488 - flipkart-crawler - INFO - [PAGE 3 SUMMARY] +24 new unique items (Total crawled: 88). Saved to Mongo: 40.
+2026-10-26 15:31:25,489 - flipkart-crawler - INFO - Waiting 3.40s before fetching page 4...
+2026-10-26 15:31:28,904 - flipkart-crawler - INFO - 
+[PAGE 4] Navigating to: https://www.flipkart.com/search?q=perfume&otracker=search&otracker1=search&marketplace=FLIPKART&as-show=on&as=off&page=4
+2026-10-26 15:31:29,518 - flipkart-crawler - INFO - Scrolling down page to trigger lazy loaded product cards & images...
+2026-10-26 15:31:32,662 - flipkart-crawler - INFO - [PAGE 4] In-browser JS extracted 40 product cards.
+2026-10-26 15:31:32,666 - flipkart-crawler - INFO - [PAGE 4] Extracted 40 valid perfume items.
+2026-10-26 15:31:46,959 - flipkart-crawler - INFO -   [PRICE HIKE] Flipkart PID PERHHDJCDYWF5YKA 'MAXIMOR Good & Bad Man Combo | 12Hrs Lon...': ₹1897 -> ₹1898 (+₹1)
+2026-10-26 15:31:47,838 - flipkart-crawler - INFO - [MONGO SUCCESS] Synced 40 products to 'flipkart.products' (Matched: 39, Modified: 39, Upserted: 1)
+2026-10-26 15:31:47,838 - flipkart-crawler - INFO - [PAGE 4 SUMMARY] +16 new unique items (Total crawled: 104). Saved to Mongo: 40.
+2026-10-26 15:31:47,838 - flipkart-crawler - INFO - Waiting 3.12s before fetching page 5...
+2026-10-26 15:31:50,962 - flipkart-crawler - INFO - 
+[PAGE 5] Navigating to: https://www.flipkart.com/search?q=perfume&otracker=search&otracker1=search&marketplace=FLIPKART&as-show=on&as=off&page=5
+2026-10-26 15:31:51,704 - flipkart-crawler - INFO - Scrolling down page to trigger lazy loaded product cards & images...
+2026-10-26 15:31:54,870 - flipkart-crawler - INFO - [PAGE 5] In-browser JS extracted 40 product cards.
+2026-10-26 15:31:54,875 - flipkart-crawler - INFO - [PAGE 5] Extracted 40 valid perfume items.
+2026-10-26 15:32:09,731 - flipkart-crawler - INFO - [MONGO SUCCESS] Synced 40 products to 'flipkart.products' (Matched: 40, Modified: 40, Upserted: 0)
+2026-10-26 15:32:09,731 - flipkart-crawler - INFO - [PAGE 5 SUMMARY] +19 new unique items (Total crawled: 123). Saved to Mongo: 40.
+2026-10-26 15:32:09,731 - flipkart-crawler - INFO - Waiting 3.30s before fetching page 6...
+2026-10-26 15:32:13,033 - flipkart-crawler - INFO - 
+[PAGE 6] Navigating to: https://www.flipkart.com/search?q=perfume&otracker=search&otracker1=search&marketplace=FLIPKART&as-show=on&as=off&page=6
+2026-10-26 15:32:13,625 - flipkart-crawler - INFO - Scrolling down page to trigger lazy loaded product cards & images...
+2026-10-26 15:32:16,830 - flipkart-crawler - INFO - [PAGE 6] In-browser JS extracted 40 product cards.
+2026-10-26 15:32:16,834 - flipkart-crawler - INFO - [PAGE 6] Extracted 40 valid perfume items.
+2026-10-26 15:32:21,631 - flipkart-crawler - INFO -   [PRICE DROP] Flipkart PID DEOEVYTKXEXDU3QB 'USTRAA Base Camp Cologne - Perfume for M...': ₹420 -> ₹419 (Save ₹1)
+2026-10-26 15:32:31,554 - flipkart-crawler - INFO - [MONGO SUCCESS] Synced 40 products to 'flipkart.products' (Matched: 38, Modified: 38, Upserted: 2)
+2026-10-26 15:32:31,554 - flipkart-crawler - INFO - [PAGE 6 SUMMARY] +22 new unique items (Total crawled: 145). Saved to Mongo: 40.
+2026-10-26 15:32:31,554 - flipkart-crawler - INFO - Waiting 3.86s before fetching page 7...
+2026-10-26 15:32:35,430 - flipkart-crawler - INFO - 
+[PAGE 7] Navigating to: https://www.flipkart.com/search?q=perfume&otracker=search&otracker1=search&marketplace=FLIPKART&as-show=on&as=off&page=7
+2026-10-26 15:32:36,174 - flipkart-crawler - INFO - Scrolling down page to trigger lazy loaded product cards & images...
+2026-10-26 15:32:39,332 - flipkart-crawler - INFO - [PAGE 7] In-browser JS extracted 40 product cards.
+2026-10-26 15:32:39,335 - flipkart-crawler - INFO - [PAGE 7] Extracted 40 valid perfume items.
+2026-10-26 15:32:41,046 - flipkart-crawler - INFO -   [PRICE DROP] Flipkart PID PERDRHBZVHGFYDQD 'SKINN by TITAN Raw Eau de Parfum - 50 ml...': ₹1594 -> ₹1496 (Save ₹98)
+2026-10-26 15:32:50,651 - flipkart-crawler - INFO -   [PRICE HIKE] Flipkart PID PERFVEESNHMGU5GM 'Ajmal Neea Perfume - 100 ml...': ₹409 -> ₹488 (+₹79)
+2026-10-26 15:32:53,953 - flipkart-crawler - INFO - [MONGO SUCCESS] Synced 40 products to 'flipkart.products' (Matched: 40, Modified: 40, Upserted: 0)
+2026-10-26 15:32:53,954 - flipkart-crawler - INFO - [PAGE 7 SUMMARY] +18 new unique items (Total crawled: 163). Saved to Mongo: 40.
+2026-10-26 15:32:53,954 - flipkart-crawler - INFO - Waiting 3.43s before fetching page 8...
+2026-10-26 15:32:57,390 - flipkart-crawler - INFO - 
+[PAGE 8] Navigating to: https://www.flipkart.com/search?q=perfume&otracker=search&otracker1=search&marketplace=FLIPKART&as-show=on&as=off&page=8
+2026-10-26 15:32:58,047 - flipkart-crawler - INFO - Scrolling down page to trigger lazy loaded product cards & images...
+2026-10-26 15:33:01,193 - flipkart-crawler - INFO - [PAGE 8] In-browser JS extracted 40 product cards.
+2026-10-26 15:33:01,196 - flipkart-crawler - INFO - [PAGE 8] Extracted 40 valid perfume items.
+2026-10-26 15:33:02,556 - flipkart-crawler - INFO -   [PRICE HIKE] Flipkart PID PERHPGMM4D2ZZGMX 'GodConcept PLUMANDICE_100 Eau de Parfum ...': ₹380 -> ₹456 (+₹76)
+2026-10-26 15:33:03,260 - flipkart-crawler - INFO -   [PRICE HIKE] Flipkart PID PERHFZYVVFWMBGQU 'Ajmal Wisal Dahab Long Lasting, Premium ...': ₹439 -> ₹879 (+₹440)
+2026-10-26 15:33:09,084 - flipkart-crawler - INFO -   [PRICE HIKE] Flipkart PID PERHHEYZUYAT29XH 'Artnomi Not Your Sweetheart | Long Lasti...': ₹192 -> ₹216 (+₹24)
+2026-10-26 15:33:16,064 - flipkart-crawler - INFO - [MONGO SUCCESS] Synced 40 products to 'flipkart.products' (Matched: 40, Modified: 40, Upserted: 0)
+2026-10-26 15:33:16,064 - flipkart-crawler - INFO - [PAGE 8 SUMMARY] +23 new unique items (Total crawled: 186). Saved to Mongo: 40.
+2026-10-26 15:33:16,064 - flipkart-crawler - INFO - Waiting 3.32s before fetching page 9...
+2026-10-26 15:33:19,394 - flipkart-crawler - INFO - 
+[PAGE 9] Navigating to: https://www.flipkart.com/search?q=perfume&otracker=search&otracker1=search&marketplace=FLIPKART&as-show=on&as=off&page=9
+2026-10-26 15:33:20,030 - flipkart-crawler - INFO - Scrolling down page to trigger lazy loaded product cards & images...
+2026-10-26 15:33:23,173 - flipkart-crawler - INFO - [PAGE 9] In-browser JS extracted 40 product cards.
+2026-10-26 15:33:23,178 - flipkart-crawler - INFO - [PAGE 9] Extracted 40 valid perfume items.
+2026-10-26 15:33:37,710 - flipkart-crawler - INFO - [MONGO SUCCESS] Synced 40 products to 'flipkart.products' (Matched: 40, Modified: 40, Upserted: 0)
+2026-10-26 15:33:37,711 - flipkart-crawler - INFO - [PAGE 9 SUMMARY] +22 new unique items (Total crawled: 208). Saved to Mongo: 40.
+2026-10-26 15:33:37,711 - flipkart-crawler - INFO - Waiting 3.41s before fetching page 10...
+2026-10-26 15:33:41,138 - flipkart-crawler - INFO - 
+[PAGE 10] Navigating to: https://www.flipkart.com/search?q=perfume&otracker=search&otracker1=search&marketplace=FLIPKART&as-show=on&as=off&page=10
+2026-10-26 15:33:41,745 - flipkart-crawler - INFO - Scrolling down page to trigger lazy loaded product cards & images...
+2026-10-26 15:33:44,891 - flipkart-crawler - INFO - [PAGE 10] In-browser JS extracted 40 product cards.
+2026-10-26 15:33:44,894 - flipkart-crawler - INFO - [PAGE 10] Extracted 40 valid perfume items.
+2026-10-26 15:33:53,088 - flipkart-crawler - INFO -   [PRICE HIKE] Flipkart PID PERH57TXFK4ZCWMZ 'RONZILLE Women Enchanted Bloom,Ruby Eau ...': ₹261 -> ₹267 (+₹6)
+2026-10-26 15:33:58,241 - flipkart-crawler - INFO -   [PRICE HIKE] Flipkart PID PERFVEESHGTH93HM 'Ajmal Aretha Eau de Parfum-100 ml Floral...': ₹483 -> ₹659 (+₹176)
+2026-10-26 15:33:59,491 - flipkart-crawler - INFO - [MONGO SUCCESS] Synced 40 products to 'flipkart.products' (Matched: 40, Modified: 40, Upserted: 0)
+2026-10-26 15:33:59,492 - flipkart-crawler - INFO - [PAGE 10 SUMMARY] +23 new unique items (Total crawled: 231). Saved to Mongo: 40.
+2026-10-26 15:33:59,492 - flipkart-crawler - INFO - Waiting 3.72s before fetching page 11...
+2026-10-26 15:34:03,219 - flipkart-crawler - INFO - 
+[PAGE 11] Navigating to: https://www.flipkart.com/search?q=perfume&otracker=search&otracker1=search&marketplace=FLIPKART&as-show=on&as=off&page=11
+2026-10-26 15:34:03,849 - flipkart-crawler - INFO - Scrolling down page to trigger lazy loaded product cards & images...
+2026-10-26 15:34:06,987 - flipkart-crawler - INFO - [PAGE 11] In-browser JS extracted 40 product cards.
+2026-10-26 15:34:06,992 - flipkart-crawler - INFO - [PAGE 11] Extracted 40 valid perfume items.
+2026-10-26 15:34:07,957 - flipkart-crawler - INFO -   [PRICE HIKE] Flipkart PID PEREYA4NRKEJPSGV 'OSR GIRL ORIGINAL PERFUME 120ML Eau de P...': ₹163 -> ₹172 (+₹9)
+2026-10-26 15:34:16,879 - flipkart-crawler - INFO -   [PRICE HIKE] Flipkart PID PEREQVXK3NCGJHZT 'Ajmal Bombay Dreams Eau de Parfum - 100 ...': ₹395 -> ₹456 (+₹61)
+2026-10-26 15:34:21,514 - flipkart-crawler - INFO - [MONGO SUCCESS] Synced 40 products to 'flipkart.products' (Matched: 40, Modified: 40, Upserted: 0)
+2026-10-26 15:34:21,515 - flipkart-crawler - INFO - [PAGE 11 SUMMARY] +24 new unique items (Total crawled: 255). Saved to Mongo: 40.
+2026-10-26 15:34:21,515 - flipkart-crawler - INFO - Waiting 4.36s before fetching page 12...
+2026-10-26 15:34:25,889 - flipkart-crawler - INFO - 
+[PAGE 12] Navigating to: https://www.flipkart.com/search?q=perfume&otracker=search&otracker1=search&marketplace=FLIPKART&as-show=on&as=off&page=12
+2026-10-26 15:34:26,711 - flipkart-crawler - INFO - Scrolling down page to trigger lazy loaded product cards & images...
+2026-10-26 15:34:29,856 - flipkart-crawler - INFO - [PAGE 12] In-browser JS extracted 40 product cards.
+2026-10-26 15:34:29,859 - flipkart-crawler - INFO - [PAGE 12] Extracted 40 valid perfume items.
+2026-10-26 15:34:34,539 - flipkart-crawler - INFO -   [PRICE HIKE] Flipkart PID PERFYKDCQBVFQH6R 'Ajmal KURO EDP Eau de Parfum - 90 ml...': ₹1999 -> ₹2249 (+₹250)
+2026-10-26 15:34:44,317 - flipkart-crawler - INFO - [MONGO SUCCESS] Synced 40 products to 'flipkart.products' (Matched: 40, Modified: 40, Upserted: 0)
+2026-10-26 15:34:44,318 - flipkart-crawler - INFO - [PAGE 12 SUMMARY] +24 new unique items (Total crawled: 279). Saved to Mongo: 40.
+2026-10-26 15:34:44,318 - flipkart-crawler - INFO - Waiting 3.11s before fetching page 13...
+2026-10-26 15:34:47,440 - flipkart-crawler - INFO - 
+[PAGE 13] Navigating to: https://www.flipkart.com/search?q=perfume&otracker=search&otracker1=search&marketplace=FLIPKART&as-show=on&as=off&page=13
+2026-10-26 15:34:48,179 - flipkart-crawler - INFO - Scrolling down page to trigger lazy loaded product cards & images...
+2026-10-26 15:34:51,351 - flipkart-crawler - INFO - [PAGE 13] In-browser JS extracted 40 product cards.
+2026-10-26 15:34:51,356 - flipkart-crawler - INFO - [PAGE 13] Extracted 40 valid perfume items.
+2026-10-26 15:34:57,729 - flipkart-crawler - INFO -   [PRICE HIKE] Flipkart PID PERHPNEF73PPNR3G 'NEXT Velvet Eau de Parfum - 30 ml...': ₹168 -> ₹217 (+₹49)
+2026-10-26 15:35:06,176 - flipkart-crawler - INFO - [MONGO SUCCESS] Synced 40 products to 'flipkart.products' (Matched: 40, Modified: 40, Upserted: 0)
+2026-10-26 15:35:06,177 - flipkart-crawler - INFO - [PAGE 13 SUMMARY] +24 new unique items (Total crawled: 303). Saved to Mongo: 40.
+2026-10-26 15:35:06,177 - flipkart-crawler - INFO - Waiting 3.02s before fetching page 14...
+2026-10-26 15:35:09,211 - flipkart-crawler - INFO - 
+[PAGE 14] Navigating to: https://www.flipkart.com/search?q=perfume&otracker=search&otracker1=search&marketplace=FLIPKART&as-show=on&as=off&page=14
+2026-10-26 15:35:09,906 - flipkart-crawler - INFO - Scrolling down page to trigger lazy loaded product cards & images...
+2026-10-26 15:35:13,047 - flipkart-crawler - INFO - [PAGE 14] In-browser JS extracted 40 product cards.
+2026-10-26 15:35:13,053 - flipkart-crawler - INFO - [PAGE 14] Extracted 40 valid perfume items.
+2026-10-26 15:35:27,492 - flipkart-crawler - INFO - [MONGO SUCCESS] Synced 40 products to 'flipkart.products' (Matched: 40, Modified: 40, Upserted: 0)
+2026-10-26 15:35:27,492 - flipkart-crawler - INFO - [PAGE 14 SUMMARY] +24 new unique items (Total crawled: 327). Saved to Mongo: 40.
+2026-10-26 15:35:27,493 - flipkart-crawler - INFO - Waiting 3.75s before fetching page 15...
+2026-10-26 15:35:31,255 - flipkart-crawler - INFO - 
+[PAGE 15] Navigating to: https://www.flipkart.com/search?q=perfume&otracker=search&otracker1=search&marketplace=FLIPKART&as-show=on&as=off&page=15
+2026-10-26 15:35:31,831 - flipkart-crawler - INFO - Scrolling down page to trigger lazy loaded product cards & images...
+2026-10-26 15:35:34,985 - flipkart-crawler - INFO - [PAGE 15] In-browser JS extracted 40 product cards.
+2026-10-26 15:35:34,988 - flipkart-crawler - INFO - [PAGE 15] Extracted 40 valid perfume items.
+2026-10-26 15:35:49,842 - flipkart-crawler - INFO - [MONGO SUCCESS] Synced 40 products to 'flipkart.products' (Matched: 40, Modified: 40, Upserted: 0)
+2026-10-26 15:35:49,842 - flipkart-crawler - INFO - [PAGE 15 SUMMARY] +23 new unique items (Total crawled: 350). Saved to Mongo: 40.
+2026-10-26 15:35:49,843 - flipkart-crawler - INFO - Waiting 3.21s before fetching page 16...
+2026-10-26 15:35:53,052 - flipkart-crawler - INFO - 
+[PAGE 16] Navigating to: https://www.flipkart.com/search?q=perfume&otracker=search&otracker1=search&marketplace=FLIPKART&as-show=on&as=off&page=16
+2026-10-26 15:35:53,853 - flipkart-crawler - INFO - Scrolling down page to trigger lazy loaded product cards & images...
+2026-10-26 15:35:57,005 - flipkart-crawler - INFO - [PAGE 16] In-browser JS extracted 40 product cards.
+2026-10-26 15:35:57,011 - flipkart-crawler - INFO - [PAGE 16] Extracted 40 valid perfume items.
+2026-10-26 15:36:00,344 - flipkart-crawler - INFO -   [PRICE HIKE] Flipkart PID PERHMRD7DZJ3GNTU 'XLNC Citrine Wave-100 Perfume - 100 ml...': ₹848 -> ₹1018 (+₹170)
+2026-10-26 15:36:03,795 - flipkart-crawler - INFO -   [PRICE DROP] Flipkart PID PERGW8YKEYQS4DFV 'RIYA Hum Tum, Eau de Parfume Eau de Parf...': ₹140 -> ₹135 (Save ₹5)
+2026-10-26 15:36:07,180 - flipkart-crawler - INFO -   [PRICE HIKE] Flipkart PID PERHMVUNWYCDXHG9 'XLNC Azure Blue_100 Eau de Parfum - 100 ...': ₹777 -> ₹933 (+₹156)
+2026-10-26 15:36:08,202 - flipkart-crawler - INFO -   [PRICE HIKE] Flipkart PID PERHCV7KEJJDGHNW 'HIRA Dive Club Perfume for Man |Long Las...': ₹539 -> ₹563 (+₹24)
+2026-10-26 15:36:11,514 - flipkart-crawler - INFO - [MONGO SUCCESS] Synced 40 products to 'flipkart.products' (Matched: 39, Modified: 39, Upserted: 1)
+2026-10-26 15:36:11,514 - flipkart-crawler - INFO - [PAGE 16 SUMMARY] +24 new unique items (Total crawled: 374). Saved to Mongo: 40.
+2026-10-26 15:36:11,515 - flipkart-crawler - INFO - Waiting 3.89s before fetching page 17...
+2026-10-26 15:36:15,419 - flipkart-crawler - INFO - 
+[PAGE 17] Navigating to: https://www.flipkart.com/search?q=perfume&otracker=search&otracker1=search&marketplace=FLIPKART&as-show=on&as=off&page=17
+2026-10-26 15:36:16,071 - flipkart-crawler - INFO - Scrolling down page to trigger lazy loaded product cards & images...
+2026-10-26 15:36:19,215 - flipkart-crawler - INFO - [PAGE 17] In-browser JS extracted 40 product cards.
+2026-10-26 15:36:19,219 - flipkart-crawler - INFO - [PAGE 17] Extracted 40 valid perfume items.
+2026-10-26 15:36:20,531 - flipkart-crawler - INFO -   [PRICE HIKE] Flipkart PID PERHZ9Y5YWMG6FEK 'English Leather Zest Eau de Parfum for M...': ₹88 -> ₹98 (+₹10)
+2026-10-26 15:36:20,866 - flipkart-crawler - INFO -   [PRICE HIKE] Flipkart PID PERHGS47CQZX2AFX 'Plum BodyLovin' Vanilla Caramello|Gourma...': ₹318 -> ₹337 (+₹19)
+2026-10-26 15:36:29,059 - flipkart-crawler - INFO -   [PRICE HIKE] Flipkart PID PERHNTHAHFJ8XNZH 'POLORIZER City Collection Unisex Perfume...': ₹427 -> ₹469 (+₹42)
+2026-10-26 15:36:33,716 - flipkart-crawler - INFO - [MONGO SUCCESS] Synced 40 products to 'flipkart.products' (Matched: 40, Modified: 40, Upserted: 0)
+2026-10-26 15:36:33,716 - flipkart-crawler - INFO - [PAGE 17 SUMMARY] +23 new unique items (Total crawled: 397). Saved to Mongo: 40.
+2026-10-26 15:36:33,716 - flipkart-crawler - INFO - Waiting 4.32s before fetching page 18...
+2026-10-26 15:36:38,054 - flipkart-crawler - INFO - 
+[PAGE 18] Navigating to: https://www.flipkart.com/search?q=perfume&otracker=search&otracker1=search&marketplace=FLIPKART&as-show=on&as=off&page=18
+2026-10-26 15:36:38,579 - flipkart-crawler - INFO - Scrolling down page to trigger lazy loaded product cards & images...
+2026-10-26 15:36:41,711 - flipkart-crawler - INFO - [PAGE 18] In-browser JS extracted 40 product cards.
+2026-10-26 15:36:41,714 - flipkart-crawler - INFO - [PAGE 18] Extracted 40 valid perfume items.
+2026-10-26 15:36:56,703 - flipkart-crawler - INFO - [MONGO SUCCESS] Synced 40 products to 'flipkart.products' (Matched: 39, Modified: 39, Upserted: 1)
+2026-10-26 15:36:56,703 - flipkart-crawler - INFO - [PAGE 18 SUMMARY] +24 new unique items (Total crawled: 421). Saved to Mongo: 40.
+2026-10-26 15:36:56,703 - flipkart-crawler - INFO - Waiting 3.23s before fetching page 19...
+2026-10-26 15:36:59,943 - flipkart-crawler - INFO - 
+[PAGE 19] Navigating to: https://www.flipkart.com/search?q=perfume&otracker=search&otracker1=search&marketplace=FLIPKART&as-show=on&as=off&page=19
+2026-10-26 15:37:00,802 - flipkart-crawler - INFO - Scrolling down page to trigger lazy loaded product cards & images...
+2026-10-26 15:37:03,948 - flipkart-crawler - INFO - [PAGE 19] In-browser JS extracted 40 product cards.
+2026-10-26 15:37:03,952 - flipkart-crawler - INFO - [PAGE 19] Extracted 40 valid perfume items.
+2026-10-26 15:37:14,211 - flipkart-crawler - INFO -   [PRICE HIKE] Flipkart PID PERGUZMJFYMGCKWC 'QUIMPER Chocolate Musk Spray Perfume - 3...': ₹127 -> ₹136 (+₹9)
+2026-10-26 15:37:18,777 - flipkart-crawler - INFO - [MONGO SUCCESS] Synced 40 products to 'flipkart.products' (Matched: 39, Modified: 39, Upserted: 1)
+2026-10-26 15:37:18,777 - flipkart-crawler - INFO - [PAGE 19 SUMMARY] +24 new unique items (Total crawled: 445). Saved to Mongo: 40.
+2026-10-26 15:37:18,777 - flipkart-crawler - INFO - Waiting 4.04s before fetching page 20...
+2026-10-26 15:37:22,830 - flipkart-crawler - INFO - 
+[PAGE 20] Navigating to: https://www.flipkart.com/search?q=perfume&otracker=search&otracker1=search&marketplace=FLIPKART&as-show=on&as=off&page=20
+2026-10-26 15:37:23,675 - flipkart-crawler - INFO - Scrolling down page to trigger lazy loaded product cards & images...
+2026-10-26 15:37:26,821 - flipkart-crawler - INFO - [PAGE 20] In-browser JS extracted 40 product cards.
+2026-10-26 15:37:26,825 - flipkart-crawler - INFO - [PAGE 20] Extracted 40 valid perfume items.
+2026-10-26 15:37:34,626 - flipkart-crawler - INFO -   [PRICE HIKE] Flipkart PID PERHGJ7KGHBCBYAB 'LA MONT PERFUMES Imperial Collection Gif...': ₹1289 -> ₹1462 (+₹173)
+2026-10-26 15:37:41,622 - flipkart-crawler - INFO - [MONGO SUCCESS] Synced 40 products to 'flipkart.products' (Matched: 39, Modified: 39, Upserted: 1)
+2026-10-26 15:37:41,622 - flipkart-crawler - INFO - [PAGE 20 SUMMARY] +24 new unique items (Total crawled: 469). Saved to Mongo: 40.
+2026-10-26 15:37:41,622 - flipkart-crawler - INFO - Waiting 4.09s before fetching page 21...
+2026-10-26 15:37:45,728 - flipkart-crawler - INFO - 
+[PAGE 21] Navigating to: https://www.flipkart.com/search?q=perfume&otracker=search&otracker1=search&marketplace=FLIPKART&as-show=on&as=off&page=21
+2026-10-26 15:37:46,279 - flipkart-crawler - INFO - Scrolling down page to trigger lazy loaded product cards & images...
+2026-10-26 15:37:49,428 - flipkart-crawler - INFO - [PAGE 21] In-browser JS extracted 40 product cards.
+2026-10-26 15:37:49,431 - flipkart-crawler - INFO - [PAGE 21] Extracted 40 valid perfume items.
+2026-10-26 15:37:51,426 - flipkart-crawler - INFO -   [PRICE HIKE] Flipkart PID PERER27NMRH6GXGN 'SKINN by TITAN celeste Eau de Parfum - 5...': ₹1594 -> ₹1599 (+₹5)
+2026-10-26 15:37:55,859 - flipkart-crawler - INFO -   [PRICE HIKE] Flipkart PID PERECEBUZYGHUGYG 'Perfumer's Workshop Tea Rose Eau de Toil...': ₹1295 -> ₹1463 (+₹168)
+2026-10-26 15:38:02,798 - flipkart-crawler - INFO -   [PRICE HIKE] Flipkart PID PERGFQJRCNXRT2QG 'VANESA Grace Perfume|Premium & Long Last...': ₹207 -> ₹238 (+₹31)
+2026-10-26 15:38:04,069 - flipkart-crawler - INFO - [MONGO SUCCESS] Synced 40 products to 'flipkart.products' (Matched: 40, Modified: 40, Upserted: 0)
+2026-10-26 15:38:04,069 - flipkart-crawler - INFO - [PAGE 21 SUMMARY] +24 new unique items (Total crawled: 493). Saved to Mongo: 40.
+2026-10-26 15:38:04,069 - flipkart-crawler - INFO - Waiting 3.50s before fetching page 22...
+2026-10-26 15:38:07,577 - flipkart-crawler - INFO - 
+[PAGE 22] Navigating to: https://www.flipkart.com/search?q=perfume&otracker=search&otracker1=search&marketplace=FLIPKART&as-show=on&as=off&page=22
+2026-10-26 15:38:08,420 - flipkart-crawler - INFO - Scrolling down page to trigger lazy loaded product cards & images...
+2026-10-26 15:38:11,572 - flipkart-crawler - INFO - [PAGE 22] In-browser JS extracted 40 product cards.
+2026-10-26 15:38:11,577 - flipkart-crawler - INFO - [PAGE 22] Extracted 40 valid perfume items.
+2026-10-26 15:38:22,900 - flipkart-crawler - INFO -   [PRICE HIKE] Flipkart PID PERHYVRYXWKHTMH5 'Ningen Le Gardenia Body Perfume Cream, L...': ₹315 -> ₹333 (+₹18)
+2026-10-26 15:38:23,929 - flipkart-crawler - INFO -   [PRICE HIKE] Flipkart PID PERHYHEEK92MPCA2 'RIAN Affair Apparel Perfume (Pack Of 1) ...': ₹186 -> ₹190 (+₹4)
+2026-10-26 15:38:26,229 - flipkart-crawler - INFO - [MONGO SUCCESS] Synced 40 products to 'flipkart.products' (Matched: 39, Modified: 39, Upserted: 1)
+2026-10-26 15:38:26,230 - flipkart-crawler - INFO - [PAGE 22 SUMMARY] +24 new unique items (Total crawled: 517). Saved to Mongo: 40.
+2026-10-26 15:38:26,230 - flipkart-crawler - INFO - Waiting 3.17s before fetching page 23...
+2026-10-26 15:38:29,405 - flipkart-crawler - INFO - 
+[PAGE 23] Navigating to: https://www.flipkart.com/search?q=perfume&otracker=search&otracker1=search&marketplace=FLIPKART&as-show=on&as=off&page=23
+2026-10-26 15:38:30,129 - flipkart-crawler - INFO - Scrolling down page to trigger lazy loaded product cards & images...
+2026-10-26 15:38:33,276 - flipkart-crawler - INFO - [PAGE 23] In-browser JS extracted 40 product cards.
+2026-10-26 15:38:33,282 - flipkart-crawler - INFO - [PAGE 23] Extracted 40 valid perfume items.
+2026-10-26 15:38:43,493 - flipkart-crawler - INFO -   [PRICE HIKE] Flipkart PID PERHBG3DTW5VYDNQ 'Red Tape Long-Lasting Floral & Aromatic ...': ₹737 -> ₹777 (+₹40)
+2026-10-26 15:38:44,521 - flipkart-crawler - INFO -   [PRICE HIKE] Flipkart PID PERGHHFGGERZ9PQH 'ARABIYAT Oud Al Layl Perfume Eau de Parf...': ₹1284 -> ₹1355 (+₹71)
+2026-10-26 15:38:45,196 - flipkart-crawler - INFO -   [PRICE HIKE] Flipkart PID PERHNFGKUZWCBH5E 'MissBliss Moonlit Bloom | Perfume for Me...': ₹246 -> ₹260 (+₹14)
+2026-10-26 15:38:47,805 - flipkart-crawler - INFO - [MONGO SUCCESS] Synced 40 products to 'flipkart.products' (Matched: 37, Modified: 37, Upserted: 3)
+2026-10-26 15:38:47,805 - flipkart-crawler - INFO - [PAGE 23 SUMMARY] +24 new unique items (Total crawled: 541). Saved to Mongo: 40.
+2026-10-26 15:38:47,805 - flipkart-crawler - INFO - Waiting 3.64s before fetching page 24...
+2026-10-26 15:38:51,454 - flipkart-crawler - INFO - 
+[PAGE 24] Navigating to: https://www.flipkart.com/search?q=perfume&otracker=search&otracker1=search&marketplace=FLIPKART&as-show=on&as=off&page=24
+2026-10-26 15:38:52,149 - flipkart-crawler - INFO - Scrolling down page to trigger lazy loaded product cards & images...
+2026-10-26 15:38:55,304 - flipkart-crawler - INFO - [PAGE 24] In-browser JS extracted 40 product cards.
+2026-10-26 15:38:55,307 - flipkart-crawler - INFO - [PAGE 24] Extracted 40 valid perfume items.
+2026-10-26 15:39:02,156 - flipkart-crawler - INFO -   [PRICE HIKE] Flipkart PID PERHNSYMFJ4KJ3PH 'POLORIZER New York Times & Dubai Desert ...': ₹331 -> ₹364 (+₹33)
+2026-10-26 15:39:05,540 - flipkart-crawler - INFO -   [PRICE HIKE] Flipkart PID PERHA55ZUAP6W7QG 'RAWLS Arabic Sunset & Arabic Noir Perfum...': ₹1117 -> ₹1178 (+₹61)
+2026-10-26 15:39:09,856 - flipkart-crawler - INFO - [MONGO SUCCESS] Synced 40 products to 'flipkart.products' (Matched: 38, Modified: 38, Upserted: 2)
+2026-10-26 15:39:09,857 - flipkart-crawler - INFO - [PAGE 24 SUMMARY] +24 new unique items (Total crawled: 565). Saved to Mongo: 40.
+2026-10-26 15:39:09,857 - flipkart-crawler - INFO - Waiting 3.75s before fetching page 25...
+2026-10-26 15:39:13,612 - flipkart-crawler - INFO - 
+[PAGE 25] Navigating to: https://www.flipkart.com/search?q=perfume&otracker=search&otracker1=search&marketplace=FLIPKART&as-show=on&as=off&page=25
+2026-10-26 15:39:14,470 - flipkart-crawler - INFO - Scrolling down page to trigger lazy loaded product cards & images...
+2026-10-26 15:39:17,628 - flipkart-crawler - INFO - [PAGE 25] In-browser JS extracted 40 product cards.
+2026-10-26 15:39:17,631 - flipkart-crawler - INFO - [PAGE 25] Extracted 40 valid perfume items.
+2026-10-26 15:39:29,910 - flipkart-crawler - INFO -   [PRICE HIKE] Flipkart PID PERGTE7MCGZWXHKH 'KILLER STROM POUR HOMME Eau de Parfum - ...': ₹166 -> ₹175 (+₹9)
+2026-10-26 15:39:30,930 - flipkart-crawler - INFO -   [PRICE HIKE] Flipkart PID PERGYQUHCURSHCZV 'PATEL Aroma Apparel Spray Long Lasting E...': ₹846 -> ₹864 (+₹18)
+2026-10-26 15:39:32,221 - flipkart-crawler - INFO - [MONGO SUCCESS] Synced 40 products to 'flipkart.products' (Matched: 37, Modified: 37, Upserted: 3)
+2026-10-26 15:39:32,221 - flipkart-crawler - INFO - [PAGE 25 SUMMARY] +24 new unique items (Total crawled: 589). Saved to Mongo: 40.
+2026-10-26 15:39:32,222 - flipkart-crawler - INFO - Reached configured max pages limit (25).
+2026-10-26 15:39:32,354 - flipkart-crawler - INFO - 
+==========================================
+2026-10-26 15:39:32,354 - flipkart-crawler - INFO - FLIPKART CRAWL FINISHED!
+2026-10-26 15:39:32,354 - flipkart-crawler - INFO - Total Unique Products: 589
+2026-10-26 15:39:32,630 - flipkart-crawler - INFO - Total in MongoDB: 1122
+2026-10-26 15:39:32,631 - flipkart-crawler - INFO - ==========================================
+
+2026-10-26 17:17:51,000 - flipkart-crawler - INFO - [MONGO] Connecting to MongoDB (38.45.64.201:27017/?authSource=admin) -> Database: 'flipkart', Collection: 'products'...
+2026-10-26 17:17:54,042 - flipkart-crawler - INFO - [MONGO OK] Connected! Index on 'id' verified for 'products'.
+2026-10-26 17:17:54,731 - flipkart-crawler - INFO - Launching Chromium browser (Headless: True)...
+2026-10-26 17:17:55,261 - flipkart-crawler - INFO - 
+[PAGE 1] Navigating to: https://www.flipkart.com/search?q=perfume&otracker=search&otracker1=search&marketplace=FLIPKART&as-show=on&as=off
+2026-10-26 17:17:57,354 - flipkart-crawler - INFO - Scrolling down page to trigger lazy loaded product cards & images...
+2026-10-26 17:18:00,567 - flipkart-crawler - INFO - [PAGE 1] In-browser JS extracted 40 product cards.
+2026-10-26 17:18:00,574 - flipkart-crawler - INFO - [PAGE 1] Extracted 40 valid perfume items.
+2026-10-26 17:18:11,602 - flipkart-crawler - INFO -   [PRICE HIKE] Flipkart PID PERH27MTGZ8GEMGG 'BELLAVITA Unisex Scents Gift Set|4x20ml|...': ₹369 -> ₹375 (+₹6)
+2026-10-26 17:18:14,394 - flipkart-crawler - INFO -   [PRICE HIKE] Flipkart PID PERHNDKDCDHXTJG2 'Loxira White London Perfume 60ml Strong ...': ₹180 -> ₹190 (+₹10)
+2026-10-26 17:18:15,313 - flipkart-crawler - INFO - [MONGO SUCCESS] Synced 40 products to 'flipkart.products' (Matched: 39, Modified: 39, Upserted: 1)
+2026-10-26 17:18:15,314 - flipkart-crawler - INFO - [PAGE 1 SUMMARY] +40 new unique items (Total crawled: 40). Saved to Mongo: 40.
+2026-10-26 17:18:15,314 - flipkart-crawler - INFO - Waiting 4.25s before fetching page 2...
+2026-10-26 17:18:19,562 - flipkart-crawler - INFO - 
+[PAGE 2] Navigating to: https://www.flipkart.com/search?q=perfume&otracker=search&otracker1=search&marketplace=FLIPKART&as-show=on&as=off&page=2
+2026-10-26 17:18:20,282 - flipkart-crawler - INFO - Scrolling down page to trigger lazy loaded product cards & images...
+2026-10-26 17:18:23,433 - flipkart-crawler - INFO - [PAGE 2] In-browser JS extracted 40 product cards.
+2026-10-26 17:18:23,437 - flipkart-crawler - INFO - [PAGE 2] Extracted 40 valid perfume items.
+2026-10-26 17:18:38,224 - flipkart-crawler - INFO - [MONGO SUCCESS] Synced 40 products to 'flipkart.products' (Matched: 39, Modified: 39, Upserted: 1)
+2026-10-26 17:18:38,224 - flipkart-crawler - INFO - [PAGE 2 SUMMARY] +26 new unique items (Total crawled: 66). Saved to Mongo: 40.
+2026-10-26 17:18:38,224 - flipkart-crawler - INFO - Waiting 3.73s before fetching page 3...
+2026-10-26 17:18:41,969 - flipkart-crawler - INFO - 
+[PAGE 3] Navigating to: https://www.flipkart.com/search?q=perfume&otracker=search&otracker1=search&marketplace=FLIPKART&as-show=on&as=off&page=3
+2026-10-26 17:18:42,775 - flipkart-crawler - INFO - Scrolling down page to trigger lazy loaded product cards & images...
+2026-10-26 17:18:45,942 - flipkart-crawler - INFO - [PAGE 3] In-browser JS extracted 40 product cards.
+2026-10-26 17:18:45,948 - flipkart-crawler - INFO - [PAGE 3] Extracted 40 valid perfume items.
+2026-10-26 17:19:00,432 - flipkart-crawler - INFO - [MONGO SUCCESS] Synced 40 products to 'flipkart.products' (Matched: 40, Modified: 40, Upserted: 0)
+2026-10-26 17:19:00,432 - flipkart-crawler - INFO - [PAGE 3 SUMMARY] +23 new unique items (Total crawled: 89). Saved to Mongo: 40.
+2026-10-26 17:19:00,432 - flipkart-crawler - INFO - Waiting 3.74s before fetching page 4...
+2026-10-26 17:19:04,187 - flipkart-crawler - INFO - 
+[PAGE 4] Navigating to: https://www.flipkart.com/search?q=perfume&otracker=search&otracker1=search&marketplace=FLIPKART&as-show=on&as=off&page=4
+2026-10-26 17:19:04,985 - flipkart-crawler - INFO - Scrolling down page to trigger lazy loaded product cards & images...
+2026-10-26 17:19:08,218 - flipkart-crawler - INFO - [PAGE 4] In-browser JS extracted 40 product cards.
+2026-10-26 17:19:08,223 - flipkart-crawler - INFO - [PAGE 4] Extracted 40 valid perfume items.
+2026-10-26 17:19:22,784 - flipkart-crawler - INFO - [MONGO SUCCESS] Synced 40 products to 'flipkart.products' (Matched: 38, Modified: 38, Upserted: 2)
+2026-10-26 17:19:22,784 - flipkart-crawler - INFO - [PAGE 4 SUMMARY] +19 new unique items (Total crawled: 108). Saved to Mongo: 40.
+2026-10-26 17:19:22,784 - flipkart-crawler - INFO - Waiting 4.09s before fetching page 5...
+2026-10-26 17:19:26,874 - flipkart-crawler - INFO - 
+[PAGE 5] Navigating to: https://www.flipkart.com/search?q=perfume&otracker=search&otracker1=search&marketplace=FLIPKART&as-show=on&as=off&page=5
+2026-10-26 17:19:27,596 - flipkart-crawler - INFO - Scrolling down page to trigger lazy loaded product cards & images...
+2026-10-26 17:19:30,750 - flipkart-crawler - INFO - [PAGE 5] In-browser JS extracted 40 product cards.
+2026-10-26 17:19:30,754 - flipkart-crawler - INFO - [PAGE 5] Extracted 40 valid perfume items.
+2026-10-26 17:19:43,049 - flipkart-crawler - INFO -   [PRICE HIKE] Flipkart PID PERFFMHWPZE5JAXZ 'VIWA Something Something Spray Eau de Pa...': ₹187 -> ₹220 (+₹33)
+2026-10-26 17:19:45,301 - flipkart-crawler - INFO - [MONGO SUCCESS] Synced 40 products to 'flipkart.products' (Matched: 40, Modified: 40, Upserted: 0)
+2026-10-26 17:19:45,301 - flipkart-crawler - INFO - [PAGE 5 SUMMARY] +21 new unique items (Total crawled: 129). Saved to Mongo: 40.
+2026-10-26 17:19:45,301 - flipkart-crawler - INFO - Waiting 4.50s before fetching page 6...
+2026-10-26 17:19:49,813 - flipkart-crawler - INFO - 
+[PAGE 6] Navigating to: https://www.flipkart.com/search?q=perfume&otracker=search&otracker1=search&marketplace=FLIPKART&as-show=on&as=off&page=6
+2026-10-26 17:19:50,459 - flipkart-crawler - INFO - Scrolling down page to trigger lazy loaded product cards & images...
+2026-10-26 17:19:53,653 - flipkart-crawler - INFO - [PAGE 6] In-browser JS extracted 40 product cards.
+2026-10-26 17:19:53,679 - flipkart-crawler - INFO - [PAGE 6] Extracted 40 valid perfume items.
+2026-10-26 17:20:06,127 - flipkart-crawler - INFO -   [PRICE HIKE] Flipkart PID PERHFU4FY5TPU2S3 'PARK AVENUE Luxury Perfume Gift Set - Ha...': ₹445 -> ₹461 (+₹16)
+2026-10-26 17:20:08,410 - flipkart-crawler - INFO - [MONGO SUCCESS] Synced 40 products to 'flipkart.products' (Matched: 40, Modified: 40, Upserted: 0)
+2026-10-26 17:20:08,410 - flipkart-crawler - INFO - [PAGE 6 SUMMARY] +19 new unique items (Total crawled: 148). Saved to Mongo: 40.
+2026-10-26 17:20:08,411 - flipkart-crawler - INFO - Waiting 3.00s before fetching page 7...
+2026-10-26 17:20:11,420 - flipkart-crawler - INFO - 
+[PAGE 7] Navigating to: https://www.flipkart.com/search?q=perfume&otracker=search&otracker1=search&marketplace=FLIPKART&as-show=on&as=off&page=7
+2026-10-26 17:20:12,321 - flipkart-crawler - INFO - Scrolling down page to trigger lazy loaded product cards & images...
+2026-10-26 17:20:15,584 - flipkart-crawler - INFO - [PAGE 7] In-browser JS extracted 40 product cards.
+2026-10-26 17:20:15,607 - flipkart-crawler - INFO - [PAGE 7] Extracted 40 valid perfume items.
+2026-10-26 17:20:30,283 - flipkart-crawler - INFO - [MONGO SUCCESS] Synced 40 products to 'flipkart.products' (Matched: 39, Modified: 39, Upserted: 1)
+2026-10-26 17:20:30,283 - flipkart-crawler - INFO - [PAGE 7 SUMMARY] +19 new unique items (Total crawled: 167). Saved to Mongo: 40.
+2026-10-26 17:20:30,283 - flipkart-crawler - INFO - Waiting 4.44s before fetching page 8...
+2026-10-26 17:20:34,727 - flipkart-crawler - INFO - 
+[PAGE 8] Navigating to: https://www.flipkart.com/search?q=perfume&otracker=search&otracker1=search&marketplace=FLIPKART&as-show=on&as=off&page=8
+2026-10-26 17:20:35,397 - flipkart-crawler - INFO - Scrolling down page to trigger lazy loaded product cards & images...
+2026-10-26 17:20:38,542 - flipkart-crawler - INFO - [PAGE 8] In-browser JS extracted 40 product cards.
+2026-10-26 17:20:38,547 - flipkart-crawler - INFO - [PAGE 8] Extracted 40 valid perfume items.
+2026-10-26 17:20:52,912 - flipkart-crawler - INFO - [MONGO SUCCESS] Synced 40 products to 'flipkart.products' (Matched: 40, Modified: 40, Upserted: 0)
+2026-10-26 17:20:52,913 - flipkart-crawler - INFO - [PAGE 8 SUMMARY] +20 new unique items (Total crawled: 187). Saved to Mongo: 40.
+2026-10-26 17:20:52,913 - flipkart-crawler - INFO - Waiting 3.08s before fetching page 9...
+2026-10-26 17:20:56,003 - flipkart-crawler - INFO - 
+[PAGE 9] Navigating to: https://www.flipkart.com/search?q=perfume&otracker=search&otracker1=search&marketplace=FLIPKART&as-show=on&as=off&page=9
+2026-10-26 17:20:56,838 - flipkart-crawler - INFO - Scrolling down page to trigger lazy loaded product cards & images...
+2026-10-26 17:20:59,977 - flipkart-crawler - INFO - [PAGE 9] In-browser JS extracted 40 product cards.
+2026-10-26 17:20:59,981 - flipkart-crawler - INFO - [PAGE 9] Extracted 40 valid perfume items.
+2026-10-26 17:21:03,082 - flipkart-crawler - INFO -   [PRICE DROP] Flipkart PID PERGEMPUFS8YA8PA 'RAMSONS U R Sweet & Lovely Pack of 2 Eau...': ₹242 -> ₹240 (Save ₹2)
+2026-10-26 17:21:14,747 - flipkart-crawler - INFO - [MONGO SUCCESS] Synced 40 products to 'flipkart.products' (Matched: 39, Modified: 39, Upserted: 1)
+2026-10-26 17:21:14,748 - flipkart-crawler - INFO - [PAGE 9 SUMMARY] +22 new unique items (Total crawled: 209). Saved to Mongo: 40.
+2026-10-26 17:21:14,748 - flipkart-crawler - INFO - Waiting 4.01s before fetching page 10...
+2026-10-26 17:21:18,774 - flipkart-crawler - INFO - 
+[PAGE 10] Navigating to: https://www.flipkart.com/search?q=perfume&otracker=search&otracker1=search&marketplace=FLIPKART&as-show=on&as=off&page=10
+2026-10-26 17:21:19,554 - flipkart-crawler - INFO - Scrolling down page to trigger lazy loaded product cards & images...
+2026-10-26 17:21:22,733 - flipkart-crawler - INFO - [PAGE 10] In-browser JS extracted 40 product cards.
+2026-10-26 17:21:22,739 - flipkart-crawler - INFO - [PAGE 10] Extracted 40 valid perfume items.
+2026-10-26 17:21:30,668 - flipkart-crawler - INFO -   [PRICE DROP] Flipkart PID PERHFSE9VSAY3CYB 'Parag Fragrances Natural Javadhu Perfume...': ₹335 -> ₹277 (Save ₹58)
+2026-10-26 17:21:35,125 - flipkart-crawler - INFO -   [PRICE HIKE] Flipkart PID PERF8942GZVKZQZB 'Ajmal Zeal Eau de Parfum - 100 ml...': ₹1299 -> ₹1499 (+₹200)
+2026-10-26 17:21:36,504 - flipkart-crawler - INFO -   [PRICE HIKE] Flipkart PID PERFVEESEQZZZSVN 'Ajmal Yearn Perfume - 100 ml...': ₹439 -> ₹488 (+₹49)
+2026-10-26 17:21:37,400 - flipkart-crawler - INFO - [MONGO SUCCESS] Synced 40 products to 'flipkart.products' (Matched: 40, Modified: 40, Upserted: 0)
+2026-10-26 17:21:37,400 - flipkart-crawler - INFO - [PAGE 10 SUMMARY] +24 new unique items (Total crawled: 233). Saved to Mongo: 40.
+2026-10-26 17:21:37,400 - flipkart-crawler - INFO - Waiting 4.16s before fetching page 11...
+2026-10-26 17:21:41,567 - flipkart-crawler - INFO - 
+[PAGE 11] Navigating to: https://www.flipkart.com/search?q=perfume&otracker=search&otracker1=search&marketplace=FLIPKART&as-show=on&as=off&page=11
+2026-10-26 17:21:42,257 - flipkart-crawler - INFO - Scrolling down page to trigger lazy loaded product cards & images...
+2026-10-26 17:21:45,428 - flipkart-crawler - INFO - [PAGE 11] In-browser JS extracted 40 product cards.
+2026-10-26 17:21:45,438 - flipkart-crawler - INFO - [PAGE 11] Extracted 40 valid perfume items.
+2026-10-26 17:21:53,797 - flipkart-crawler - INFO -   [PRICE HIKE] Flipkart PID PERHMYA29BCRE6DU 'Artnomi Yes Mine 24% Concn Long Lasting ...': ₹541 -> ₹571 (+₹30)
+2026-10-26 17:22:00,181 - flipkart-crawler - INFO - [MONGO SUCCESS] Synced 40 products to 'flipkart.products' (Matched: 40, Modified: 40, Upserted: 0)
+2026-10-26 17:22:00,181 - flipkart-crawler - INFO - [PAGE 11 SUMMARY] +24 new unique items (Total crawled: 257). Saved to Mongo: 40.
+2026-10-26 17:22:00,182 - flipkart-crawler - INFO - Waiting 3.81s before fetching page 12...
+2026-10-26 17:22:04,001 - flipkart-crawler - INFO - 
+[PAGE 12] Navigating to: https://www.flipkart.com/search?q=perfume&otracker=search&otracker1=search&marketplace=FLIPKART&as-show=on&as=off&page=12
+2026-10-26 17:22:04,785 - flipkart-crawler - INFO - Scrolling down page to trigger lazy loaded product cards & images...
+2026-10-26 17:22:07,956 - flipkart-crawler - INFO - [PAGE 12] In-browser JS extracted 40 product cards.
+2026-10-26 17:22:07,965 - flipkart-crawler - INFO - [PAGE 12] Extracted 40 valid perfume items.
+2026-10-26 17:22:22,549 - flipkart-crawler - INFO - [MONGO SUCCESS] Synced 40 products to 'flipkart.products' (Matched: 40, Modified: 40, Upserted: 0)
+2026-10-26 17:22:22,550 - flipkart-crawler - INFO - [PAGE 12 SUMMARY] +24 new unique items (Total crawled: 281). Saved to Mongo: 40.
+2026-10-26 17:22:22,550 - flipkart-crawler - INFO - Waiting 3.78s before fetching page 13...
+2026-10-26 17:22:26,341 - flipkart-crawler - INFO - 
+[PAGE 13] Navigating to: https://www.flipkart.com/search?q=perfume&otracker=search&otracker1=search&marketplace=FLIPKART&as-show=on&as=off&page=13
+2026-10-26 17:22:27,184 - flipkart-crawler - INFO - Scrolling down page to trigger lazy loaded product cards & images...
+2026-10-26 17:22:30,352 - flipkart-crawler - INFO - [PAGE 13] In-browser JS extracted 40 product cards.
+2026-10-26 17:22:30,363 - flipkart-crawler - INFO - [PAGE 13] Extracted 40 valid perfume items.
+2026-10-26 17:22:32,031 - flipkart-crawler - INFO -   [PRICE HIKE] Flipkart PID PERGV43YYRNTN9AQ 'THE MAN COMPANY Perfume for Men Gift Set...': ₹327 -> ₹348 (+₹21)
+2026-10-26 17:22:32,373 - flipkart-crawler - INFO -   [PRICE DROP] Flipkart PID PERGFH6FE9MXF2US 'RAMCO VIP 919 Gold Perfume 50ml Perfume ...': ₹278 -> ₹270 (Save ₹8)
+2026-10-26 17:22:43,748 - flipkart-crawler - INFO -   [PRICE HIKE] Flipkart PID PERHP56NN9T4QUWB 'Ramson RED ZX Eau de Parfum - 100 ml...': ₹353 -> ₹372 (+₹19)
+2026-10-26 17:22:44,990 - flipkart-crawler - INFO - [MONGO SUCCESS] Synced 40 products to 'flipkart.products' (Matched: 40, Modified: 40, Upserted: 0)
+2026-10-26 17:22:44,990 - flipkart-crawler - INFO - [PAGE 13 SUMMARY] +24 new unique items (Total crawled: 305). Saved to Mongo: 40.
+2026-10-26 17:22:44,991 - flipkart-crawler - INFO - Waiting 3.46s before fetching page 14...
+2026-10-26 17:22:48,465 - flipkart-crawler - INFO - 
+[PAGE 14] Navigating to: https://www.flipkart.com/search?q=perfume&otracker=search&otracker1=search&marketplace=FLIPKART&as-show=on&as=off&page=14
+2026-10-26 17:22:49,242 - flipkart-crawler - INFO - Scrolling down page to trigger lazy loaded product cards & images...
+2026-10-26 17:22:52,403 - flipkart-crawler - INFO - [PAGE 14] In-browser JS extracted 40 product cards.
+2026-10-26 17:22:52,413 - flipkart-crawler - INFO - [PAGE 14] Extracted 40 valid perfume items.
+2026-10-26 17:23:04,724 - flipkart-crawler - INFO -   [PRICE HIKE] Flipkart PID PERFHCZZHKHW3G6S 'OPP MAGNET APPAREL Perfume - 100 ml...': ₹271 -> ₹286 (+₹15)
+2026-10-26 17:23:06,090 - flipkart-crawler - INFO -   [PRICE HIKE] Flipkart PID PERHDZBXXV6XAHVH 'BRIT ACCENT |Grandeur Premium Collection...': ₹253 -> ₹270 (+₹17)
+2026-10-26 17:23:07,000 - flipkart-crawler - INFO - [MONGO SUCCESS] Synced 40 products to 'flipkart.products' (Matched: 40, Modified: 40, Upserted: 0)
+2026-10-26 17:23:07,001 - flipkart-crawler - INFO - [PAGE 14 SUMMARY] +24 new unique items (Total crawled: 329). Saved to Mongo: 40.
+2026-10-26 17:23:07,001 - flipkart-crawler - INFO - Waiting 3.86s before fetching page 15...
+2026-10-26 17:23:10,869 - flipkart-crawler - INFO - 
+[PAGE 15] Navigating to: https://www.flipkart.com/search?q=perfume&otracker=search&otracker1=search&marketplace=FLIPKART&as-show=on&as=off&page=15
+2026-10-26 17:23:11,789 - flipkart-crawler - INFO - Scrolling down page to trigger lazy loaded product cards & images...
+2026-10-26 17:23:14,983 - flipkart-crawler - INFO - [PAGE 15] In-browser JS extracted 40 product cards.
+2026-10-26 17:23:14,994 - flipkart-crawler - INFO - [PAGE 15] Extracted 40 valid perfume items.
+2026-10-26 17:23:22,892 - flipkart-crawler - INFO -   [PRICE HIKE] Flipkart PID PERHG6X8JYUBMFGJ 'Cool Rock Solid Perfume Combo, Bombshell...': ₹179 -> ₹183 (+₹4)
+2026-10-26 17:23:29,878 - flipkart-crawler - INFO - [MONGO SUCCESS] Synced 40 products to 'flipkart.products' (Matched: 39, Modified: 39, Upserted: 1)
+2026-10-26 17:23:29,879 - flipkart-crawler - INFO - [PAGE 15 SUMMARY] +23 new unique items (Total crawled: 352). Saved to Mongo: 40.
+2026-10-26 17:23:29,879 - flipkart-crawler - INFO - Waiting 3.43s before fetching page 16...
+2026-10-26 17:23:33,310 - flipkart-crawler - INFO - 
+[PAGE 16] Navigating to: https://www.flipkart.com/search?q=perfume&otracker=search&otracker1=search&marketplace=FLIPKART&as-show=on&as=off&page=16
+2026-10-26 17:23:34,155 - flipkart-crawler - INFO - Scrolling down page to trigger lazy loaded product cards & images...
+2026-10-26 17:23:37,360 - flipkart-crawler - INFO - [PAGE 16] In-browser JS extracted 40 product cards.
+2026-10-26 17:23:37,370 - flipkart-crawler - INFO - [PAGE 16] Extracted 40 valid perfume items.
+2026-10-26 17:23:44,157 - flipkart-crawler - INFO -   [PRICE DROP] Flipkart PID PERFZZFAEMDZHVNZ 'OSR Boy Apparel Eau de Parfum - 20 ml...': ₹109 -> ₹75 (Save ₹34)
+2026-10-26 17:23:53,526 - flipkart-crawler - INFO - [MONGO SUCCESS] Synced 40 products to 'flipkart.products' (Matched: 40, Modified: 40, Upserted: 0)
+2026-10-26 17:23:53,526 - flipkart-crawler - INFO - [PAGE 16 SUMMARY] +24 new unique items (Total crawled: 376). Saved to Mongo: 40.
+2026-10-26 17:23:53,526 - flipkart-crawler - INFO - Waiting 3.65s before fetching page 17...
+2026-10-26 17:23:57,182 - flipkart-crawler - INFO - 
+[PAGE 17] Navigating to: https://www.flipkart.com/search?q=perfume&otracker=search&otracker1=search&marketplace=FLIPKART&as-show=on&as=off&page=17
+2026-10-26 17:23:58,106 - flipkart-crawler - INFO - Scrolling down page to trigger lazy loaded product cards & images...
+2026-10-26 17:24:01,316 - flipkart-crawler - INFO - [PAGE 17] In-browser JS extracted 40 product cards.
+2026-10-26 17:24:01,328 - flipkart-crawler - INFO - [PAGE 17] Extracted 40 valid perfume items.
+2026-10-26 17:24:10,233 - flipkart-crawler - INFO -   [PRICE DROP] Flipkart PID PERHFZCDH36BN7JS 'Alhiza Maryam Roll-On Perfume | Alcohol-...': ₹163 -> ₹143 (Save ₹20)
+2026-10-26 17:24:15,952 - flipkart-crawler - INFO - [MONGO SUCCESS] Synced 40 products to 'flipkart.products' (Matched: 40, Modified: 40, Upserted: 0)
+2026-10-26 17:24:15,953 - flipkart-crawler - INFO - [PAGE 17 SUMMARY] +24 new unique items (Total crawled: 400). Saved to Mongo: 40.
+2026-10-26 17:24:15,953 - flipkart-crawler - INFO - Waiting 4.06s before fetching page 18...
+2026-10-26 17:24:20,029 - flipkart-crawler - INFO - 
+[PAGE 18] Navigating to: https://www.flipkart.com/search?q=perfume&otracker=search&otracker1=search&marketplace=FLIPKART&as-show=on&as=off&page=18
+2026-10-26 17:24:20,741 - flipkart-crawler - INFO - Scrolling down page to trigger lazy loaded product cards & images...
+2026-10-26 17:24:23,898 - flipkart-crawler - INFO - [PAGE 18] In-browser JS extracted 40 product cards.
+2026-10-26 17:24:23,903 - flipkart-crawler - INFO - [PAGE 18] Extracted 40 valid perfume items.
+2026-10-26 17:24:32,380 - flipkart-crawler - INFO -   [PRICE HIKE] Flipkart PID PERGCYSDK3MXTKEP 'Wildplay Midnight 40ml perfume 1pc. Perf...': ₹124 -> ₹126 (+₹2)
+2026-10-26 17:24:35,604 - flipkart-crawler - INFO -   [PRICE HIKE] Flipkart PID PERHMYZXYNYYDUB9 'LOMANI Just Call Me Maxi Eau De Cologne ...': ₹904 -> ₹954 (+₹50)
+2026-10-26 17:24:38,570 - flipkart-crawler - INFO - [MONGO SUCCESS] Synced 40 products to 'flipkart.products' (Matched: 40, Modified: 40, Upserted: 0)
+2026-10-26 17:24:38,571 - flipkart-crawler - INFO - [PAGE 18 SUMMARY] +24 new unique items (Total crawled: 424). Saved to Mongo: 40.
+2026-10-26 17:24:38,571 - flipkart-crawler - INFO - Waiting 4.34s before fetching page 19...
+2026-10-26 17:24:42,925 - flipkart-crawler - INFO - 
+[PAGE 19] Navigating to: https://www.flipkart.com/search?q=perfume&otracker=search&otracker1=search&marketplace=FLIPKART&as-show=on&as=off&page=19
+2026-10-26 17:24:43,920 - flipkart-crawler - INFO - Scrolling down page to trigger lazy loaded product cards & images...
+2026-10-26 17:24:47,177 - flipkart-crawler - INFO - [PAGE 19] In-browser JS extracted 40 product cards.
+2026-10-26 17:24:47,189 - flipkart-crawler - INFO - [PAGE 19] Extracted 40 valid perfume items.
+2026-10-26 17:24:51,937 - flipkart-crawler - INFO -   [PRICE HIKE] Flipkart PID PERHEDH4DZNHRSV8 'MOSA ITALIA Velvet oud Perfume with Frui...': ₹242 -> ₹258 (+₹16)
+2026-10-26 17:25:01,969 - flipkart-crawler - INFO - [MONGO SUCCESS] Synced 40 products to 'flipkart.products' (Matched: 39, Modified: 39, Upserted: 1)
+2026-10-26 17:25:01,969 - flipkart-crawler - INFO - [PAGE 19 SUMMARY] +24 new unique items (Total crawled: 448). Saved to Mongo: 40.
+2026-10-26 17:25:01,969 - flipkart-crawler - INFO - Waiting 4.05s before fetching page 20...
+2026-10-26 17:25:06,027 - flipkart-crawler - INFO - 
+[PAGE 20] Navigating to: https://www.flipkart.com/search?q=perfume&otracker=search&otracker1=search&marketplace=FLIPKART&as-show=on&as=off&page=20
+2026-10-26 17:25:06,735 - flipkart-crawler - INFO - Scrolling down page to trigger lazy loaded product cards & images...
+2026-10-26 17:25:09,872 - flipkart-crawler - INFO - [PAGE 20] In-browser JS extracted 40 product cards.
+2026-10-26 17:25:09,899 - flipkart-crawler - INFO - [PAGE 20] Extracted 40 valid perfume items.
+2026-10-26 17:25:21,479 - flipkart-crawler - INFO -   [PRICE DROP] Flipkart PID PERDRHBZZN9WYXHG 'SKINN by TITAN Steele Eau de Parfum - 50...': ₹1594 -> ₹1496 (Save ₹98)
+2026-10-26 17:25:23,582 - flipkart-crawler - INFO -   [PRICE HIKE] Flipkart PID PERHGE66ZUWHDHXD 'manish WL White London Perfume Perfume -...': ₹316 -> ₹334 (+₹18)
+2026-10-26 17:25:24,558 - flipkart-crawler - INFO - [MONGO SUCCESS] Synced 40 products to 'flipkart.products' (Matched: 40, Modified: 40, Upserted: 0)
+2026-10-26 17:25:24,558 - flipkart-crawler - INFO - [PAGE 20 SUMMARY] +24 new unique items (Total crawled: 472). Saved to Mongo: 40.
+2026-10-26 17:25:24,558 - flipkart-crawler - INFO - Waiting 3.51s before fetching page 21...
+2026-10-26 17:25:28,079 - flipkart-crawler - INFO - 
+[PAGE 21] Navigating to: https://www.flipkart.com/search?q=perfume&otracker=search&otracker1=search&marketplace=FLIPKART&as-show=on&as=off&page=21
+2026-10-26 17:25:29,038 - flipkart-crawler - INFO - Scrolling down page to trigger lazy loaded product cards & images...
+2026-10-26 17:25:32,252 - flipkart-crawler - INFO - [PAGE 21] In-browser JS extracted 40 product cards.
+2026-10-26 17:25:32,260 - flipkart-crawler - INFO - [PAGE 21] Extracted 40 valid perfume items.
+2026-10-26 17:25:37,716 - flipkart-crawler - INFO -   [PRICE HIKE] Flipkart PID PERHGWJ4HPGHK99A 'JECCY Rose & Jasmin Fresh And Floral Lon...': ₹280 -> ₹286 (+₹6)
+2026-10-26 17:25:45,612 - flipkart-crawler - INFO -   [PRICE HIKE] Flipkart PID PERFWHYUCNU99UJQ 'LOMANI POUR HOMME (ORIGINAL) Eau de Toil...': ₹892 -> ₹949 (+₹57)
+2026-10-26 17:25:46,890 - flipkart-crawler - INFO - [MONGO SUCCESS] Synced 40 products to 'flipkart.products' (Matched: 40, Modified: 40, Upserted: 0)
+2026-10-26 17:25:46,890 - flipkart-crawler - INFO - [PAGE 21 SUMMARY] +24 new unique items (Total crawled: 496). Saved to Mongo: 40.
+2026-10-26 17:25:46,890 - flipkart-crawler - INFO - Waiting 4.36s before fetching page 22...
+2026-10-26 17:25:51,248 - flipkart-crawler - INFO - 
+[PAGE 22] Navigating to: https://www.flipkart.com/search?q=perfume&otracker=search&otracker1=search&marketplace=FLIPKART&as-show=on&as=off&page=22
+2026-10-26 17:25:52,031 - flipkart-crawler - INFO - Scrolling down page to trigger lazy loaded product cards & images...
+2026-10-26 17:25:55,202 - flipkart-crawler - INFO - [PAGE 22] In-browser JS extracted 40 product cards.
+2026-10-26 17:25:55,212 - flipkart-crawler - INFO - [PAGE 22] Extracted 40 valid perfume items.
+2026-10-26 17:25:58,249 - flipkart-crawler - INFO -   [PRICE HIKE] Flipkart PID PERHP54DM4ACZTPH 'SIGMA DOT Luxury Fragrance Bundle Pack o...': ₹162 -> ₹168 (+₹6)
+2026-10-26 17:26:07,535 - flipkart-crawler - INFO -   [PRICE HIKE] Flipkart PID PERHHF3SWPQZBNUY 'Artnomi Sweet But Psycho | Premium Long ...': ₹195 -> ₹231 (+₹36)
+2026-10-26 17:26:10,095 - flipkart-crawler - INFO - [MONGO SUCCESS] Synced 40 products to 'flipkart.products' (Matched: 39, Modified: 39, Upserted: 1)
+2026-10-26 17:26:10,096 - flipkart-crawler - INFO - [PAGE 22 SUMMARY] +24 new unique items (Total crawled: 520). Saved to Mongo: 40.
+2026-10-26 17:26:10,096 - flipkart-crawler - INFO - Waiting 4.26s before fetching page 23...
+2026-10-26 17:26:14,361 - flipkart-crawler - INFO - 
+[PAGE 23] Navigating to: https://www.flipkart.com/search?q=perfume&otracker=search&otracker1=search&marketplace=FLIPKART&as-show=on&as=off&page=23
+2026-10-26 17:26:15,389 - flipkart-crawler - INFO - Scrolling down page to trigger lazy loaded product cards & images...
+2026-10-26 17:26:18,538 - flipkart-crawler - INFO - [PAGE 23] In-browser JS extracted 40 product cards.
+2026-10-26 17:26:18,543 - flipkart-crawler - INFO - [PAGE 23] Extracted 40 valid perfume items.
+2026-10-26 17:26:33,481 - flipkart-crawler - INFO - [MONGO SUCCESS] Synced 40 products to 'flipkart.products' (Matched: 40, Modified: 40, Upserted: 0)
+2026-10-26 17:26:33,482 - flipkart-crawler - INFO - [PAGE 23 SUMMARY] +23 new unique items (Total crawled: 543). Saved to Mongo: 40.
+2026-10-26 17:26:33,482 - flipkart-crawler - INFO - Waiting 4.29s before fetching page 24...
+2026-10-26 17:26:37,786 - flipkart-crawler - INFO - 
+[PAGE 24] Navigating to: https://www.flipkart.com/search?q=perfume&otracker=search&otracker1=search&marketplace=FLIPKART&as-show=on&as=off&page=24
+2026-10-26 17:26:38,535 - flipkart-crawler - INFO - Scrolling down page to trigger lazy loaded product cards & images...
+2026-10-26 17:26:41,733 - flipkart-crawler - INFO - [PAGE 24] In-browser JS extracted 40 product cards.
+2026-10-26 17:26:41,745 - flipkart-crawler - INFO - [PAGE 24] Extracted 40 valid perfume items.
+2026-10-26 17:26:50,010 - flipkart-crawler - INFO -   [PRICE HIKE] Flipkart PID PERH38GTCXNZDFKP 'Eastside Twilight Extrait De Parfum - 10...': ₹485 -> ₹496 (+₹11)
+2026-10-26 17:26:51,759 - flipkart-crawler - INFO -   [PRICE HIKE] Flipkart PID PERGNFG87NZ5TJNG 'Logic Magnet Pure Perfume 7 Ml (pack of ...': ₹172 -> ₹176 (+₹4)
+2026-10-26 17:26:56,470 - flipkart-crawler - INFO - [MONGO SUCCESS] Synced 40 products to 'flipkart.products' (Matched: 39, Modified: 39, Upserted: 1)
+2026-10-26 17:26:56,470 - flipkart-crawler - INFO - [PAGE 24 SUMMARY] +24 new unique items (Total crawled: 567). Saved to Mongo: 40.
+2026-10-26 17:26:56,470 - flipkart-crawler - INFO - Waiting 3.97s before fetching page 25...
+2026-10-26 17:27:00,443 - flipkart-crawler - INFO - 
+[PAGE 25] Navigating to: https://www.flipkart.com/search?q=perfume&otracker=search&otracker1=search&marketplace=FLIPKART&as-show=on&as=off&page=25
+2026-10-26 17:27:01,357 - flipkart-crawler - INFO - Scrolling down page to trigger lazy loaded product cards & images...
+2026-10-26 17:27:04,517 - flipkart-crawler - INFO - [PAGE 25] In-browser JS extracted 40 product cards.
+2026-10-26 17:27:04,523 - flipkart-crawler - INFO - [PAGE 25] Extracted 40 valid perfume items.
+2026-10-26 17:27:06,577 - flipkart-crawler - INFO -   [PRICE HIKE] Flipkart PID PERFP65BMWYTZYM4 'PARK AVENUE Perfume II VOYAGE OBSESSION ...': ₹348 -> ₹349 (+₹1)
+2026-10-26 17:27:15,885 - flipkart-crawler - INFO -   [PRICE HIKE] Flipkart PID PERH79ZEERGHDQTK 'Ajmal Scent Ocean Long Lasting Perfume E...': ₹571 -> ₹618 (+₹47)
+2026-10-26 17:27:17,958 - flipkart-crawler - INFO -   [PRICE HIKE] Flipkart PID PERGP4CAMYZ3Z8GE 'agn tulip Tulip Perfume By AGN EDP Eau d...': ₹229 -> ₹259 (+₹30)
+2026-10-26 17:27:19,442 - flipkart-crawler - INFO - [MONGO SUCCESS] Synced 40 products to 'flipkart.products' (Matched: 38, Modified: 38, Upserted: 2)
+2026-10-26 17:27:19,443 - flipkart-crawler - INFO - [PAGE 25 SUMMARY] +24 new unique items (Total crawled: 591). Saved to Mongo: 40.
+2026-10-26 17:27:19,443 - flipkart-crawler - INFO - Reached configured max pages limit (25).
+2026-10-26 17:27:19,672 - flipkart-crawler - INFO - 
+==========================================
+2026-10-26 17:27:19,672 - flipkart-crawler - INFO - FLIPKART CRAWL FINISHED!
+2026-10-26 17:27:19,672 - flipkart-crawler - INFO - Total Unique Products: 591
+2026-10-26 17:27:19,948 - flipkart-crawler - INFO - Total in MongoDB: 1134
+2026-10-26 17:27:19,949 - flipkart-crawler - INFO - ==========================================
+
+2026-10-28 10:14:15,433 - flipkart-crawler - INFO - [MONGO] Connecting to MongoDB (38.45.64.201:27017/?authSource=admin) -> Database: 'flipkart', Collection: 'products'...
+2026-10-28 10:14:24,043 - flipkart-crawler - INFO - [MONGO OK] Connected! Index on 'id' verified for 'products'.
+2026-10-28 10:14:25,104 - flipkart-crawler - INFO - Launching Chromium browser (Headless: True)...
+2026-10-28 10:14:25,881 - flipkart-crawler - INFO - 
+[PAGE 1] Navigating to: https://www.flipkart.com/search?q=perfume&otracker=search&otracker1=search&marketplace=FLIPKART&as-show=on&as=off
+2026-10-28 10:14:27,829 - flipkart-crawler - INFO - Scrolling down page to trigger lazy loaded product cards & images...
+2026-10-28 10:17:58,475 - flipkart-crawler - INFO - [MONGO] Connecting to MongoDB (38.45.64.201:27017/?authSource=admin) -> Database: 'flipkart', Collection: 'products'...
+2026-10-28 11:58:15,200 - flipkart-crawler - INFO - [MONGO] Connecting to MongoDB (38.45.64.201:27017/?authSource=admin) -> Database: 'flipkart', Collection: 'products'...
+2026-10-28 11:58:17,719 - flipkart-crawler - INFO - [MONGO OK] Connected! Index on 'id' verified for 'products'.
+2026-10-28 11:58:18,236 - flipkart-crawler - INFO - Launching Chromium browser (Headless: True)...
+2026-10-28 11:58:18,515 - flipkart-crawler - INFO - 
+[PAGE 1] Navigating to: https://www.flipkart.com/search?q=perfume&otracker=search&otracker1=search&marketplace=FLIPKART&as-show=on&as=off
+2026-10-28 11:58:19,642 - flipkart-crawler - INFO - Scrolling down page to trigger lazy loaded product cards & images...
+2026-10-28 11:58:23,031 - flipkart-crawler - INFO - [PAGE 1] In-browser JS extracted 40 product cards.
+2026-10-28 11:58:23,037 - flipkart-crawler - INFO - [PAGE 1] Extracted 40 valid perfume items.
+2026-10-28 11:58:26,522 - flipkart-crawler - INFO -   [PRICE DROP] Flipkart PID PERHZZMQFGPAZMGW 'REEBOK EDT Trio Gift Set | Move + Inspir...': ₹329 -> ₹299 (Save ₹30)
+2026-10-28 11:58:34,324 - flipkart-crawler - INFO -   [PRICE DROP] Flipkart PID PERGXZ8GCYFGTK3Z 'BRIT ACCENT High Street|Depth of Ocean| ...': ₹88 -> ₹82 (Save ₹6)
+2026-10-28 11:58:35,448 - flipkart-crawler - INFO - [MONGO SUCCESS] Synced 40 products to 'flipkart.products' (Matched: 37, Modified: 37, Upserted: 3)
+2026-10-28 11:58:35,449 - flipkart-crawler - INFO - [PAGE 1 SUMMARY] +39 new unique items (Total crawled: 39). Saved to Mongo: 40.
+2026-10-28 11:58:35,449 - flipkart-crawler - INFO - Waiting 3.35s before fetching page 2...
+2026-10-28 11:58:38,811 - flipkart-crawler - INFO - 
+[PAGE 2] Navigating to: https://www.flipkart.com/search?q=perfume&otracker=search&otracker1=search&marketplace=FLIPKART&as-show=on&as=off&page=2
+2026-10-28 11:58:39,731 - flipkart-crawler - INFO - Scrolling down page to trigger lazy loaded product cards & images...
+2026-10-28 11:58:42,976 - flipkart-crawler - INFO - [PAGE 2] In-browser JS extracted 40 product cards.
+2026-10-28 11:58:42,980 - flipkart-crawler - INFO - [PAGE 2] Extracted 40 valid perfume items.
+2026-10-28 11:58:44,692 - flipkart-crawler - INFO -   [PRICE HIKE] Flipkart PID PERF7DVCZZJZSBZN 'JEVTON First Love Perfume 100ML Eau de P...': ₹250 -> ₹259 (+₹9)
+2026-10-28 11:58:55,324 - flipkart-crawler - INFO - [MONGO SUCCESS] Synced 40 products to 'flipkart.products' (Matched: 39, Modified: 39, Upserted: 1)
+2026-10-28 11:58:55,325 - flipkart-crawler - INFO - [PAGE 2 SUMMARY] +28 new unique items (Total crawled: 67). Saved to Mongo: 40.
+2026-10-28 11:58:55,325 - flipkart-crawler - INFO - Waiting 3.06s before fetching page 3...
+2026-10-28 11:58:58,398 - flipkart-crawler - INFO - 
+[PAGE 3] Navigating to: https://www.flipkart.com/search?q=perfume&otracker=search&otracker1=search&marketplace=FLIPKART&as-show=on&as=off&page=3
+2026-10-28 11:58:59,309 - flipkart-crawler - INFO - Scrolling down page to trigger lazy loaded product cards & images...
+2026-10-28 11:59:02,522 - flipkart-crawler - INFO - [PAGE 3] In-browser JS extracted 40 product cards.
+2026-10-28 11:59:02,526 - flipkart-crawler - INFO - [PAGE 3] Extracted 40 valid perfume items.
+2026-10-28 11:59:03,349 - flipkart-crawler - INFO -   [PRICE HIKE] Flipkart PID PERHHDJCDYWF5YKA 'MAXIMOR Good & Bad Man Combo | 12Hrs Lon...': ₹1717 -> ₹1847 (+₹130)
+2026-10-28 11:59:03,953 - flipkart-crawler - INFO -   [PRICE DROP] Flipkart PID PERD8DHUZFQ24YFY 'DAVIDOFF Cool Water Eau de Toilette - 12...': ₹2697 -> ₹1998 (Save ₹699)
+2026-10-28 11:59:14,892 - flipkart-crawler - INFO - [MONGO SUCCESS] Synced 40 products to 'flipkart.products' (Matched: 40, Modified: 40, Upserted: 0)
+2026-10-28 11:59:14,892 - flipkart-crawler - INFO - [PAGE 3 SUMMARY] +24 new unique items (Total crawled: 91). Saved to Mongo: 40.
+2026-10-28 11:59:14,892 - flipkart-crawler - INFO - Waiting 3.65s before fetching page 4...
+2026-10-28 11:59:18,539 - flipkart-crawler - INFO - 
+[PAGE 4] Navigating to: https://www.flipkart.com/search?q=perfume&otracker=search&otracker1=search&marketplace=FLIPKART&as-show=on&as=off&page=4
+2026-10-28 11:59:19,617 - flipkart-crawler - INFO - Scrolling down page to trigger lazy loaded product cards & images...
+2026-10-28 11:59:22,766 - flipkart-crawler - INFO - [PAGE 4] In-browser JS extracted 40 product cards.
+2026-10-28 11:59:22,771 - flipkart-crawler - INFO - [PAGE 4] Extracted 40 valid perfume items.
+2026-10-28 11:59:27,511 - flipkart-crawler - INFO -   [PRICE DROP] Flipkart PID PERFG3QQ5KXHW9FZ 'MONET PASS PORT PERFUME SPRAY MOST SELLI...': ₹389 -> ₹381 (Save ₹8)
+2026-10-28 11:59:30,533 - flipkart-crawler - INFO -   [PRICE HIKE] Flipkart PID PERGWZZTN7MTVHY8 'Plum BodyLovin' Vanilla Caramello|Gourma...': ₹679 -> ₹809 (+₹130)
+2026-10-28 11:59:35,172 - flipkart-crawler - INFO - [MONGO SUCCESS] Synced 40 products to 'flipkart.products' (Matched: 37, Modified: 37, Upserted: 3)
+2026-10-28 11:59:35,172 - flipkart-crawler - INFO - [PAGE 4 SUMMARY] +17 new unique items (Total crawled: 108). Saved to Mongo: 40.
+2026-10-28 11:59:35,172 - flipkart-crawler - INFO - Waiting 3.83s before fetching page 5...
+2026-10-28 11:59:39,010 - flipkart-crawler - INFO - 
+[PAGE 5] Navigating to: https://www.flipkart.com/search?q=perfume&otracker=search&otracker1=search&marketplace=FLIPKART&as-show=on&as=off&page=5
+2026-10-28 11:59:40,055 - flipkart-crawler - INFO - Scrolling down page to trigger lazy loaded product cards & images...
+2026-10-28 11:59:43,221 - flipkart-crawler - INFO - [PAGE 5] In-browser JS extracted 40 product cards.
+2026-10-28 11:59:43,225 - flipkart-crawler - INFO - [PAGE 5] Extracted 40 valid perfume items.
+2026-10-28 11:59:47,042 - flipkart-crawler - INFO -   [PRICE DROP] Flipkart PID PERHPTM4NTWUSV8R 'Real Madrid Collector Metal Tin | Aromat...': ₹348 -> ₹308 (Save ₹40)
+2026-10-28 11:59:50,356 - flipkart-crawler - INFO -   [PRICE HIKE] Flipkart PID PERGPZGF36VAFX8B 'RIYA HUM TUM Essence of Togetherness For...': ₹225 -> ₹226 (+₹1)
+2026-10-28 11:59:55,712 - flipkart-crawler - INFO - [MONGO SUCCESS] Synced 40 products to 'flipkart.products' (Matched: 40, Modified: 40, Upserted: 0)
+2026-10-28 11:59:55,723 - flipkart-crawler - INFO - [PAGE 5 SUMMARY] +19 new unique items (Total crawled: 127). Saved to Mongo: 40.
+2026-10-28 11:59:55,723 - flipkart-crawler - INFO - Reached configured max pages limit (5).
+2026-10-28 11:59:55,844 - flipkart-crawler - INFO - 
+==========================================
+2026-10-28 11:59:55,844 - flipkart-crawler - INFO - FLIPKART CRAWL FINISHED!
+2026-10-28 11:59:55,844 - flipkart-crawler - INFO - Total Unique Products: 127
+2026-10-28 11:59:56,069 - flipkart-crawler - INFO - Total in MongoDB: 1310
+2026-10-28 11:59:56,070 - flipkart-crawler - INFO - ==========================================
+
+2026-10-28 13:08:49,300 - flipkart-crawler - INFO - [MONGO] Connecting to MongoDB (38.45.64.201:27017/?authSource=admin) -> Database: 'flipkart', Collection: 'products'...
+2026-10-28 13:08:51,795 - flipkart-crawler - INFO - [MONGO OK] Connected! Index on 'id' verified for 'products'.
+2026-10-28 13:08:52,452 - flipkart-crawler - INFO - Launching Chromium browser (Headless: True)...
+2026-10-28 13:08:52,745 - flipkart-crawler - INFO - 
+[PAGE 1] Navigating to: https://www.flipkart.com/search?q=perfume&otracker=search&otracker1=search&marketplace=FLIPKART&as-show=on&as=off
+2026-10-28 13:08:54,115 - flipkart-crawler - INFO - Scrolling down page to trigger lazy loaded product cards & images...
+2026-10-28 13:08:57,604 - flipkart-crawler - INFO - [PAGE 1] In-browser JS extracted 40 product cards.
+2026-10-28 13:08:57,615 - flipkart-crawler - INFO - [PAGE 1] Extracted 40 valid perfume items.
+2026-10-28 13:09:09,417 - flipkart-crawler - INFO -   [PRICE DROP] Flipkart PID PERHYGB35ZZ7AEHF 'Wildplay Chocolate Pure Original Perfume...': ₹148 -> ₹145 (Save ₹3)
+2026-10-28 13:09:09,948 - flipkart-crawler - INFO - [MONGO SUCCESS] Synced 40 products to 'flipkart.products' (Matched: 40, Modified: 40, Upserted: 0)
+2026-10-28 13:09:09,948 - flipkart-crawler - INFO - [PAGE 1 SUMMARY] +40 new unique items (Total crawled: 40). Saved to Mongo: 40.
+2026-10-28 13:09:09,949 - flipkart-crawler - INFO - Waiting 3.14s before fetching page 2...
+2026-10-28 13:09:13,085 - flipkart-crawler - INFO - 
+[PAGE 2] Navigating to: https://www.flipkart.com/search?q=perfume&otracker=search&otracker1=search&marketplace=FLIPKART&as-show=on&as=off&page=2
+2026-10-28 13:09:14,618 - flipkart-crawler - INFO - Scrolling down page to trigger lazy loaded product cards & images...
+2026-10-28 13:09:17,800 - flipkart-crawler - INFO - [PAGE 2] In-browser JS extracted 40 product cards.
+2026-10-28 13:09:17,804 - flipkart-crawler - INFO - [PAGE 2] Extracted 40 valid perfume items.
+2026-10-28 13:09:30,007 - flipkart-crawler - INFO - [MONGO SUCCESS] Synced 40 products to 'flipkart.products' (Matched: 40, Modified: 40, Upserted: 0)
+2026-10-28 13:09:30,007 - flipkart-crawler - INFO - [PAGE 2 SUMMARY] +25 new unique items (Total crawled: 65). Saved to Mongo: 40.
+2026-10-28 13:09:30,008 - flipkart-crawler - INFO - Waiting 4.45s before fetching page 3...
+2026-10-28 13:09:34,459 - flipkart-crawler - INFO - 
+[PAGE 3] Navigating to: https://www.flipkart.com/search?q=perfume&otracker=search&otracker1=search&marketplace=FLIPKART&as-show=on&as=off&page=3
+2026-10-28 13:09:35,614 - flipkart-crawler - INFO - Scrolling down page to trigger lazy loaded product cards & images...
+2026-10-28 13:09:38,781 - flipkart-crawler - INFO - [PAGE 3] In-browser JS extracted 40 product cards.
+2026-10-28 13:09:38,788 - flipkart-crawler - INFO - [PAGE 3] Extracted 40 valid perfume items.
+2026-10-28 13:09:51,070 - flipkart-crawler - INFO - [MONGO SUCCESS] Synced 40 products to 'flipkart.products' (Matched: 39, Modified: 39, Upserted: 1)
+2026-10-28 13:09:51,070 - flipkart-crawler - INFO - [PAGE 3 SUMMARY] +25 new unique items (Total crawled: 90). Saved to Mongo: 40.
+2026-10-28 13:09:51,070 - flipkart-crawler - INFO - Waiting 3.35s before fetching page 4...
+2026-10-28 13:09:54,432 - flipkart-crawler - INFO - 
+[PAGE 4] Navigating to: https://www.flipkart.com/search?q=perfume&otracker=search&otracker1=search&marketplace=FLIPKART&as-show=on&as=off&page=4
+2026-10-28 13:09:55,443 - flipkart-crawler - INFO - Scrolling down page to trigger lazy loaded product cards & images...
+2026-10-28 13:09:58,664 - flipkart-crawler - INFO - [PAGE 4] In-browser JS extracted 40 product cards.
+2026-10-28 13:09:58,674 - flipkart-crawler - INFO - [PAGE 4] Extracted 40 valid perfume items.
+2026-10-28 13:10:10,919 - flipkart-crawler - INFO - [MONGO SUCCESS] Synced 40 products to 'flipkart.products' (Matched: 40, Modified: 40, Upserted: 0)
+2026-10-28 13:10:10,920 - flipkart-crawler - INFO - [PAGE 4 SUMMARY] +15 new unique items (Total crawled: 105). Saved to Mongo: 40.
+2026-10-28 13:10:10,920 - flipkart-crawler - INFO - Waiting 4.35s before fetching page 5...
+2026-10-28 13:10:15,282 - flipkart-crawler - INFO - 
+[PAGE 5] Navigating to: https://www.flipkart.com/search?q=perfume&otracker=search&otracker1=search&marketplace=FLIPKART&as-show=on&as=off&page=5
+2026-10-28 13:10:17,715 - flipkart-crawler - INFO - Scrolling down page to trigger lazy loaded product cards & images...
+2026-10-28 13:10:21,180 - flipkart-crawler - INFO - [PAGE 5] In-browser JS extracted 40 product cards.
+2026-10-28 13:10:21,185 - flipkart-crawler - INFO - [PAGE 5] Extracted 40 valid perfume items.
+2026-10-28 13:10:22,002 - flipkart-crawler - INFO -   [PRICE HIKE] Flipkart PID PERHDKMFGFZGH3MU 'OSSA Gourmand Eclair Caramel Parfum Long...': ₹566 -> ₹623 (+₹57)
+2026-10-28 13:10:31,193 - flipkart-crawler - INFO -   [PRICE DROP] Flipkart PID PERGVJC8U2P9NGUB 'FRENCH ESSENCE Luxury Bloom |Long-Lastin...': ₹139 -> ₹125 (Save ₹14)
+2026-10-28 13:10:33,468 - flipkart-crawler - INFO - [MONGO SUCCESS] Synced 40 products to 'flipkart.products' (Matched: 40, Modified: 40, Upserted: 0)
+2026-10-28 13:10:33,469 - flipkart-crawler - INFO - [PAGE 5 SUMMARY] +18 new unique items (Total crawled: 123). Saved to Mongo: 40.
+2026-10-28 13:10:33,469 - flipkart-crawler - INFO - Reached configured max pages limit (5).
+2026-10-28 13:10:33,625 - flipkart-crawler - INFO - 
+==========================================
+2026-10-28 13:10:33,626 - flipkart-crawler - INFO - FLIPKART CRAWL FINISHED!
+2026-10-28 13:10:33,626 - flipkart-crawler - INFO - Total Unique Products: 123
+2026-10-28 13:10:33,849 - flipkart-crawler - INFO - Total in MongoDB: 1311
+2026-10-28 13:10:33,850 - flipkart-crawler - INFO - ==========================================
+
+2026-10-28 15:26:59,117 - flipkart-crawler - INFO - [MONGO] Connecting to MongoDB (38.45.64.201:27017/?authSource=admin) -> Database: 'flipkart', Collection: 'products'...
+2026-10-28 15:27:01,610 - flipkart-crawler - INFO - [MONGO OK] Connected! Index on 'id' verified for 'products'.
+2026-10-28 15:27:02,102 - flipkart-crawler - INFO - Launching Chromium browser (Headless: True)...
+2026-10-28 15:27:02,296 - flipkart-crawler - INFO - 
+[PAGE 1] Navigating to: https://www.flipkart.com/search?q=perfume&otracker=search&otracker1=search&marketplace=FLIPKART&as-show=on&as=off
+2026-10-28 15:27:04,843 - flipkart-crawler - INFO - Scrolling down page to trigger lazy loaded product cards & images...
+2026-10-28 15:27:08,019 - flipkart-crawler - INFO - [PAGE 1] In-browser JS extracted 40 product cards.
+2026-10-28 15:27:08,025 - flipkart-crawler - INFO - [PAGE 1] Extracted 40 valid perfume items.
+2026-10-28 15:27:15,636 - flipkart-crawler - INFO -   [PRICE DROP] Flipkart PID PERHC6J8FVJJV7QX 'Arabian Aroma Old Money Eau de Parfum – ...': ₹235 -> ₹229 (Save ₹6)
+2026-10-28 15:27:17,770 - flipkart-crawler - INFO -   [PRICE DROP] Flipkart PID PERHPUVTS9JZMHET 'patel neck Nesty Long Lasting Fresh & Po...': ₹500 -> ₹480 (Save ₹20)
+2026-10-28 15:27:20,360 - flipkart-crawler - INFO - [MONGO SUCCESS] Synced 40 products to 'flipkart.products' (Matched: 38, Modified: 38, Upserted: 2)
+2026-10-28 15:27:20,361 - flipkart-crawler - INFO - [PAGE 1 SUMMARY] +39 new unique items (Total crawled: 39). Saved to Mongo: 40.
+2026-10-28 15:27:20,361 - flipkart-crawler - INFO - Waiting 3.44s before fetching page 2...
+2026-10-28 15:27:23,799 - flipkart-crawler - INFO - 
+[PAGE 2] Navigating to: https://www.flipkart.com/search?q=perfume&otracker=search&otracker1=search&marketplace=FLIPKART&as-show=on&as=off&page=2
+2026-10-28 15:27:24,805 - flipkart-crawler - INFO - Scrolling down page to trigger lazy loaded product cards & images...
+2026-10-28 15:27:27,965 - flipkart-crawler - INFO - [PAGE 2] In-browser JS extracted 40 product cards.
+2026-10-28 15:27:27,969 - flipkart-crawler - INFO - [PAGE 2] Extracted 40 valid perfume items.
+2026-10-28 15:27:33,796 - flipkart-crawler - INFO -   [PRICE DROP] Flipkart PID PERHRKVNPPBTSFX2 'Lumus Dhan Yog Crystal Perfume for Men &...': ₹849 -> ₹829 (Save ₹20)
+2026-10-28 15:27:36,494 - flipkart-crawler - INFO -   [PRICE DROP] Flipkart PID PERHRFHMEASBGC3D 'MENDRDO Apex Eau De Parfum | Luxury Prem...': ₹984 -> ₹944 (Save ₹40)
+2026-10-28 15:27:38,265 - flipkart-crawler - INFO -   [PRICE HIKE] Flipkart PID PERHHEE6PUPEPGRW 'BLA BLI BLU My Wingman Perfume for Men|C...': ₹185 -> ₹187 (+₹2)
+2026-10-28 15:27:40,366 - flipkart-crawler - INFO - [MONGO SUCCESS] Synced 40 products to 'flipkart.products' (Matched: 40, Modified: 40, Upserted: 0)
+2026-10-28 15:27:40,367 - flipkart-crawler - INFO - [PAGE 2 SUMMARY] +26 new unique items (Total crawled: 65). Saved to Mongo: 40.
+2026-10-28 15:27:40,367 - flipkart-crawler - INFO - Waiting 3.95s before fetching page 3...
+2026-10-28 15:27:44,323 - flipkart-crawler - INFO - 
+[PAGE 3] Navigating to: https://www.flipkart.com/search?q=perfume&otracker=search&otracker1=search&marketplace=FLIPKART&as-show=on&as=off&page=3
+2026-10-28 15:27:45,076 - flipkart-crawler - INFO - Scrolling down page to trigger lazy loaded product cards & images...
+2026-10-28 15:27:48,243 - flipkart-crawler - INFO - [PAGE 3] In-browser JS extracted 40 product cards.
+2026-10-28 15:27:48,247 - flipkart-crawler - INFO - [PAGE 3] Extracted 40 valid perfume items.
+2026-10-28 15:27:49,404 - flipkart-crawler - INFO -   [PRICE HIKE] Flipkart PID PERH22YGZUYJHYYJ 'VILLAIN Legacy Classic perfume | Long La...': ₹299 -> ₹305 (+₹6)
+2026-10-28 15:27:51,147 - flipkart-crawler - INFO -   [PRICE HIKE] Flipkart PID PERHHGT3GU2K8DZF 'BLA BLI BLU Hot Af Perfume for Women|Bla...': ₹185 -> ₹187 (+₹2)
+2026-10-28 15:27:59,041 - flipkart-crawler - INFO -   [PRICE HIKE] Flipkart PID PERHCJXFAD4GGMYZ 'DENVER Imperial & Caliber Perfume - 200 ...': ₹635 -> ₹748 (+₹113)
+2026-10-28 15:28:00,215 - flipkart-crawler - INFO -   [PRICE HIKE] Flipkart PID PERHRYSFUYPCTYXM 'BLA BLI BLU Lights Off Perfume for Men &...': ₹185 -> ₹187 (+₹2)
+2026-10-28 15:28:00,769 - flipkart-crawler - INFO - [MONGO SUCCESS] Synced 40 products to 'flipkart.products' (Matched: 40, Modified: 40, Upserted: 0)
+2026-10-28 15:28:00,769 - flipkart-crawler - INFO - [PAGE 3 SUMMARY] +24 new unique items (Total crawled: 89). Saved to Mongo: 40.
+2026-10-28 15:28:00,770 - flipkart-crawler - INFO - Waiting 3.32s before fetching page 4...
+2026-10-28 15:28:04,095 - flipkart-crawler - INFO - 
+[PAGE 4] Navigating to: https://www.flipkart.com/search?q=perfume&otracker=search&otracker1=search&marketplace=FLIPKART&as-show=on&as=off&page=4
+2026-10-28 15:28:04,978 - flipkart-crawler - INFO - Scrolling down page to trigger lazy loaded product cards & images...
+2026-10-28 15:28:08,136 - flipkart-crawler - INFO - [PAGE 4] In-browser JS extracted 40 product cards.
+2026-10-28 15:28:08,141 - flipkart-crawler - INFO - [PAGE 4] Extracted 40 valid perfume items.
+2026-10-28 15:28:27,011 - flipkart-crawler - INFO - [MONGO SUCCESS] Synced 40 products to 'flipkart.products' (Matched: 40, Modified: 40, Upserted: 0)
+2026-10-28 15:28:27,011 - flipkart-crawler - INFO - [PAGE 4 SUMMARY] +17 new unique items (Total crawled: 106). Saved to Mongo: 40.
+2026-10-28 15:28:27,012 - flipkart-crawler - INFO - Waiting 3.42s before fetching page 5...
+2026-10-28 15:28:30,449 - flipkart-crawler - INFO - 
+[PAGE 5] Navigating to: https://www.flipkart.com/search?q=perfume&otracker=search&otracker1=search&marketplace=FLIPKART&as-show=on&as=off&page=5
+2026-10-28 15:28:31,703 - flipkart-crawler - INFO - Scrolling down page to trigger lazy loaded product cards & images...
+2026-10-28 15:28:34,880 - flipkart-crawler - INFO - [PAGE 5] In-browser JS extracted 40 product cards.
+2026-10-28 15:28:34,885 - flipkart-crawler - INFO - [PAGE 5] Extracted 40 valid perfume items.
+2026-10-28 15:28:38,055 - flipkart-crawler - INFO -   [PRICE HIKE] Flipkart PID DEOF4VVSZZE95XZ7 'Envy Natural Perfume Perfume - 60 ml...': ₹195 -> ₹230 (+₹35)
+2026-10-28 15:28:42,121 - flipkart-crawler - INFO -   [PRICE DROP] Flipkart PID PERHR7GFTFREJEGX 'Ahasan Black Magnet Eau de Parfum - 100 ...': ₹400 -> ₹384 (Save ₹16)
+2026-10-28 15:28:46,748 - flipkart-crawler - INFO -   [PRICE HIKE] Flipkart PID PERFEGGMYR5QRJUC 'Envy Bold Perfume,Premium and Long Lasti...': ₹200 -> ₹236 (+₹36)
+2026-10-28 15:28:50,321 - flipkart-crawler - INFO - [MONGO SUCCESS] Synced 40 products to 'flipkart.products' (Matched: 40, Modified: 40, Upserted: 0)
+2026-10-28 15:28:50,322 - flipkart-crawler - INFO - [PAGE 5 SUMMARY] +20 new unique items (Total crawled: 126). Saved to Mongo: 40.
+2026-10-28 15:28:50,326 - flipkart-crawler - INFO - Reached configured max pages limit (5).
+2026-10-28 15:28:50,413 - flipkart-crawler - INFO - 
+==========================================
+2026-10-28 15:28:50,414 - flipkart-crawler - INFO - FLIPKART CRAWL FINISHED!
+2026-10-28 15:28:50,414 - flipkart-crawler - INFO - Total Unique Products: 126
+2026-10-28 15:28:50,699 - flipkart-crawler - INFO - Total in MongoDB: 1313
+2026-10-28 15:28:50,699 - flipkart-crawler - INFO - ==========================================
+

@@ -1,0 +1,56 @@
+#Makeup > Face > Foundation
+https://www.nykaa.com/makeup/face/face-foundation/c/228
+#Makeup > Face > Blush
+https://www.nykaa.com/makeup/face/face-blush/c/235
+#Makeup > Face > Highlighter
+https://www.nykaa.com/makeup/face/face-highlighter/c/237
+#Makeup > Face > Primer
+https://www.nykaa.com/makeup/face/face-primer/c/233
+#Makeup > Face > Concealer
+https://www.nykaa.com/makeup/face/face-concealer/c/234
+#Makeup > Face > Compact Powder
+https://www.nykaa.com/makeup/face/face-compact/c/231
+#Makeup > Face > Setting Spray
+https://www.nykaa.com/makeup/face/setting-spray/c/6761
+#Makeup > Face > Makeup Remover
+https://www.nykaa.com/makeup/face/makeup-remover/c/239
+#Makeup > Face > Loose Powder
+https://www.nykaa.com/makeup/face/loose-powder/c/229
+#Makeup > Face > Contour
+https://www.nykaa.com/makeup/face/face-contour/c/4140
+#Makeup > Face > BB & CC Cream
+https://www.nykaa.com/makeup/face/bb-cc-cream/c/232
+#Makeup > Face > Bronzer
+https://www.nykaa.com/makeup/face/face-bronzer/c/236
+#Makeup > Face > Tinted Moisturizer
+https://www.nykaa.com/makeup/face/tinted-moisturizer/c/230
+#Makeup > Face > Sindoor
+https://www.nykaa.com/makeup/face/sindoor/c/220
+#Makeup > Eyes > Eyeshadow
+https://www.nykaa.com/makeup/eyes/eye-shadow/c/3940
+#Makeup > Eyes > Mascara
+https://www.nykaa.com/makeup/eyes/mascara/c/3886
+#Makeup > Eyes > Eyeliner & Kajal
+https://www.nykaa.com/makeup/eyes/eyeliner-kajal/c/3939
+#Makeup > Eyes > Eyebrows
+https://www.nykaa.com/makeup/eyes/brows/c/3941
+#Makeup > Face > Concealer
+https://www.nykaa.com/makeup/eyes/concealer/c/3944
+#Makeup > Eyes > False Lashes
+https://www.nykaa.com/makeup/eyes/lashes/c/3942
+#Makeup > Eyes > Eye Primer
+https://www.nykaa.com/makeup/eyes/eye-primer/c/3943
+#Makeup > Lips > Lipstick
+https://www.nykaa.com/makeup/lips/lipstick/c/3945
+#Makeup > Lips > Lip Balm
+https://www.nykaa.com/makeup/lips/lip-balm/c/3948
+#Makeup > Lips > Lip Gloss
+https://www.nykaa.com/makeup/lips/lip-gloss/c/3946
+#Makeup > Lips > Liquid Lipstick
+https://www.nykaa.com/makeup/lips/liquid-lipstick/c/12887
+#Makeup > Lips > Lip Liner
+https://www.nykaa.com/makeup/lips/lip-liner/c/3947
+#Makeup > Nails > Nail Polish
+https://www.nykaa.com/makeup/nails/nail-polish/c/3949
+#Makeup > Nails > Nail Care
+https://www.nykaa.com/makeup/nails/nail-care/c/3950

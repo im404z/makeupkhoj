@@ -1,0 +1,132 @@
+[
+  {
+    "marketplace": "myntra",
+    "marketplace_name": "Myntra",
+    "category": "Makeup",
+    "sub_category": "General",
+    "sub_sub_category": "General Makeup",
+    "category_path": "Makeup > General > General Makeup",
+    "category_name": "General Makeup",
+    "url": "https://www.myntra.com/makeup"
+  },
+  {
+    "marketplace": "myntra",
+    "marketplace_name": "Myntra",
+    "category": "Makeup",
+    "sub_category": "Lips",
+    "sub_sub_category": "Lipstick",
+    "category_path": "Makeup > Lips > Lipstick",
+    "category_name": "Lipstick",
+    "url": "https://www.myntra.com/lipstick"
+  },
+  {
+    "marketplace": "myntra",
+    "marketplace_name": "Myntra",
+    "category": "Makeup",
+    "sub_category": "Lips",
+    "sub_sub_category": "Lip Gloss",
+    "category_path": "Makeup > Lips > Lip Gloss",
+    "category_name": "Lip Gloss",
+    "url": "https://www.myntra.com/lip-gloss"
+  },
+  {
+    "marketplace": "myntra",
+    "marketplace_name": "Myntra",
+    "category": "Makeup",
+    "sub_category": "Lips",
+    "sub_sub_category": "Lip Liner",
+    "category_path": "Makeup > Lips > Lip Liner",
+    "category_name": "Lip Liner",
+    "url": "https://www.myntra.com/lip-liner"
+  },
+  {
+    "marketplace": "myntra",
+    "marketplace_name": "Myntra",
+    "category": "Makeup",
+    "sub_category": "Eyes",
+    "sub_sub_category": "Mascara",
+    "category_path": "Makeup > Eyes > Mascara",
+    "category_name": "Mascara",
+    "url": "https://www.myntra.com/mascara"
+  },
+  {
+    "marketplace": "myntra",
+    "marketplace_name": "Myntra",
+    "category": "Makeup",
+    "sub_category": "Eyes",
+    "sub_sub_category": "Eyeliner",
+    "category_path": "Makeup > Eyes > Eyeliner",
+    "category_name": "Eyeliner",
+    "url": "https://www.myntra.com/eyeliner"
+  },
+  {
+    "marketplace": "myntra",
+    "marketplace_name": "Myntra",
+    "category": "Makeup",
+    "sub_category": "Eyes",
+    "sub_sub_category": "Kajal",
+    "category_path": "Makeup > Eyes > Kajal",
+    "category_name": "Kajal",
+    "url": "https://www.myntra.com/kajal"
+  },
+  {
+    "marketplace": "myntra",
+    "marketplace_name": "Myntra",
+    "category": "Makeup",
+    "sub_category": "Eyes",
+    "sub_sub_category": "Eyeshadow",
+    "category_path": "Makeup > Eyes > Eyeshadow",
+    "category_name": "Eyeshadow",
+    "url": "https://www.myntra.com/eyeshadow"
+  },
+  {
+    "marketplace": "myntra",
+    "marketplace_name": "Myntra",
+    "category": "Makeup",
+    "sub_category": "Face",
+    "sub_sub_category": "Foundation",
+    "category_path": "Makeup > Face > Foundation",
+    "category_name": "Foundation",
+    "url": "https://www.myntra.com/foundation"
+  },
+  {
+    "marketplace": "myntra",
+    "marketplace_name": "Myntra",
+    "category": "Makeup",
+    "sub_category": "Face",
+    "sub_sub_category": "Primer",
+    "category_path": "Makeup > Face > Primer",
+    "category_name": "Primer",
+    "url": "https://www.myntra.com/primer"
+  },
+  {
+    "marketplace": "myntra",
+    "marketplace_name": "Myntra",
+    "category": "Makeup",
+    "sub_category": "Face",
+    "sub_sub_category": "Concealer",
+    "category_path": "Makeup > Face > Concealer",
+    "category_name": "Concealer",
+    "url": "https://www.myntra.com/concealer"
+  },
+  {
+    "marketplace": "myntra",
+    "marketplace_name": "Myntra",
+    "category": "Makeup",
+    "sub_category": "Face",
+    "sub_sub_category": "Compact Powder",
+    "category_path": "Makeup > Face > Compact Powder",
+    "category_name": "Compact Powder",
+    "url": "https://www.myntra.com/compact"
+  },
+  {
+    "marketplace": "myntra",
+    "marketplace_name": "Myntra",
+    "category": "Makeup",
+    "sub_category": "Nails",
+    "sub_sub_category": "Nail Polish",
+    "category_path": "Makeup > Nails > Nail Polish",
+    "category_name": "Nail Polish",
+    "url": "https://www.myntra.com/nail-polish"
+  }
+]

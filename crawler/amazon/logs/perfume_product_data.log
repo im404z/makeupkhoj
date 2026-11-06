@@ -1,0 +1,3 @@
+2026-10-26 12:34:17,788 - perfume-product-data - INFO - [MONGO] Connecting to amazon...
+2026-10-26 12:34:20,527 - perfume-product-data - INFO - [MONGO OK] Connected! Source: 'amazon_perfume' | Target: 'amazon_perfume_products' | Brands: 'scentkhoj.brands' | Master: 'scentkhoj.products'.
+2026-10-26 12:34:21,100 - perfume-product-data - INFO - [JS ENGINE] Loaded extractor (5847 chars) from amazon-product-extractor-logic.js

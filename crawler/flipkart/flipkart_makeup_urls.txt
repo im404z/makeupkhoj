@@ -1,0 +1,32 @@
+#Makeup > General > General Makeup
+https://www.flipkart.com/beauty-and-grooming/makeup/pr?sid=g9b%2Cffi&p%5B%5D=facets.fulfilled_by%255B%255D%3DF-Assured&param=345678&BU=BGM
+#Makeup > Lips > Lipstick
+https://www.flipkart.com/beauty-and-grooming/makeup/lips/lipstick/pr?sid=g9b%2Cffi%2Ctv5%2Cuna&p%5B%5D=facets.fulfilled_by%255B%255D%3DF-Assured&param=5675667&BU=BGM
+#Makeup > Lips > Lip Gloss
+https://www.flipkart.com/beauty-and-grooming/makeup/lips/lip-gloss/pr?sid=g9b%2Cffi%2Ctv5%2C4rm&p%5B%5D=facets.fulfilled_by%255B%255D%3DF-Assured&param=4567878&BU=BGM
+#Makeup > Lips > Lip Liner
+https://www.flipkart.com/beauty-and-grooming/makeup/lips/lip-liner/pr?sid=g9b%2Cffi%2Ctv5%2Cnyo&p%5B%5D=facets.fulfilled_by%255B%255D%3DF-Assured&param=435432&BU=BGM
+#Makeup > Lips > Lip Stain
+https://www.flipkart.com/beauty-and-grooming/makeup/lips/lip-stain/pr?sid=g9b%2Cffi%2Ctv5%2C7mz&p%5B%5D=facets.fulfilled_by%255B%255D%3DF-Assured&param=878996&BU=BGM
+#Makeup > Lips > Lip Balm
+https://www.flipkart.com/beauty-and-grooming/makeup/lips/lip-balm/pr?sid=g9b%2Cffi%2Ctv5%2Csho&p%5B%5D=facets.fulfilled_by%255B%255D%3DF-Assured&param=456123&BU=BGM
+#Makeup > Eyes > Eye Makeup
+https://www.flipkart.com/beauty-and-grooming/makeup/eye-makeup/pr?sid=g9b%2Cffi%2Cttr&p%5B%5D=facets.fulfilled_by%255B%255D%3DF-Assured&param=45678&ctx=eyJjYXJkQ29udGV4dCI6eyJhdHRyaWJ1dGVzIjp7InRpdGxlIjp7Im11bHRpVmFsdWVkQXR0cmlidXRlIjp7ImtleSI6InRpdGxlIiwiaW5mZXJlbmNlVHlwZSI6IlRJVExFIiwidmFsdWVzIjpbIkV5ZSBtYWtldXAiXSwidmFsdWVUeXBlIjoiTVVMVElfVkFMVUVEIn19fX19&BU=BGM
+#Makeup > Face > Face Makeup
+https://www.flipkart.com/beauty-and-grooming/makeup/face-makeup/pr?sid=g9b%2Cffi%2Cdzu&p%5B%5D=facets.fulfilled_by%255B%255D%3DF-Assured&param=456783&BU=BGM
+#Makeup > Face > Foundation
+https://www.flipkart.com/beauty-and-grooming/makeup/face-makeup/foundation/pr?sid=g9b%2Cffi%2Cdzu%2Cgru&p%5B%5D=facets.fulfilled_by%255B%255D%3DF-Assured&param=874544&BU=BGM
+#Makeup > Face > Concealer
+https://www.flipkart.com/beauty-and-grooming/makeup/face-makeup/concealer/pr?sid=g9b%2Cffi%2Cdzu%2Cnjv&p%5B%5D=facets.fulfilled_by%255B%5D%3DF-Assured&PARAM=8765443&BU=BGM
+#Makeup > Face > Compact Powder
+https://www.flipkart.com/beauty-and-grooming/makeup/face-makeup/compact/pr?sid=g9b%2Cffi%2Cdzu%2Cypp&p%5B%5D=facets.fulfilled_by%255B%5D%3DF-Assured&PARAM=2345678&BU=BGM
+#Makeup > Face > Blush
+https://www.flipkart.com/beauty-and-grooming/makeup/face-makeup/blush/pr?sid=g9b%2Cffi%2Cdzu%2Cyk7&p%5B%5D=facets.fulfilled_by%255B%5D%3DF-Assured&PARAM=583839&BU=BGM
+#Makeup > Face > Highlighter
+https://www.flipkart.com/beauty-and-grooming/makeup/face-makeup/highlighter/pr?sid=g9b%2Cffi%2Cdzu%2Cy2c&p%5B%5D=facets.fulfilled_by%255B%5D%3DF-Assured&PARAM=876421&BU=BGM
+#Makeup > Nails > Nail Polish
+https://www.flipkart.com/beauty-and-grooming/makeup/nails/pr?sid=g9b%2Cffi%2Cbhh&p%5B%5D=facets.fulfilled_by%255B%5D%3DF-Assured&param=456789&ctx=eyJjYXJkQ29udGV4dCI6eyJhdHRyaWJ1dGVzIjp7InRpdGxlIjp7Im11bHRpVmFsdWVkQXR0cmlidXRlIjp7ImtleSI6InRpdGxlIiwiaW5mZXJlbmNlVHlwZSI6IlRJVExFIiwidmFsdWVzIjpbIk5haWxzIl0sInZhbHVlVHlwZSI6Ik1VTFRJX1ZBTFVFRCJ9fX19fQ%3D%3D&BU=BGM
+#Makeup > Kits & Sets > Kits & Combos
+https://www.flipkart.com/beauty-and-grooming/makeup/makeup-kits-combo/pr?sid=g9b%2Cffi%2C3dd&p%5B%5D=facets.fulfilled_by%255B%255D%3DF-Assured&param=3456789&ctx=eyJjYXJkQ29udGV4dCI6eyJhdHRyaWJ1dGVzIjp7InRpdGxlIjp7Im11bHRpVmFsdWVkQXR0cmlidXRlIjp7ImtleSI6InRpdGxlIiwiaW5mZXJlbmNlVHlwZSI6IlRJVExFIiwidmFsdWVzIjpbIktpdHMtQ29tYm9zIl0sInZhbHVlVHlwZSI6Ik1VTFRJX1ZBTFVFRCJ9fX19fQ%3D%3D&BU=BGM
+#Makeup > Tools & Accessories > Brushes & Tools
+https://www.flipkart.com/beauty-and-grooming/makeup/makeup-accessory/pr?sid=g9b%2Cffi%2Cssf&p%5B%5D=facets.fulfilled_by%255B%255D%3DF-Assured&param=3456722&ctx=eyJjYXJkQ29udGV4dCI6eyJhdHRyaWJ1dGVzIjp7InRpdGxlIjp7Im11bHRpVmFsdWVkQXR0cmlidXRlIjp7ImtleSI6InRpdGxlIiwiaW5mZXJlbmNlVHlwZSI6IlRJVExFIiwidmFsdWVzIjpbIk1ha2V1cCBBY2Nlc3NvcmllcyJdLCJ2YWx1ZVR5cGUiOiJNVUxUSV9WQUxVRUQifX19fX0%3D&BU=BGM

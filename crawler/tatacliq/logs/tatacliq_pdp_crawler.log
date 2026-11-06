@@ -1,0 +1,22 @@
+2026-10-28 16:03:28,734 - TataCliqPDPCrawler - INFO - Starting batch PDP crawl for 10 Tata CLiQ products (force=False, dry_run=False)...
+2026-10-28 16:03:28,734 - TataCliqPDPCrawler - INFO - [1/10] Processing: MP000000011874893 - 'Le Male Le Parfum Eau de Parfum Intense ...'
+2026-10-28 16:03:34,119 - TataCliqPDPCrawler - INFO -   ✓ Saved PDP: Brand='Jean Paul Gaultier', Top Note='N/A', Price=₹7850, Rating=5.0
+2026-10-28 16:03:35,512 - TataCliqPDPCrawler - INFO - [2/10] Processing: MP000000021812185 - 'Calvin Klein Eternity Aromatic Essence P...'
+2026-10-28 16:03:41,725 - TataCliqPDPCrawler - INFO -   ✓ Saved PDP: Brand='CALVIN KLEIN', Top Note='N/A', Price=₹6995, Rating=4.714285714285714
+2026-10-28 16:03:43,143 - TataCliqPDPCrawler - INFO - [3/10] Processing: MP000000022042250 - 'Jean Paul Gaultier Le Beau Paradise Gard...'
+2026-10-28 16:03:48,631 - TataCliqPDPCrawler - INFO -   ✓ Saved PDP: Brand='Jean Paul Gaultier', Top Note='N/A', Price=₹10900, Rating=4.8
+2026-10-28 16:03:49,969 - TataCliqPDPCrawler - INFO - [4/10] Processing: MP000000007971341 - 'Chopard Oud Malaki Eau de Parfum 80 ml f...'
+2026-10-28 16:03:55,238 - TataCliqPDPCrawler - INFO -   ✓ Saved PDP: Brand='Chopard', Top Note='N/A', Price=₹9840, Rating=2.0
+2026-10-28 16:03:56,616 - TataCliqPDPCrawler - INFO - [5/10] Processing: MP000000030120517 - 'NEESH Tsunara Extrait De Parfum - 15 ml...'
+2026-10-28 16:04:01,310 - TataCliqPDPCrawler - INFO -   ✓ Saved PDP: Brand='NEESH', Top Note='N/A', Price=₹1440, Rating=1.0
+2026-10-28 16:04:02,911 - TataCliqPDPCrawler - INFO - [6/10] Processing: MP000000027828550 - 'GUESS Seductive Red Gift Set For Women...'
+2026-10-28 16:04:07,751 - TataCliqPDPCrawler - INFO -   ✓ Saved PDP: Brand='Guess', Top Note='N/A', Price=₹5355, Rating=5.0
+2026-10-28 16:04:09,159 - TataCliqPDPCrawler - INFO - [7/10] Processing: MP000000012161172 - 'Jimmy Choo Man Intense EDT - 100 ml...'
+2026-10-28 16:04:14,674 - TataCliqPDPCrawler - INFO -   ✓ Saved PDP: Brand='Jimmy Choo', Top Note='N/A', Price=₹11600, Rating=4.0
+2026-10-28 16:04:16,188 - TataCliqPDPCrawler - INFO - [8/10] Processing: MP000000030200877 - 'Ferragamo Sublime Leather Intense Eau De...'
+2026-10-28 16:04:58,853 - TataCliqPDPCrawler - INFO -   ✓ Saved PDP: Brand='Ferragamo', Top Note='N/A', Price=₹7110, Rating=4.0
+2026-10-28 16:05:00,170 - TataCliqPDPCrawler - INFO - [9/10] Processing: MP000000007904646 - 'Tommy Hilfiger Girl Eau de Toilette for ...'
+2026-10-28 16:05:05,585 - TataCliqPDPCrawler - INFO -   ✓ Saved PDP: Brand='Tommy Hilfiger', Top Note='N/A', Price=₹8415, Rating=4.325
+2026-10-28 16:05:07,076 - TataCliqPDPCrawler - INFO - [10/10] Processing: MP000000026889254 - 'United Colors of Benetton Colors Man Bla...'
+2026-10-28 16:05:11,764 - TataCliqPDPCrawler - INFO -   ✓ Saved PDP: Brand='United Colors of Benetton', Top Note='N/A', Price=₹3510, Rating=3.5
+2026-10-28 16:05:13,279 - TataCliqPDPCrawler - INFO - Finished batch crawl. Successfully processed: 10/10 items.

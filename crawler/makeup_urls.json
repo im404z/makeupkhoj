@@ -1,0 +1,812 @@
+[
+  {
+    "marketplace": "amazon",
+    "marketplace_name": "Amazon",
+    "category": "Makeup",
+    "sub_category": "Face",
+    "sub_sub_category": "Foundation",
+    "category_path": "Makeup > Face > Foundation",
+    "category_name": "Foundation",
+    "url": "https://www.amazon.in/s?bbn=1374375031&rh=n%3A1374375031%2Cp_85%3A10440599031&pf_rd_i=1374371031&pf_rd_m=A1VBAL9TL5WCBF&pf_rd_p=cc77b160-c05b-41eb-939d-2a20bd1a671b&pf_rd_r=ETBW8QAFFS17M64FC98S&pf_rd_s=merchandised-search-4&ref=QANav11CTA_en_IN_1"
+  },
+  {
+    "marketplace": "amazon",
+    "marketplace_name": "Amazon",
+    "category": "Makeup",
+    "sub_category": "Face",
+    "sub_sub_category": "Compact Powder",
+    "category_path": "Makeup > Face > Compact Powder",
+    "category_name": "Compact Powder",
+    "url": "https://www.amazon.in/s?i=beauty&bbn=1374371031&rh=n%3A1355016031%2Cn%3A1374357031%2Cn%3A1374371031%2Cn%3A1374378031%2Cp_85%3A10440599031&pf_rd_i=1374371031&pf_rd_m=A1VBAL9TL5WCBF&pf_rd_p=cc77b160-c05b-41eb-939d-2a20bd1a671b&pf_rd_r=ETBW8QAFFS17M64FC98S&pf_rd_s=merchandised-search-4&ref=QANav11CTA_en_IN_2"
+  },
+  {
+    "marketplace": "amazon",
+    "marketplace_name": "Amazon",
+    "category": "Makeup",
+    "sub_category": "Face",
+    "sub_sub_category": "Concealer",
+    "category_path": "Makeup > Face > Concealer",
+    "category_name": "Concealer",
+    "url": "https://www.amazon.in/s?i=beauty&bbn=1374371031&rh=n%3A1355016031%2Cn%3A1374357031%2Cn%3A1374371031%2Cn%3A1374374031%2Cp_85%3A10440599031&pf_rd_i=1374371031&pf_rd_m=A1VBAL9TL5WCBF&pf_rd_p=cc77b160-c05b-41eb-939d-2a20bd1a671b&pf_rd_r=ETBW8QAFFS17M64FC98S&pf_rd_s=merchandised-search-4&ref=QANav11CTA_en_IN_3"
+  },
+  {
+    "marketplace": "amazon",
+    "marketplace_name": "Amazon",
+    "category": "Makeup",
+    "sub_category": "Face",
+    "sub_sub_category": "Blush",
+    "category_path": "Makeup > Face > Blush",
+    "category_name": "Blush",
+    "url": "https://www.amazon.in/s?i=beauty&bbn=1374371031&rh=n%3A1355016031%2Cn%3A1374357031%2Cn%3A1374371031%2Cn%3A1374372031%2Cp_85%3A10440599031&pf_rd_i=1374371031&pf_rd_m=A1VBAL9TL5WCBF&pf_rd_p=cc77b160-c05b-41eb-939d-2a20bd1a671b&pf_rd_r=ETBW8QAFFS17M64FC98S&pf_rd_s=merchandised-search-4&ref=QANav11CTA_en_IN_4"
+  },
+  {
+    "marketplace": "amazon",
+    "marketplace_name": "Amazon",
+    "category": "Makeup",
+    "sub_category": "Face",
+    "sub_sub_category": "Bronzer",
+    "category_path": "Makeup > Face > Bronzer",
+    "category_name": "Bronzer",
+    "url": "https://www.amazon.in/s?i=beauty&bbn=1374371031&rh=n%3A1355016031%2Cn%3A1374357031%2Cn%3A1374371031%2Cn%3A1374373031%2Cp_85%3A10440599031&pf_rd_i=1374371031&pf_rd_m=A1VBAL9TL5WCBF&pf_rd_p=cc77b160-c05b-41eb-939d-2a20bd1a671b&pf_rd_r=ETBW8QAFFS17M64FC98S&pf_rd_s=merchandised-search-4&ref=QANav11CTA_en_IN_5"
+  },
+  {
+    "marketplace": "amazon",
+    "marketplace_name": "Amazon",
+    "category": "Makeup",
+    "sub_category": "Face",
+    "sub_sub_category": "Highlighter",
+    "category_path": "Makeup > Face > Highlighter",
+    "category_name": "Highlighter",
+    "url": "https://www.amazon.in/s?i=beauty&bbn=1374371031&rh=n%3A1355016031%2Cn%3A1374357031%2Cn%3A1374371031%2Cn%3A1374377031%2Cp_85%3A10440599031&pf_rd_i=1374371031&pf_rd_m=A1VBAL9TL5WCBF&pf_rd_p=cc77b160-c05b-41eb-939d-2a20bd1a671b&pf_rd_r=ETBW8QAFFS17M64FC98S&pf_rd_s=merchandised-search-4&ref=QANav11CTA_en_IN_6"
+  },
+  {
+    "marketplace": "amazon",
+    "marketplace_name": "Amazon",
+    "category": "Makeup",
+    "sub_category": "Face",
+    "sub_sub_category": "Primer",
+    "category_path": "Makeup > Face > Primer",
+    "category_name": "Primer",
+    "url": "https://www.amazon.in/s?i=beauty&rh=n%3A1374376031&s=popularity-rank&fs=true&ref=lp_1374376031_sar"
+  },
+  {
+    "marketplace": "amazon",
+    "marketplace_name": "Amazon",
+    "category": "Makeup",
+    "sub_category": "Face",
+    "sub_sub_category": "Sindoor",
+    "category_path": "Makeup > Face > Sindoor",
+    "category_name": "Sindoor",
+    "url": "https://www.amazon.in/s?rh=n%3A1355016031%2Cn%3A1374357031%2Cn%3A1374371031%2Cn%3A9530408031&dc&qid=1793951179&rnid=1374371031&ref=sr_nr_n_12"
+  },
+  {
+    "marketplace": "amazon",
+    "marketplace_name": "Amazon",
+    "category": "Makeup",
+    "sub_category": "Face",
+    "sub_sub_category": "Setting Sprays & Powders",
+    "category_path": "Makeup > Face > Setting Sprays & Powders",
+    "category_name": "Setting Sprays & Powders",
+    "url": "https://www.amazon.in/s?rh=n%3A1355016031%2Cn%3A1374357031%2Cn%3A1374371031%2Cn%3A219523556031&dc&qid=1793951179&rnid=1374371031&ref=sr_nr_n_13"
+  },
+  {
+    "marketplace": "amazon",
+    "marketplace_name": "Amazon",
+    "category": "Makeup",
+    "sub_category": "Face",
+    "sub_sub_category": "Tinted Moisturizer",
+    "category_path": "Makeup > Face > Tinted Moisturizer",
+    "category_name": "Tinted Moisturizer",
+    "url": "https://www.amazon.in/s?i=beauty&rh=n%3A22649445031&s=popularity-rank&fs=true&ref=lp_22649445031_sar"
+  },
+  {
+    "marketplace": "amazon",
+    "marketplace_name": "Amazon",
+    "category": "Makeup",
+    "sub_category": "Lips",
+    "sub_sub_category": "Lipstick",
+    "category_path": "Makeup > Lips > Lipstick",
+    "category_name": "Lipstick",
+    "url": "https://www.amazon.in/Lip-Glosses-Prime-Eligible-Lips/s?i=beauty&bbn=1374379031&rh=n%3A1355016031%2Cn%3A1374357031%2Cn%3A1374379031%2Cn%3A1374384031%2Cp_85%3A10440599031%2Cp_28%3A-spons&pf_rd_i=1374379031&pf_rd_m=A1VBAL9TL5WCBF&pf_rd_p=e2e57b49-ca6e-4d40-8328-9829b9ecd266&pf_rd_r=K30D3C4V620NZQC51ZK6&pf_rd_s=merchandised-search-4&ref=QAQuad11CTA_en_IN_1"
+  },
+  {
+    "marketplace": "amazon",
+    "marketplace_name": "Amazon",
+    "category": "Makeup",
+    "sub_category": "Lips",
+    "sub_sub_category": "Lip Gloss",
+    "category_path": "Makeup > Lips > Lip Gloss",
+    "category_name": "Lip Gloss",
+    "url": "https://www.amazon.in/s?i=beauty&bbn=1374379031&rh=n%3A1355016031%2Cn%3A1374357031%2Cn%3A1374379031%2Cn%3A1374380031%2Cp_85%3A10440599031%2Cp_28%3A-spons&pf_rd_i=1374379031&pf_rd_m=A1VBAL9TL5WCBF&pf_rd_p=e2e57b49-ca6e-4d40-8328-9829b9ecd266&pf_rd_r=K30D3C4V620NZQC51ZK6&pf_rd_s=merchandised-search-4&ref=QAQuad11CTA_en_IN_2"
+  },
+  {
+    "marketplace": "amazon",
+    "marketplace_name": "Amazon",
+    "category": "Makeup",
+    "sub_category": "Lips",
+    "sub_sub_category": "Lip Liner",
+    "category_path": "Makeup > Lips > Lip Liner",
+    "category_name": "Lip Liner",
+    "url": "https://www.amazon.in/Lip-Glosses-Prime-Eligible-Lips/s?i=beauty&bbn=1374379031&rh=n%3A1355016031%2Cn%3A1374357031%2Cn%3A1374379031%2Cn%3A1374381031%2Cp_85%3A10440599031%2Cp_28%3A-spons&pf_rd_i=1374379031&pf_rd_m=A1VBAL9TL5WCBF&pf_rd_p=e2e57b49-ca6e-4d40-8328-9829b9ecd266&pf_rd_r=K30D3C4V620NZQC51ZK6&pf_rd_s=merchandised-search-4&ref=QAQuad11CTA_en_IN_3"
+  },
+  {
+    "marketplace": "amazon",
+    "marketplace_name": "Amazon",
+    "category": "Makeup",
+    "sub_category": "Lips",
+    "sub_sub_category": "Lip Stain & Tint",
+    "category_path": "Makeup > Lips > Lip Stain & Tint",
+    "category_name": "Lip Stain & Tint",
+    "url": "https://www.amazon.in/Lip-Glosses-Prime-Eligible-Lips/s?i=beauty&bbn=1374379031&rh=n%3A1355016031%2Cn%3A1374357031%2Cn%3A1374379031%2Cn%3A1374383031%2Cp_85%3A10440599031%2Cp_28%3A-spons&pf_rd_i=1374379031&pf_rd_m=A1VBAL9TL5WCBF&pf_rd_p=e2e57b49-ca6e-4d40-8328-9829b9ecd266&pf_rd_r=K30D3C4V620NZQC51ZK6&pf_rd_s=merchandised-search-4&ref=QAQuad11CTA_en_IN_4"
+  },
+  {
+    "marketplace": "amazon",
+    "marketplace_name": "Amazon",
+    "category": "Makeup",
+    "sub_category": "Eyes",
+    "sub_sub_category": "Eye Concealer",
+    "category_path": "Makeup > Eyes > Eye Concealer",
+    "category_name": "Eye Concealer",
+    "url": "https://www.amazon.in/s?i=beauty&rh=n%3A1374365031&s=popularity-rank&fs=true&ref=lp_1374365031_sar"
+  },
+  {
+    "marketplace": "amazon",
+    "marketplace_name": "Amazon",
+    "category": "Makeup",
+    "sub_category": "Eyes",
+    "sub_sub_category": "Eyebrows",
+    "category_path": "Makeup > Eyes > Eyebrows",
+    "category_name": "Eyebrows",
+    "url": "https://www.amazon.in/s?i=beauty&rh=n%3A1374367031&s=popularity-rank&fs=true&ref=lp_1374367031_sar"
+  },
+  {
+    "marketplace": "amazon",
+    "marketplace_name": "Amazon",
+    "category": "Makeup",
+    "sub_category": "Eyes",
+    "sub_sub_category": "Eyeliner",
+    "category_path": "Makeup > Eyes > Eyeliner",
+    "category_name": "Eyeliner",
+    "url": "https://www.amazon.in/s?i=beauty&rh=n%3A1374368031&s=popularity-rank&fs=true&ref=lp_1374368031_sar"
+  },
+  {
+    "marketplace": "amazon",
+    "marketplace_name": "Amazon",
+    "category": "Makeup",
+    "sub_category": "Eyes",
+    "sub_sub_category": "Eyeshadow",
+    "category_path": "Makeup > Eyes > Eyeshadow",
+    "category_name": "Eyeshadow",
+    "url": "https://www.amazon.in/s?i=beauty&rh=n%3A1374369031&s=popularity-rank&fs=true&ref=lp_1374369031_sar"
+  },
+  {
+    "marketplace": "amazon",
+    "marketplace_name": "Amazon",
+    "category": "Makeup",
+    "sub_category": "Eyes",
+    "sub_sub_category": "Eye Primer",
+    "category_path": "Makeup > Eyes > Eye Primer",
+    "category_name": "Eye Primer",
+    "url": "https://www.amazon.in/s?i=beauty&rh=n%3A9530405031&s=popularity-rank&fs=true&ref=lp_9530405031_sar"
+  },
+  {
+    "marketplace": "amazon",
+    "marketplace_name": "Amazon",
+    "category": "Makeup",
+    "sub_category": "Eyes",
+    "sub_sub_category": "False Lashes",
+    "category_path": "Makeup > Eyes > False Lashes",
+    "category_name": "False Lashes",
+    "url": "https://www.amazon.in/s?rh=n%3A1355016031%2Cn%3A1374357031%2Cn%3A1374364031%2Cn%3A1374366031&dc&qid=1793951919&rnid=1374364031&ref=sr_nr_n_8"
+  },
+  {
+    "marketplace": "amazon",
+    "marketplace_name": "Amazon",
+    "category": "Makeup",
+    "sub_category": "Eyes",
+    "sub_sub_category": "Kajal",
+    "category_path": "Makeup > Eyes > Kajal",
+    "category_name": "Kajal",
+    "url": "https://www.amazon.in/s?i=beauty&rh=n%3A3507140031&s=popularity-rank&fs=true&ref=lp_3507140031_sar"
+  },
+  {
+    "marketplace": "amazon",
+    "marketplace_name": "Amazon",
+    "category": "Makeup",
+    "sub_category": "Eyes",
+    "sub_sub_category": "Mascara",
+    "category_path": "Makeup > Eyes > Mascara",
+    "category_name": "Mascara",
+    "url": "https://www.amazon.in/s?rh=n%3A1355016031%2Cn%3A1374357031%2Cn%3A1374364031%2Cn%3A1374370031&dc&qid=1793951919&rnid=1374364031&ref=sr_nr_n_10"
+  },
+  {
+    "marketplace": "amazon",
+    "marketplace_name": "Amazon",
+    "category": "Makeup",
+    "sub_category": "Nails",
+    "sub_sub_category": "Nail Polish",
+    "category_path": "Makeup > Nails > Nail Polish",
+    "category_name": "Nail Polish",
+    "url": "https://www.amazon.in/s?k=nail+paint&i=beauty&crid=STMTCEXUXU5N&pf_rd_i=1374357031&pf_rd_i=1374357031&pf_rd_m=A1VBAL9TL5WCBF&pf_rd_m=A1VBAL9TL5WCBF&pf_rd_p=56eebe01-9345-437e-9a41-ae03b8060104&pf_rd_p=8b196310-152f-4599-83bb-d0958bc62d2f&pf_rd_r=MGPVER9HRTQ54CA6MDHV&pf_rd_r=Y85ZJKZ9T8NNFVWPT0TV&pf_rd_s=merchandised-search-1&pf_rd_s=merchandised-search-12&sprefix=nail+paint%2Cbeauty%2C200&ref=QAHzEditorial_en_IN_4"
+  },
+  {
+    "marketplace": "amazon",
+    "marketplace_name": "Amazon",
+    "category": "Makeup",
+    "sub_category": "Tools & Accessories",
+    "sub_sub_category": "Brushes & Tools",
+    "category_path": "Makeup > Tools & Accessories > Brushes & Tools",
+    "category_name": "Brushes & Tools",
+    "url": "https://www.amazon.in/s?i=beauty&bbn=9530409031&rh=n%3A1355016031%2Cn%3A1374357031%2Cn%3A9530409031%2Cn%3A1374467031%2Cp_85%3A10440599031&dc&ds=v1%3AaxC60p3ONZ3%2BQr6WgDKu1BpYEHGXTEW9qIkcIH58lHY&pf_rd_i=1374357031&pf_rd_i=1374357031&pf_rd_m=A1VBAL9TL5WCBF&pf_rd_m=A1VBAL9TL5WCBF&pf_rd_p=56eebe01-9345-437e-9a41-ae03b8060104&pf_rd_p=57127e09-5719-4deb-b496-3f95aaccd6ea&pf_rd_r=4EMGWW34XRFJNB0TSW24&pf_rd_r=MGPVER9HRTQ54CA6MDHV&pf_rd_s=merchandised-search-1&pf_rd_s=mobile-hybrid-1&pf_rd_t=30901&qid=1711446608&rnid=1355016031&ref=QAHzEditorial_en_IN_5"
+  },
+  {
+    "marketplace": "nykaa",
+    "marketplace_name": "Nykaa",
+    "category": "Makeup",
+    "sub_category": "Face",
+    "sub_sub_category": "Foundation",
+    "category_path": "Makeup > Face > Foundation",
+    "category_name": "Foundation",
+    "url": "https://www.nykaa.com/makeup/face/face-foundation/c/228"
+  },
+  {
+    "marketplace": "nykaa",
+    "marketplace_name": "Nykaa",
+    "category": "Makeup",
+    "sub_category": "Face",
+    "sub_sub_category": "Blush",
+    "category_path": "Makeup > Face > Blush",
+    "category_name": "Blush",
+    "url": "https://www.nykaa.com/makeup/face/face-blush/c/235"
+  },
+  {
+    "marketplace": "nykaa",
+    "marketplace_name": "Nykaa",
+    "category": "Makeup",
+    "sub_category": "Face",
+    "sub_sub_category": "Highlighter",
+    "category_path": "Makeup > Face > Highlighter",
+    "category_name": "Highlighter",
+    "url": "https://www.nykaa.com/makeup/face/face-highlighter/c/237"
+  },
+  {
+    "marketplace": "nykaa",
+    "marketplace_name": "Nykaa",
+    "category": "Makeup",
+    "sub_category": "Face",
+    "sub_sub_category": "Primer",
+    "category_path": "Makeup > Face > Primer",
+    "category_name": "Primer",
+    "url": "https://www.nykaa.com/makeup/face/face-primer/c/233"
+  },
+  {
+    "marketplace": "nykaa",
+    "marketplace_name": "Nykaa",
+    "category": "Makeup",
+    "sub_category": "Face",
+    "sub_sub_category": "Concealer",
+    "category_path": "Makeup > Face > Concealer",
+    "category_name": "Concealer",
+    "url": "https://www.nykaa.com/makeup/face/face-concealer/c/234"
+  },
+  {
+    "marketplace": "nykaa",
+    "marketplace_name": "Nykaa",
+    "category": "Makeup",
+    "sub_category": "Face",
+    "sub_sub_category": "Compact Powder",
+    "category_path": "Makeup > Face > Compact Powder",
+    "category_name": "Compact Powder",
+    "url": "https://www.nykaa.com/makeup/face/face-compact/c/231"
+  },
+  {
+    "marketplace": "nykaa",
+    "marketplace_name": "Nykaa",
+    "category": "Makeup",
+    "sub_category": "Face",
+    "sub_sub_category": "Setting Spray",
+    "category_path": "Makeup > Face > Setting Spray",
+    "category_name": "Setting Spray",
+    "url": "https://www.nykaa.com/makeup/face/setting-spray/c/6761"
+  },
+  {
+    "marketplace": "nykaa",
+    "marketplace_name": "Nykaa",
+    "category": "Makeup",
+    "sub_category": "Face",
+    "sub_sub_category": "Makeup Remover",
+    "category_path": "Makeup > Face > Makeup Remover",
+    "category_name": "Makeup Remover",
+    "url": "https://www.nykaa.com/makeup/face/makeup-remover/c/239"
+  },
+  {
+    "marketplace": "nykaa",
+    "marketplace_name": "Nykaa",
+    "category": "Makeup",
+    "sub_category": "Face",
+    "sub_sub_category": "Loose Powder",
+    "category_path": "Makeup > Face > Loose Powder",
+    "category_name": "Loose Powder",
+    "url": "https://www.nykaa.com/makeup/face/loose-powder/c/229"
+  },
+  {
+    "marketplace": "nykaa",
+    "marketplace_name": "Nykaa",
+    "category": "Makeup",
+    "sub_category": "Face",
+    "sub_sub_category": "Contour",
+    "category_path": "Makeup > Face > Contour",
+    "category_name": "Contour",
+    "url": "https://www.nykaa.com/makeup/face/face-contour/c/4140"
+  },
+  {
+    "marketplace": "nykaa",
+    "marketplace_name": "Nykaa",
+    "category": "Makeup",
+    "sub_category": "Face",
+    "sub_sub_category": "BB & CC Cream",
+    "category_path": "Makeup > Face > BB & CC Cream",
+    "category_name": "BB & CC Cream",
+    "url": "https://www.nykaa.com/makeup/face/bb-cc-cream/c/232"
+  },
+  {
+    "marketplace": "nykaa",
+    "marketplace_name": "Nykaa",
+    "category": "Makeup",
+    "sub_category": "Face",
+    "sub_sub_category": "Bronzer",
+    "category_path": "Makeup > Face > Bronzer",
+    "category_name": "Bronzer",
+    "url": "https://www.nykaa.com/makeup/face/face-bronzer/c/236"
+  },
+  {
+    "marketplace": "nykaa",
+    "marketplace_name": "Nykaa",
+    "category": "Makeup",
+    "sub_category": "Face",
+    "sub_sub_category": "Tinted Moisturizer",
+    "category_path": "Makeup > Face > Tinted Moisturizer",
+    "category_name": "Tinted Moisturizer",
+    "url": "https://www.nykaa.com/makeup/face/tinted-moisturizer/c/230"
+  },
+  {
+    "marketplace": "nykaa",
+    "marketplace_name": "Nykaa",
+    "category": "Makeup",
+    "sub_category": "Face",
+    "sub_sub_category": "Sindoor",
+    "category_path": "Makeup > Face > Sindoor",
+    "category_name": "Sindoor",
+    "url": "https://www.nykaa.com/makeup/face/sindoor/c/220"
+  },
+  {
+    "marketplace": "nykaa",
+    "marketplace_name": "Nykaa",
+    "category": "Makeup",
+    "sub_category": "Eyes",
+    "sub_sub_category": "Eyeshadow",
+    "category_path": "Makeup > Eyes > Eyeshadow",
+    "category_name": "Eyeshadow",
+    "url": "https://www.nykaa.com/makeup/eyes/eye-shadow/c/3940"
+  },
+  {
+    "marketplace": "nykaa",
+    "marketplace_name": "Nykaa",
+    "category": "Makeup",
+    "sub_category": "Eyes",
+    "sub_sub_category": "Mascara",
+    "category_path": "Makeup > Eyes > Mascara",
+    "category_name": "Mascara",
+    "url": "https://www.nykaa.com/makeup/eyes/mascara/c/3886"
+  },
+  {
+    "marketplace": "nykaa",
+    "marketplace_name": "Nykaa",
+    "category": "Makeup",
+    "sub_category": "Eyes",
+    "sub_sub_category": "Eyeliner & Kajal",
+    "category_path": "Makeup > Eyes > Eyeliner & Kajal",
+    "category_name": "Eyeliner & Kajal",
+    "url": "https://www.nykaa.com/makeup/eyes/eyeliner-kajal/c/3939"
+  },
+  {
+    "marketplace": "nykaa",
+    "marketplace_name": "Nykaa",
+    "category": "Makeup",
+    "sub_category": "Eyes",
+    "sub_sub_category": "Eyebrows",
+    "category_path": "Makeup > Eyes > Eyebrows",
+    "category_name": "Eyebrows",
+    "url": "https://www.nykaa.com/makeup/eyes/brows/c/3941"
+  },
+  {
+    "marketplace": "nykaa",
+    "marketplace_name": "Nykaa",
+    "category": "Makeup",
+    "sub_category": "Face",
+    "sub_sub_category": "Concealer",
+    "category_path": "Makeup > Face > Concealer",
+    "category_name": "Concealer",
+    "url": "https://www.nykaa.com/makeup/eyes/concealer/c/3944"
+  },
+  {
+    "marketplace": "nykaa",
+    "marketplace_name": "Nykaa",
+    "category": "Makeup",
+    "sub_category": "Eyes",
+    "sub_sub_category": "False Lashes",
+    "category_path": "Makeup > Eyes > False Lashes",
+    "category_name": "False Lashes",
+    "url": "https://www.nykaa.com/makeup/eyes/lashes/c/3942"
+  },
+  {
+    "marketplace": "nykaa",
+    "marketplace_name": "Nykaa",
+    "category": "Makeup",
+    "sub_category": "Eyes",
+    "sub_sub_category": "Eye Primer",
+    "category_path": "Makeup > Eyes > Eye Primer",
+    "category_name": "Eye Primer",
+    "url": "https://www.nykaa.com/makeup/eyes/eye-primer/c/3943"
+  },
+  {
+    "marketplace": "nykaa",
+    "marketplace_name": "Nykaa",
+    "category": "Makeup",
+    "sub_category": "Lips",
+    "sub_sub_category": "Lipstick",
+    "category_path": "Makeup > Lips > Lipstick",
+    "category_name": "Lipstick",
+    "url": "https://www.nykaa.com/makeup/lips/lipstick/c/3945"
+  },
+  {
+    "marketplace": "nykaa",
+    "marketplace_name": "Nykaa",
+    "category": "Makeup",
+    "sub_category": "Lips",
+    "sub_sub_category": "Lip Balm",
+    "category_path": "Makeup > Lips > Lip Balm",
+    "category_name": "Lip Balm",
+    "url": "https://www.nykaa.com/makeup/lips/lip-balm/c/3948"
+  },
+  {
+    "marketplace": "nykaa",
+    "marketplace_name": "Nykaa",
+    "category": "Makeup",
+    "sub_category": "Lips",
+    "sub_sub_category": "Lip Gloss",
+    "category_path": "Makeup > Lips > Lip Gloss",
+    "category_name": "Lip Gloss",
+    "url": "https://www.nykaa.com/makeup/lips/lip-gloss/c/3946"
+  },
+  {
+    "marketplace": "nykaa",
+    "marketplace_name": "Nykaa",
+    "category": "Makeup",
+    "sub_category": "Lips",
+    "sub_sub_category": "Liquid Lipstick",
+    "category_path": "Makeup > Lips > Liquid Lipstick",
+    "category_name": "Liquid Lipstick",
+    "url": "https://www.nykaa.com/makeup/lips/liquid-lipstick/c/12887"
+  },
+  {
+    "marketplace": "nykaa",
+    "marketplace_name": "Nykaa",
+    "category": "Makeup",
+    "sub_category": "Lips",
+    "sub_sub_category": "Lip Liner",
+    "category_path": "Makeup > Lips > Lip Liner",
+    "category_name": "Lip Liner",
+    "url": "https://www.nykaa.com/makeup/lips/lip-liner/c/3947"
+  },
+  {
+    "marketplace": "nykaa",
+    "marketplace_name": "Nykaa",
+    "category": "Makeup",
+    "sub_category": "Nails",
+    "sub_sub_category": "Nail Polish",
+    "category_path": "Makeup > Nails > Nail Polish",
+    "category_name": "Nail Polish",
+    "url": "https://www.nykaa.com/makeup/nails/nail-polish/c/3949"
+  },
+  {
+    "marketplace": "nykaa",
+    "marketplace_name": "Nykaa",
+    "category": "Makeup",
+    "sub_category": "Nails",
+    "sub_sub_category": "Nail Care",
+    "category_path": "Makeup > Nails > Nail Care",
+    "category_name": "Nail Care",
+    "url": "https://www.nykaa.com/makeup/nails/nail-care/c/3950"
+  },
+  {
+    "marketplace": "myntra",
+    "marketplace_name": "Myntra",
+    "category": "Makeup",
+    "sub_category": "General",
+    "sub_sub_category": "General Makeup",
+    "category_path": "Makeup > General > General Makeup",
+    "category_name": "General Makeup",
+    "url": "https://www.myntra.com/makeup"
+  },
+  {
+    "marketplace": "myntra",
+    "marketplace_name": "Myntra",
+    "category": "Makeup",
+    "sub_category": "Lips",
+    "sub_sub_category": "Lipstick",
+    "category_path": "Makeup > Lips > Lipstick",
+    "category_name": "Lipstick",
+    "url": "https://www.myntra.com/lipstick"
+  },
+  {
+    "marketplace": "myntra",
+    "marketplace_name": "Myntra",
+    "category": "Makeup",
+    "sub_category": "Lips",
+    "sub_sub_category": "Lip Gloss",
+    "category_path": "Makeup > Lips > Lip Gloss",
+    "category_name": "Lip Gloss",
+    "url": "https://www.myntra.com/lip-gloss"
+  },
+  {
+    "marketplace": "myntra",
+    "marketplace_name": "Myntra",
+    "category": "Makeup",
+    "sub_category": "Lips",
+    "sub_sub_category": "Lip Liner",
+    "category_path": "Makeup > Lips > Lip Liner",
+    "category_name": "Lip Liner",
+    "url": "https://www.myntra.com/lip-liner"
+  },
+  {
+    "marketplace": "myntra",
+    "marketplace_name": "Myntra",
+    "category": "Makeup",
+    "sub_category": "Eyes",
+    "sub_sub_category": "Mascara",
+    "category_path": "Makeup > Eyes > Mascara",
+    "category_name": "Mascara",
+    "url": "https://www.myntra.com/mascara"
+  },
+  {
+    "marketplace": "myntra",
+    "marketplace_name": "Myntra",
+    "category": "Makeup",
+    "sub_category": "Eyes",
+    "sub_sub_category": "Eyeliner",
+    "category_path": "Makeup > Eyes > Eyeliner",
+    "category_name": "Eyeliner",
+    "url": "https://www.myntra.com/eyeliner"
+  },
+  {
+    "marketplace": "myntra",
+    "marketplace_name": "Myntra",
+    "category": "Makeup",
+    "sub_category": "Eyes",
+    "sub_sub_category": "Kajal",
+    "category_path": "Makeup > Eyes > Kajal",
+    "category_name": "Kajal",
+    "url": "https://www.myntra.com/kajal"
+  },
+  {
+    "marketplace": "myntra",
+    "marketplace_name": "Myntra",
+    "category": "Makeup",
+    "sub_category": "Eyes",
+    "sub_sub_category": "Eyeshadow",
+    "category_path": "Makeup > Eyes > Eyeshadow",
+    "category_name": "Eyeshadow",
+    "url": "https://www.myntra.com/eyeshadow"
+  },
+  {
+    "marketplace": "myntra",
+    "marketplace_name": "Myntra",
+    "category": "Makeup",
+    "sub_category": "Face",
+    "sub_sub_category": "Foundation",
+    "category_path": "Makeup > Face > Foundation",
+    "category_name": "Foundation",
+    "url": "https://www.myntra.com/foundation"
+  },
+  {
+    "marketplace": "myntra",
+    "marketplace_name": "Myntra",
+    "category": "Makeup",
+    "sub_category": "Face",
+    "sub_sub_category": "Primer",
+    "category_path": "Makeup > Face > Primer",
+    "category_name": "Primer",
+    "url": "https://www.myntra.com/primer"
+  },
+  {
+    "marketplace": "myntra",
+    "marketplace_name": "Myntra",
+    "category": "Makeup",
+    "sub_category": "Face",
+    "sub_sub_category": "Concealer",
+    "category_path": "Makeup > Face > Concealer",
+    "category_name": "Concealer",
+    "url": "https://www.myntra.com/concealer"
+  },
+  {
+    "marketplace": "myntra",
+    "marketplace_name": "Myntra",
+    "category": "Makeup",
+    "sub_category": "Face",
+    "sub_sub_category": "Compact Powder",
+    "category_path": "Makeup > Face > Compact Powder",
+    "category_name": "Compact Powder",
+    "url": "https://www.myntra.com/compact"
+  },
+  {
+    "marketplace": "myntra",
+    "marketplace_name": "Myntra",
+    "category": "Makeup",
+    "sub_category": "Nails",
+    "sub_sub_category": "Nail Polish",
+    "category_path": "Makeup > Nails > Nail Polish",
+    "category_name": "Nail Polish",
+    "url": "https://www.myntra.com/nail-polish"
+  },
+  {
+    "marketplace": "flipkart",
+    "marketplace_name": "Flipkart",
+    "category": "Makeup",
+    "sub_category": "General",
+    "sub_sub_category": "General Makeup",
+    "category_path": "Makeup > General > General Makeup",
+    "category_name": "General Makeup",
+    "url": "https://www.flipkart.com/beauty-and-grooming/makeup/pr?sid=g9b%2Cffi&p%5B%5D=facets.fulfilled_by%255B%255D%3DF-Assured&param=345678&BU=BGM"
+  },
+  {
+    "marketplace": "flipkart",
+    "marketplace_name": "Flipkart",
+    "category": "Makeup",
+    "sub_category": "Lips",
+    "sub_sub_category": "Lipstick",
+    "category_path": "Makeup > Lips > Lipstick",
+    "category_name": "Lipstick",
+    "url": "https://www.flipkart.com/beauty-and-grooming/makeup/lips/lipstick/pr?sid=g9b%2Cffi%2Ctv5%2Cuna&p%5B%5D=facets.fulfilled_by%255B%255D%3DF-Assured&param=5675667&BU=BGM"
+  },
+  {
+    "marketplace": "flipkart",
+    "marketplace_name": "Flipkart",
+    "category": "Makeup",
+    "sub_category": "Lips",
+    "sub_sub_category": "Lip Gloss",
+    "category_path": "Makeup > Lips > Lip Gloss",
+    "category_name": "Lip Gloss",
+    "url": "https://www.flipkart.com/beauty-and-grooming/makeup/lips/lip-gloss/pr?sid=g9b%2Cffi%2Ctv5%2C4rm&p%5B%5D=facets.fulfilled_by%255B%255D%3DF-Assured&param=4567878&BU=BGM"
+  },
+  {
+    "marketplace": "flipkart",
+    "marketplace_name": "Flipkart",
+    "category": "Makeup",
+    "sub_category": "Lips",
+    "sub_sub_category": "Lip Liner",
+    "category_path": "Makeup > Lips > Lip Liner",
+    "category_name": "Lip Liner",
+    "url": "https://www.flipkart.com/beauty-and-grooming/makeup/lips/lip-liner/pr?sid=g9b%2Cffi%2Ctv5%2Cnyo&p%5B%5D=facets.fulfilled_by%255B%255D%3DF-Assured&param=435432&BU=BGM"
+  },
+  {
+    "marketplace": "flipkart",
+    "marketplace_name": "Flipkart",
+    "category": "Makeup",
+    "sub_category": "Lips",
+    "sub_sub_category": "Lip Stain",
+    "category_path": "Makeup > Lips > Lip Stain",
+    "category_name": "Lip Stain",
+    "url": "https://www.flipkart.com/beauty-and-grooming/makeup/lips/lip-stain/pr?sid=g9b%2Cffi%2Ctv5%2C7mz&p%5B%5D=facets.fulfilled_by%255B%255D%3DF-Assured&param=878996&BU=BGM"
+  },
+  {
+    "marketplace": "flipkart",
+    "marketplace_name": "Flipkart",
+    "category": "Makeup",
+    "sub_category": "Lips",
+    "sub_sub_category": "Lip Balm",
+    "category_path": "Makeup > Lips > Lip Balm",
+    "category_name": "Lip Balm",
+    "url": "https://www.flipkart.com/beauty-and-grooming/makeup/lips/lip-balm/pr?sid=g9b%2Cffi%2Ctv5%2Csho&p%5B%5D=facets.fulfilled_by%255B%255D%3DF-Assured&param=456123&BU=BGM"
+  },
+  {
+    "marketplace": "flipkart",
+    "marketplace_name": "Flipkart",
+    "category": "Makeup",
+    "sub_category": "Eyes",
+    "sub_sub_category": "Eye Makeup",
+    "category_path": "Makeup > Eyes > Eye Makeup",
+    "category_name": "Eye Makeup",
+    "url": "https://www.flipkart.com/beauty-and-grooming/makeup/eye-makeup/pr?sid=g9b%2Cffi%2Cttr&p%5B%5D=facets.fulfilled_by%255B%255D%3DF-Assured&param=45678&ctx=eyJjYXJkQ29udGV4dCI6eyJhdHRyaWJ1dGVzIjp7InRpdGxlIjp7Im11bHRpVmFsdWVkQXR0cmlidXRlIjp7ImtleSI6InRpdGxlIiwiaW5mZXJlbmNlVHlwZSI6IlRJVExFIiwidmFsdWVzIjpbIkV5ZSBtYWtldXAiXSwidmFsdWVUeXBlIjoiTVVMVElfVkFMVUVEIn19fX19&BU=BGM"
+  },
+  {
+    "marketplace": "flipkart",
+    "marketplace_name": "Flipkart",
+    "category": "Makeup",
+    "sub_category": "Face",
+    "sub_sub_category": "Face Makeup",
+    "category_path": "Makeup > Face > Face Makeup",
+    "category_name": "Face Makeup",
+    "url": "https://www.flipkart.com/beauty-and-grooming/makeup/face-makeup/pr?sid=g9b%2Cffi%2Cdzu&p%5B%5D=facets.fulfilled_by%255B%255D%3DF-Assured&param=456783&BU=BGM"
+  },
+  {
+    "marketplace": "flipkart",
+    "marketplace_name": "Flipkart",
+    "category": "Makeup",
+    "sub_category": "Face",
+    "sub_sub_category": "Foundation",
+    "category_path": "Makeup > Face > Foundation",
+    "category_name": "Foundation",
+    "url": "https://www.flipkart.com/beauty-and-grooming/makeup/face-makeup/foundation/pr?sid=g9b%2Cffi%2Cdzu%2Cgru&p%5B%5D=facets.fulfilled_by%255B%255D%3DF-Assured&param=874544&BU=BGM"
+  },
+  {
+    "marketplace": "flipkart",
+    "marketplace_name": "Flipkart",
+    "category": "Makeup",
+    "sub_category": "Face",
+    "sub_sub_category": "Concealer",
+    "category_path": "Makeup > Face > Concealer",
+    "category_name": "Concealer",
+    "url": "https://www.flipkart.com/beauty-and-grooming/makeup/face-makeup/concealer/pr?sid=g9b%2Cffi%2Cdzu%2Cnjv&p%5B%5D=facets.fulfilled_by%255B%5D%3DF-Assured&PARAM=8765443&BU=BGM"
+  },
+  {
+    "marketplace": "flipkart",
+    "marketplace_name": "Flipkart",
+    "category": "Makeup",
+    "sub_category": "Face",
+    "sub_sub_category": "Compact Powder",
+    "category_path": "Makeup > Face > Compact Powder",
+    "category_name": "Compact Powder",
+    "url": "https://www.flipkart.com/beauty-and-grooming/makeup/face-makeup/compact/pr?sid=g9b%2Cffi%2Cdzu%2Cypp&p%5B%5D=facets.fulfilled_by%255B%5D%3DF-Assured&PARAM=2345678&BU=BGM"
+  },
+  {
+    "marketplace": "flipkart",
+    "marketplace_name": "Flipkart",
+    "category": "Makeup",
+    "sub_category": "Face",
+    "sub_sub_category": "Blush",
+    "category_path": "Makeup > Face > Blush",
+    "category_name": "Blush",
+    "url": "https://www.flipkart.com/beauty-and-grooming/makeup/face-makeup/blush/pr?sid=g9b%2Cffi%2Cdzu%2Cyk7&p%5B%5D=facets.fulfilled_by%255B%5D%3DF-Assured&PARAM=583839&BU=BGM"
+  },
+  {
+    "marketplace": "flipkart",
+    "marketplace_name": "Flipkart",
+    "category": "Makeup",
+    "sub_category": "Face",
+    "sub_sub_category": "Highlighter",
+    "category_path": "Makeup > Face > Highlighter",
+    "category_name": "Highlighter",
+    "url": "https://www.flipkart.com/beauty-and-grooming/makeup/face-makeup/highlighter/pr?sid=g9b%2Cffi%2Cdzu%2Cy2c&p%5B%5D=facets.fulfilled_by%255B%5D%3DF-Assured&PARAM=876421&BU=BGM"
+  },
+  {
+    "marketplace": "flipkart",
+    "marketplace_name": "Flipkart",
+    "category": "Makeup",
+    "sub_category": "Nails",
+    "sub_sub_category": "Nail Polish",
+    "category_path": "Makeup > Nails > Nail Polish",
+    "category_name": "Nail Polish",
+    "url": "https://www.flipkart.com/beauty-and-grooming/makeup/nails/pr?sid=g9b%2Cffi%2Cbhh&p%5B%5D=facets.fulfilled_by%255B%5D%3DF-Assured&param=456789&ctx=eyJjYXJkQ29udGV4dCI6eyJhdHRyaWJ1dGVzIjp7InRpdGxlIjp7Im11bHRpVmFsdWVkQXR0cmlidXRlIjp7ImtleSI6InRpdGxlIiwiaW5mZXJlbmNlVHlwZSI6IlRJVExFIiwidmFsdWVzIjpbIk5haWxzIl0sInZhbHVlVHlwZSI6Ik1VTFRJX1ZBTFVFRCJ9fX19fQ%3D%3D&BU=BGM"
+  },
+  {
+    "marketplace": "flipkart",
+    "marketplace_name": "Flipkart",
+    "category": "Makeup",
+    "sub_category": "Kits & Sets",
+    "sub_sub_category": "Kits & Combos",
+    "category_path": "Makeup > Kits & Sets > Kits & Combos",
+    "category_name": "Kits & Combos",
+    "url": "https://www.flipkart.com/beauty-and-grooming/makeup/makeup-kits-combo/pr?sid=g9b%2Cffi%2C3dd&p%5B%5D=facets.fulfilled_by%255B%255D%3DF-Assured&param=3456789&ctx=eyJjYXJkQ29udGV4dCI6eyJhdHRyaWJ1dGVzIjp7InRpdGxlIjp7Im11bHRpVmFsdWVkQXR0cmlidXRlIjp7ImtleSI6InRpdGxlIiwiaW5mZXJlbmNlVHlwZSI6IlRJVExFIiwidmFsdWVzIjpbIktpdHMtQ29tYm9zIl0sInZhbHVlVHlwZSI6Ik1VTFRJX1ZBTFVFRCJ9fX19fQ%3D%3D&BU=BGM"
+  },
+  {
+    "marketplace": "flipkart",
+    "marketplace_name": "Flipkart",
+    "category": "Makeup",
+    "sub_category": "Tools & Accessories",
+    "sub_sub_category": "Brushes & Tools",
+    "category_path": "Makeup > Tools & Accessories > Brushes & Tools",
+    "category_name": "Brushes & Tools",
+    "url": "https://www.flipkart.com/beauty-and-grooming/makeup/makeup-accessory/pr?sid=g9b%2Cffi%2Cssf&p%5B%5D=facets.fulfilled_by%255B%255D%3DF-Assured&param=3456722&ctx=eyJjYXJkQ29udGV4dCI6eyJhdHRyaWJ1dGVzIjp7InRpdGxlIjp7Im11bHRpVmFsdWVkQXR0cmlidXRlIjp7ImtleSI6InRpdGxlIiwiaW5mZXJlbmNlVHlwZSI6IlRJVExFIiwidmFsdWVzIjpbIk1ha2V1cCBBY2Nlc3NvcmllcyJdLCJ2YWx1ZVR5cGUiOiJNVUxUSV9WQUxVRUQifX19fX0%3D&BU=BGM"
+  }
+]
