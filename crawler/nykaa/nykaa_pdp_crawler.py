@@ -87,12 +87,16 @@ try:
 except ImportError:
     pass
 
-DEFAULT_MONGO_URI = (
-    os.getenv("MONGO_URI") or
-    os.getenv("MONGO") or
-    os.getenv("MONGODB_URI") or
-    'mongodb://admin:8ko92AWggrY2%21@38.45.64.201:27017/?authSource=admin'
-)
+# Import MakeupKhoj DB config and Category Mapper
+_crawler_root = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
+if _crawler_root not in sys.path:
+    sys.path.insert(0, _crawler_root)
+
+from db_config import get_db, COLLECTIONS, DB_NAME, DEFAULT_MONGO_URI, validate_db_safety
+from category_mapper import get_marketplace_urls, lookup_category_by_url
+
+DEFAULT_DB = DB_NAME  # 'makeupkhoj'
+DEFAULT_COLLECTION = COLLECTIONS['nykaa']  # 'nykaa_makeupkhoj'
 
 # Setup Logging
 logging.basicConfig(
@@ -173,6 +177,66 @@ def clean_high_res_image(url: str) -> str:
     clean = re.sub(r'tr:[^/]+/', '', url)
     clean = re.sub(r'\?tr=[^&]+', '', clean)
     return clean
+
+
+def extract_makeup_attributes(text: str, title: str = "", prod_state: dict = None) -> Dict[str, Any]:
+    """Extract makeup-specific attributes: shade, finish, formulation, coverage, skin_type, spf."""
+    combined = f"{title}\n{text}"
+    attrs = {
+        "shade": None,
+        "finish": None,
+        "formulation": None,
+        "coverage": None,
+        "skin_type": None,
+        "spf": None
+    }
+
+    # Shade
+    shade_match = re.search(r'(?:Shade(?:\s*Name|\s*No\.?)?|Color)\s*[:\-–]\s*([^\n\.<,]+)', combined, re.I)
+    if shade_match:
+        attrs["shade"] = shade_match.group(1).strip()
+    elif prod_state and prod_state.get("variantName"):
+        attrs["shade"] = clean_text(prod_state.get("variantName"))
+
+    # Finish
+    finishes = ["Matte", "Glossy", "Dewy", "Satin", "Shimmer", "Radiant", "Metallic", "Natural", "Velvet", "Glitter", "Luminous", "Sheer"]
+    for f in finishes:
+        if re.search(rf'\b{f}\b', combined, re.I):
+            attrs["finish"] = f
+            break
+
+    # Formulation
+    formulations = ["Liquid", "Cream", "Powder", "Gel", "Crayon", "Pencil", "Stick", "Serum", "Mousse", "Pressed Powder", "Loose Powder"]
+    for frm in formulations:
+        if re.search(rf'\b{re.escape(frm)}\b', combined, re.I):
+            attrs["formulation"] = frm
+            break
+
+    # Coverage
+    coverages = ["Full Coverage", "Medium Coverage", "Sheer Coverage", "Buildable Coverage", "Light Coverage"]
+    for cov in coverages:
+        if re.search(rf'\b{re.escape(cov)}\b', combined, re.I):
+            attrs["coverage"] = cov
+            break
+    if not attrs["coverage"]:
+        for cov_simple in ["Full", "Medium", "Sheer", "Light"]:
+            if re.search(rf'\b{cov_simple}\s+Coverage\b', combined, re.I):
+                attrs["coverage"] = f"{cov_simple} Coverage"
+                break
+
+    # Skin Type
+    skin_types = ["All Skin Types", "Oily Skin", "Dry Skin", "Combination Skin", "Sensitive Skin", "Normal Skin"]
+    for st in skin_types:
+        if re.search(rf'\b{re.escape(st)}\b', combined, re.I):
+            attrs["skin_type"] = st
+            break
+
+    # SPF
+    spf_match = re.search(r'\b(SPF\s*\d+\+?)\b', combined, re.I)
+    if spf_match:
+        attrs["spf"] = spf_match.group(1).upper()
+
+    return attrs
 
 
 # --- CORE PDP EXTRACTOR ---
@@ -296,7 +360,13 @@ class NykaaPDPCrawler:
                 if txt and txt not in breadcrumbs:
                     breadcrumbs.append(txt)
 
-        category = breadcrumbs[-1] if breadcrumbs else "Fragrance"
+        cat_meta = lookup_category_by_url(source_url) or {}
+        category = cat_meta.get('category', 'Makeup')
+        sub_category = cat_meta.get('sub_category', breadcrumbs[1] if len(breadcrumbs) > 1 else (breadcrumbs[0] if breadcrumbs else 'General'))
+        sub_sub_category = cat_meta.get('sub_sub_category', cat_meta.get('category_name', breadcrumbs[-1] if breadcrumbs else 'Makeup'))
+        category_path = cat_meta.get('category_path', f"Makeup > {sub_category} > {sub_sub_category}")
+        category_name = cat_meta.get('category_name', sub_sub_category)
+
         gender = "Unisex"
         for bc in breadcrumbs:
             if "women" in bc.lower():
@@ -561,6 +631,9 @@ class NykaaPDPCrawler:
             if bs_el:
                 bestseller_tag = f"{clean_text(bs_el.get_text())} in {clean_text(cat_el.get_text()) if cat_el else ''}".strip()
 
+        # Extract makeup-specific attributes
+        makeup_attrs = extract_makeup_attributes(clean_desc, clean_product_title or "", prod_state)
+
         return {
             "id": formatted_id,
             "product_id": raw_pid,
@@ -571,9 +644,22 @@ class NykaaPDPCrawler:
             "slug": prod_state.get("slug") or urlparse(source_url).path.strip("/"),
             "gender": gender,
             "category": category,
-            "breadcrumbs": breadcrumbs,
+            "sub_category": sub_category,
+            "sub_sub_category": sub_sub_category,
+            "category_path": category_path,
+            "category_name": category_name,
+            "category_url": cat_meta.get('url', source_url),
             "size": size or prod_state.get("packSize"),
             "pack_size": size or prod_state.get("packSize"),
+
+            # Makeup Attributes
+            "shade": makeup_attrs.get("shade"),
+            "finish": makeup_attrs.get("finish"),
+            "formulation": makeup_attrs.get("formulation"),
+            "coverage": makeup_attrs.get("coverage"),
+            "skin_type": makeup_attrs.get("skin_type"),
+            "spf": makeup_attrs.get("spf"),
+            "breadcrumbs": breadcrumbs,
 
             # Pricing
             "price": price,
@@ -643,9 +729,9 @@ class NykaaPDPCrawler:
         active_mode = "all" if is_all_mode else "pending"
 
         logger.info("=" * 75)
-        logger.info("       SCENTKHOJ NYKAA PDP & CATALOG EXTRACTOR")
+        logger.info(f"       MAKEUPKHOJ NYKAA PDP & CATALOG EXTRACTOR")
         logger.info("=" * 75)
-        logger.info(f"Target DB: nykaa.product_data | Master: scentkhoj.products")
+        logger.info(f"Target DB: {DEFAULT_DB}.{DEFAULT_COLLECTION} | Master: {DEFAULT_DB}.products")
         logger.info(f"Execution Mode: {active_mode.upper()} {'(Re-checking all products)' if is_all_mode else '(Pending un-scraped items only)'}")
         logger.info(f"Run Type: {'DRY RUN' if dry_run else 'LIVE MONGODB SYNC'}")
         logger.info(f"Limit: {limit if limit > 0 else 'All available'} | Force: {force}")
@@ -655,26 +741,29 @@ class NykaaPDPCrawler:
         targets = []
         client = None
         db = None
+        col = None
 
         if pymongo:
             try:
+                validate_db_safety(DEFAULT_DB, DEFAULT_COLLECTION)
                 client = pymongo.MongoClient(self.mongo_uri, serverSelectionTimeoutMS=8000)
-                db = client["nykaa"]
+                db = client[DEFAULT_DB]
+                col = db[DEFAULT_COLLECTION]
             except Exception as e:
                 logger.error(f"MongoDB connection failed: {e}")
 
         if single_url:
             targets = [{"url": single_url, "id": single_id or "NYK-CUSTOM"}]
-        elif single_id and db is not None:
-            doc = db["products"].find_one({"$or": [{"id": single_id}, {"product_id": single_id}]})
+        elif single_id and col is not None:
+            doc = col.find_one({"$or": [{"id": single_id}, {"product_id": single_id}]})
             if doc:
                 targets = [doc]
             else:
-                logger.warning(f"Product ID {single_id} not found in nykaa.products.")
+                logger.warning(f"Product ID {single_id} not found in {DEFAULT_COLLECTION}.")
                 return 0
-        elif db is not None:
+        elif col is not None:
             query = {} if is_all_mode else {"$or": [{"pdp_scraped": {"$ne": True}}, {"pdp_scraped": {"$exists": False}}]}
-            cursor = db["products"].find(query)
+            cursor = col.find(query)
             if limit > 0:
                 cursor = cursor.limit(limit)
             targets = list(cursor)
@@ -686,7 +775,6 @@ class NykaaPDPCrawler:
         logger.info(f"Loaded {len(targets)} Nykaa product(s) to process (Mode: {active_mode.upper()}).\n")
 
         total_scraped = 0
-        upsert_ops = []
 
         for idx, item in enumerate(targets, 1):
             url = item.get("url")
@@ -723,21 +811,22 @@ class NykaaPDPCrawler:
             record["mrp"] = mrp
             record["price_last_checked"] = now_iso
             record["updated_at"] = now_iso
+            record["pdp_scraped"] = True
+            record["pdp_scraped_at"] = now_iso
 
             # Log rich sample summary
             logger.info(
                 f"  -> Extracted: [{record['brand']}] {record['title'][:48]} | "
-                f"Size: {record.get('size')} | Price: INR {record.get('price')} (MRP: INR {record.get('mrp')}) | "
+                f"Price: INR {record.get('price')} (MRP: INR {record.get('mrp')}) | "
+                f"Shade: {record.get('shade')} | Finish: {record.get('finish')} | "
                 f"Rating: {record.get('rating')} ({record.get('rating_count')} revs)"
             )
-            if record.get("pyramid_notes", {}).get("family"):
-                logger.info(f"     Notes/Family: {', '.join(record['pyramid_notes']['family'][:3])}")
             if record.get("reviews"):
                 logger.info(f"     Verified Reviews: {len(record['reviews'])} extracted | Photos: {len(record.get('customer_photos', []))}")
 
-            if not dry_run and db is not None and pymongo is not None:
+            if not dry_run and col is not None and pymongo is not None:
                 # Check existing record for price shift & review tracking
-                existing = db["product_data"].find_one({"id": record["id"]})
+                existing = col.find_one({"$or": [{"id": record["id"]}, {"id": pid}, {"url": url}]})
                 price_shift_detected = False
                 old_price = None
                 pdp_update_ops = {"$set": record}
@@ -818,53 +907,7 @@ class NykaaPDPCrawler:
                         record["lowest_recorded_price"] = new_price
                         record["highest_recorded_price"] = mrp or new_price
 
-                # 1. Upsert full deep specifications into nykaa.product_data
-                db["product_data"].update_one(
-                    {"id": record["id"]},
-                    pdp_update_ops,
-                    upsert=True
-                )
-
-                # 2. Enrich listing record in nykaa.products with PDP extracted data & images
-                nykaa_product_updates = {
-                    "pdp_scraped": True,
-                    "pdp_scraped_at": now_iso,
-                    "price_last_checked": now_iso,
-                    "brand": record["brand"],
-                    "size": record.get("size"),
-                    "pack_size": record.get("pack_size"),
-                    "category": record.get("category"),
-                    "gender": record.get("gender"),
-                    "breadcrumbs": record.get("breadcrumbs", []),
-                    "description": record.get("description"),
-                    "description_html": record.get("description_html"),
-                    "pyramid_notes": record.get("pyramid_notes", {}),
-                    "seller_name": record.get("seller_name"),
-                    "country_of_origin": record.get("country_of_origin"),
-                    "authenticity_badge": record.get("authenticity_badge"),
-                    "rating": record.get("rating"),
-                    "rating_count": record.get("rating_count"),
-                    "review_count": record.get("review_count"),
-                    "rating_breakdown": record.get("rating_breakdown", {}),
-                    "customer_photos": record.get("customer_photos", []),
-                    "reviews": record.get("reviews", []),
-                    "variants": record.get("variants", [])
-                }
-
-                if record.get("image"):
-                    nykaa_product_updates["image"] = record["image"]
-                if record.get("images"):
-                    nykaa_product_updates["images"] = record["images"]
-                if record.get("price") is not None:
-                    nykaa_product_updates["price"] = record["price"]
-                if record.get("mrp") is not None:
-                    nykaa_product_updates["mrp"] = record["mrp"]
-                if record.get("discount"):
-                    nykaa_product_updates["discount"] = record["discount"]
-                if record.get("discount_percentage") is not None:
-                    nykaa_product_updates["discount_percentage"] = record["discount_percentage"]
-
-                # Match by _id, id, or url
+                # 1. Upsert full deep specifications in-place into makeupkhoj.nykaa_makeupkhoj
                 match_filter = {}
                 if "_id" in item:
                     match_filter = {"_id": item["_id"]}
@@ -875,15 +918,29 @@ class NykaaPDPCrawler:
                 else:
                     match_filter = {"id": record["id"]}
 
-                db["products"].update_one(match_filter, {"$set": nykaa_product_updates})
+                col.update_one(match_filter, pdp_update_ops, upsert=True)
 
-                # 3. Propagate to scentkhoj master catalog
+                # 2. Propagate to makeupkhoj master products catalog
                 try:
-                    sk_db = client["scentkhoj"]
+                    master_col = db["products"]
                     target_ids = [record["id"], item.get("id")]
-                    sk_update_fields = {
+                    master_set_fields = {
+                        "name": record.get("title"),
+                        "brand": record.get("brand"),
+                        "category": record.get("category", "Makeup"),
+                        "sub_category": record.get("sub_category"),
+                        "sub_sub_category": record.get("sub_sub_category"),
+                        "category_path": record.get("category_path"),
+                        "category_name": record.get("category_name"),
+                        "shade": record.get("shade"),
+                        "finish": record.get("finish"),
+                        "formulation": record.get("formulation"),
+                        "coverage": record.get("coverage"),
+                        "skin_type": record.get("skin_type"),
+                        "spf": record.get("spf"),
                         "price": record.get("price"),
                         "lowest_price": record.get("price"),
+                        "mappings.nykaa.id": record.get("id"),
                         "mappings.nykaa.price": record.get("price"),
                         "mappings.nykaa.mrp": record.get("mrp"),
                         "mappings.nykaa.url": url,
@@ -895,12 +952,13 @@ class NykaaPDPCrawler:
                         "updated_at": now_iso
                     }
                     if record.get("image"):
-                        sk_update_fields["mappings.nykaa.image"] = record["image"]
+                        master_set_fields["mappings.nykaa.image"] = record["image"]
+                        master_set_fields["image"] = record["image"]
                     if record.get("images"):
-                        sk_update_fields["mappings.nykaa.images"] = record["images"]
+                        master_set_fields["mappings.nykaa.images"] = record["images"]
 
-                    sk_ops = {
-                        "$set": sk_update_fields,
+                    master_ops = {
+                        "$set": master_set_fields,
                         "$addToSet": {
                             "customer_photos": {"$each": record.get("customer_photos", [])},
                             "images": {"$each": record.get("images", [])}
@@ -917,11 +975,11 @@ class NykaaPDPCrawler:
                             "change": round(float(new_price) - float(old_price)),
                             "marketplace": "nykaa"
                         }
-                        sk_ops["$push"] = {"price_history": {"$each": [history_entry], "$slice": -30}}
+                        master_ops["$push"] = {"price_history": {"$each": [history_entry], "$slice": -30}}
                         if new_price:
-                            sk_ops["$min"] = {"lowest_recorded_price": new_price}
+                            master_ops["$min"] = {"lowest_recorded_price": new_price}
 
-                    sk_db["products"].update_many(
+                    master_col.update_many(
                         {
                             "$or": [
                                 {"mappings.nykaa.id": {"$in": target_ids}},
@@ -929,49 +987,41 @@ class NykaaPDPCrawler:
                                 {"id": {"$in": target_ids}}
                             ]
                         },
-                        sk_ops
+                        master_ops
                     )
+                except Exception as m_err:
+                    logger.debug(f"Master catalog sync notice: {m_err}")
 
-                    # If master product has no image or invalid image, set hero image from Nykaa
-                    if record.get("image"):
-                        sk_db["products"].update_many(
+                # 3. Brand synchronization to makeupkhoj.brands
+                if record.get("brand") and record["brand"] != "Unknown":
+                    try:
+                        db["brands"].update_one(
+                            {"name": record["brand"]},
                             {
-                                "$and": [
-                                    {
-                                        "$or": [
-                                            {"mappings.nykaa.id": {"$in": target_ids}},
-                                            {"mappings.nykaa.url": url},
-                                            {"id": {"$in": target_ids}}
-                                        ]
-                                    },
-                                    {
-                                        "$or": [
-                                            {"image": {"$exists": False}},
-                                            {"image": None},
-                                            {"image": ""},
-                                            {"image": "N/A"},
-                                            {"image": "NA"}
-                                        ]
-                                    }
-                                ]
+                                "$set": {
+                                    "name": record["brand"],
+                                    "marketplace": "nykaa",
+                                    "updated_at": now_iso
+                                },
+                                "$setOnInsert": {"created_at": now_iso}
                             },
-                            {"$set": {"image": record["image"]}}
+                            upsert=True
                         )
-                except Exception as sk_err:
-                    logger.debug(f"Scentkhoj sync note: {sk_err}")
+                    except Exception as b_err:
+                        logger.debug(f"Brand sync notice: {b_err}")
 
             # Politeness delay
             time.sleep(random.uniform(0.8, 1.6))
 
         logger.info("\n" + "=" * 75)
-        logger.info(f"[PDP CRAWL COMPLETE] Successfully processed {total_scraped} Nykaa PDP document(s) (Mode: {active_mode.upper()}).")
+        logger.info(f"[PDP CRAWL COMPLETE] Successfully processed {total_scraped} Nykaa PDP document(s) in {DEFAULT_DB}.{DEFAULT_COLLECTION}.")
         logger.info("=" * 75)
         return total_scraped
 
 
 # --- CLI ENTRYPOINT ---
 def main():
-    parser = argparse.ArgumentParser(description="ScentKhoj Nykaa PDP / Catalog Details Extractor")
+    parser = argparse.ArgumentParser(description="MakeupKhoj Nykaa PDP / Catalog Details Extractor")
     parser.add_argument("--mode", choices=["all", "pending"], default=None, help="Crawl mode: 'all' to re-crawl entire catalog (update prices, price history, reviews), 'pending' for unscraped products only")
     parser.add_argument("--all", dest="run_all", action="store_true", help="Re-crawl ALL catalog products (check price changes, record price history, update reviews/ratings)")
     parser.add_argument("--pending", dest="run_pending", action="store_true", help="Crawl ONLY pending / unscraped products")
@@ -993,7 +1043,7 @@ def main():
     elif not args.url and not args.id and args.limit == 50 and len(sys.argv) == 1:
         # Interactive mode selection when invoked without CLI arguments
         print("\n" + "=" * 65)
-        print("      NYKAA PDP CRAWLER -> MONGODB product_data")
+        print(f"      NYKAA PDP CRAWLER -> {DEFAULT_DB}.{DEFAULT_COLLECTION}")
         print("=" * 65)
         print("Select Crawling Mode:")
         print("  [1] Crawl PENDING products only (unscraped Nykaa items) [DEFAULT]")

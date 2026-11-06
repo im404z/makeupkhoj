@@ -22,7 +22,15 @@ try:
 except ImportError:
     pass
 
-DEFAULT_MONGO_URI = os.getenv("MONGO_URI") or os.getenv("MONGO") or os.getenv("MONGODB_URI") or 'mongodb://admin:8ko92AWggrY2%21@38.45.64.201:27017/?authSource=admin'
+# Import MakeupKhoj DB config
+_crawler_root = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
+if _crawler_root not in sys.path:
+    sys.path.insert(0, _crawler_root)
+
+from db_config import get_db, COLLECTIONS, DB_NAME, DEFAULT_MONGO_URI, validate_db_safety
+
+DEFAULT_DB = DB_NAME  # 'makeupkhoj'
+DEFAULT_COLLECTION = COLLECTIONS['myntra']  # 'myntra_makeupkhoj'
 
 try:
     import pymongo
@@ -560,11 +568,12 @@ async def fetch_product_pdp(client: httpx.AsyncClient, product_id: str, product_
 
 
 def get_mongo_connection(mongo_uri: Optional[str] = None, db_name: Optional[str] = None):
-    """Establish connection to MongoDB client and database."""
+    """Establish connection to MongoDB client and database with safety validation."""
     if pymongo is None:
         raise ImportError("pymongo is not installed. Please run 'pip install pymongo'.")
-    uri = mongo_uri or os.getenv("MONGO") or os.getenv("MONGO_URI") or os.getenv("MONGODB_URI") or DEFAULT_MONGO_URI
-    target_db = db_name or os.getenv("MONGO_DB") or "myntra"
+    uri = mongo_uri or DEFAULT_MONGO_URI
+    target_db = db_name or DEFAULT_DB
+    validate_db_safety(target_db)
     client = pymongo.MongoClient(uri, serverSelectionTimeoutMS=10000)
     return client, client[target_db]
 
@@ -812,7 +821,7 @@ def print_pdp_price_update_summary(stats: Dict[str, Any], total_targeted: int, d
             print(f"  [{i}] {d.get('title')}")
             print(f"      Brand: {d.get('brand')} | Shift: INR {d.get('old_price')} -> INR {d.get('price')} (SAVE INR {d.get('diff')})")
             if d.get("slug"):
-                print(f"      Product URL: /perfume/{d.get('slug')}")
+                print(f"      Product URL: /products/{d.get('slug')}")
         print("-" * 78)
     print("=" * 78 + "\n")
 
@@ -838,9 +847,9 @@ async def run_pdp_crawler(
     stats = init_price_update_stats()
 
     client, db = get_mongo_connection(mongo_uri, mongo_db)
-    sk_coll = client["scentkhoj"]["products"]
-    src_coll_name = source_collection or os.getenv("MONGO_COLLECTION") or "products"
-    tgt_coll_name = target_collection or "product_data"
+    sk_coll = db["products"]
+    src_coll_name = source_collection or DEFAULT_COLLECTION
+    tgt_coll_name = target_collection or DEFAULT_COLLECTION
 
     src_coll = db[src_coll_name]
     tgt_coll = db[tgt_coll_name]
@@ -988,14 +997,13 @@ def get_interactive_inputs():
         force_in = input("\n4. Rescrape already existing items in product_data? (y/N) [Default: N]: ").strip().lower()
         skip_existing = (force_in != "y")
 
-    default_src = os.getenv("MONGO_COLLECTION", "products")
+    default_src = DEFAULT_COLLECTION
     src_in = input(f"\n{'4' if is_price_update else '5'}. Source Collection [Default: {default_src}]: ").strip()
     source_collection = src_in if src_in else default_src
 
-    target_collection = "product_data"
-    tgt_in = input(f"\n{'5' if is_price_update else '6'}. Target Collection [Default: product_data]: ").strip()
-    if tgt_in:
-        target_collection = tgt_in
+    default_tgt = DEFAULT_COLLECTION
+    tgt_in = input(f"\n{'5' if is_price_update else '6'}. Target Collection [Default: {default_tgt}]: ").strip()
+    target_collection = tgt_in if tgt_in else default_tgt
 
     sync_in = input(f"\n{'6' if is_price_update else '7'}. Run Master Catalog Sync (sync_catalog_skus.js)? (Y/n) [Default: Y]: ").strip().lower()
     sync_catalog = (sync_in != "n")
@@ -1023,9 +1031,9 @@ def main():
     parser.add_argument("--no-sync-catalog", dest="sync_catalog", action="store_false", help="Skip synchronizing with Master Catalog")
     parser.add_argument("--force", action="store_true", help="Re-scrape items even if already in product_data")
     parser.add_argument("--mongo-uri", type=str, default=None, help="MongoDB connection URI")
-    parser.add_argument("--mongo-db", type=str, default=None, help="MongoDB database name")
-    parser.add_argument("--source", type=str, default=None, help="Source collection (default: products)")
-    parser.add_argument("--target", type=str, default="product_data", help="Target collection (default: product_data)")
+    parser.add_argument("--mongo-db", type=str, default=DEFAULT_DB, help=f"MongoDB database name (default: '{DEFAULT_DB}')")
+    parser.add_argument("--source", type=str, default=DEFAULT_COLLECTION, help=f"Source collection (default: '{DEFAULT_COLLECTION}')")
+    parser.add_argument("--target", type=str, default=DEFAULT_COLLECTION, help=f"Target collection (default: '{DEFAULT_COLLECTION}')")
     parser.add_argument("--non-interactive", action="store_true", help="Run without prompts using CLI arguments")
 
     args = parser.parse_args()

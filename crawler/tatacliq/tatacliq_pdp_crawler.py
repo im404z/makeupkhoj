@@ -92,16 +92,16 @@ try:
 except ImportError:
     pass
 
-DEFAULT_MONGO_URI = (
-    os.getenv("MONGO_URI") or
-    os.getenv("MONGO") or
-    os.getenv("MONGODB_URI") or
-    'mongodb://admin:8ko92AWggrY2%21@38.45.64.201:27017/?authSource=admin'
-)
+# Import MakeupKhoj DB config
+_crawler_root = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
+if _crawler_root not in sys.path:
+    sys.path.insert(0, _crawler_root)
 
-DEFAULT_DB = "tatacliq"
-DEFAULT_SOURCE_COLLECTION = "products"
-DEFAULT_TARGET_COLLECTION = "product_data"
+from db_config import get_db, COLLECTIONS, DB_NAME, DEFAULT_MONGO_URI, validate_db_safety
+
+DEFAULT_DB = DB_NAME  # 'makeupkhoj'
+DEFAULT_SOURCE_COLLECTION = COLLECTIONS['tatacliq']  # 'tatacliq_makeupkhoj'
+DEFAULT_TARGET_COLLECTION = COLLECTIONS['tatacliq']  # 'tatacliq_makeupkhoj'
 API_BASE_URL = "https://www.tatacliq.com/marketplacewebservices/v2/mpl/products"
 
 # Setup Logging
@@ -771,7 +771,9 @@ class TataCliqPDPCrawler:
             return False
 
         try:
-            client = pymongo.MongoClient(self.mongo_uri, serverSelectionTimeoutMS=10000)
+            validate_db_safety(DEFAULT_DB)
+            validate_db_safety(DEFAULT_DB)
+        client = pymongo.MongoClient(self.mongo_uri, serverSelectionTimeoutMS=10000)
             db = client[DEFAULT_DB]
             pdp_col = db[DEFAULT_TARGET_COLLECTION]
             prod_col = db[DEFAULT_SOURCE_COLLECTION]
@@ -785,24 +787,37 @@ class TataCliqPDPCrawler:
             doc_id = pdp_doc["id"]
             now_iso = datetime.now(timezone.utc).isoformat()
             pdp_doc["updated_at"] = now_iso
+            pdp_doc["pdp_scraped"] = True
+            pdp_doc["pdp_scraped_at"] = now_iso
 
-            # Upsert into tatacliq.product_data
+            # Upsert into makeupkhoj.tatacliq_makeupkhoj
             pdp_col.update_one(
                 {"id": doc_id},
                 {"$set": pdp_doc},
                 upsert=True
             )
 
-            # Flag scraped in tatacliq.products
-            raw_pid = pdp_doc.get("product_id")
-            if raw_pid:
-                prod_col.update_one(
-                    {"$or": [{"id": raw_pid}, {"product_id": raw_pid}, {"id": doc_id}]},
-                    {"$set": {
-                        "pdp_scraped": True,
-                        "pdp_scraped_at": now_iso
-                    }}
+            # Master Catalog sync
+            try:
+                db["products"].update_many(
+                    {"$or": [{"mappings.tatacliq.id": doc_id}, {"id": doc_id}]},
+                    {
+                        "$set": {
+                            "name": pdp_doc.get("title"),
+                            "brand": pdp_doc.get("brand"),
+                            "price": pdp_doc.get("price"),
+                            "lowest_price": pdp_doc.get("price"),
+                            "mappings.tatacliq.id": doc_id,
+                            "mappings.tatacliq.price": pdp_doc.get("price"),
+                            "mappings.tatacliq.mrp": pdp_doc.get("mrp"),
+                            "mappings.tatacliq.url": pdp_doc.get("url"),
+                            "mappings.tatacliq.rating": pdp_doc.get("rating"),
+                            "updated_at": now_iso
+                        }
+                    }
                 )
+            except Exception:
+                pass
 
             return True
         except Exception as e:
@@ -821,6 +836,7 @@ class TataCliqPDPCrawler:
             logger.error("pymongo is not installed.")
             return 0
 
+        validate_db_safety(DEFAULT_DB)
         client = pymongo.MongoClient(self.mongo_uri, serverSelectionTimeoutMS=10000)
         db = client[DEFAULT_DB]
         prod_col = db[DEFAULT_SOURCE_COLLECTION]

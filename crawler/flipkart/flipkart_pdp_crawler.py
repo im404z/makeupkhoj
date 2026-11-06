@@ -65,10 +65,17 @@ try:
 except ImportError:
     pass
 
-# Default Configuration
-DEFAULT_DB = "flipkart"
-DEFAULT_SOURCE_COLLECTION = "products"
-DEFAULT_TARGET_COLLECTION = "product_data"
+# Import MakeupKhoj DB config and Category Mapper
+_crawler_root = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
+if _crawler_root not in sys.path:
+    sys.path.insert(0, _crawler_root)
+
+from db_config import get_db, COLLECTIONS, DB_NAME, DEFAULT_MONGO_URI, validate_db_safety
+
+# Default Configuration (Unified listing + PDP inside flipkart_makeupkhoj)
+DEFAULT_DB = DB_NAME  # 'makeupkhoj'
+DEFAULT_SOURCE_COLLECTION = COLLECTIONS['flipkart']  # 'flipkart_makeupkhoj'
+DEFAULT_TARGET_COLLECTION = COLLECTIONS['flipkart']  # 'flipkart_makeupkhoj'
 
 DEFAULT_HEADERS = {
     "User-Agent": (
@@ -273,13 +280,13 @@ def parse_flipkart_pdp(html_content: str, fallback_id: Optional[str] = None, pag
     if not brand and breadcrumbs:
         for bc in breadcrumbs:
             if "brand" in bc.get("url", "").lower() or "~brand" in bc.get("url", "").lower():
-                brand = bc["title"].replace("Eau De Parfum", "").replace("Perfume", "").strip()
+                brand = bc["title"].replace("Makeup", "").replace("Cosmetics", "").strip()
                 break
 
     if not brand and title_raw:
         brand = title_raw.split()[0]
     if not brand:
-        brand = "Perfume"
+        brand = "Makeup"
 
     # Full Name / Title resolution (prefer h1 title_raw over breadcrumb leaf candidate)
     if title_raw and not title_raw.startswith("#") and len(title_raw) > 5:
@@ -289,7 +296,7 @@ def parse_flipkart_pdp(html_content: str, fallback_id: Optional[str] = None, pag
     elif model_name:
         full_name = f"{brand} {model_name}" if not model_name.lower().startswith(brand.lower()) else model_name
     else:
-        full_name = f"{brand} Perfume"
+        full_name = f"{brand} Makeup"
 
     # 6. Fragrance Notes & Olfactory Pyramid (ScentKhoj Core)
     top_notes = specifications.get("Top Notes") or specifications.get("Top Note")
@@ -843,14 +850,9 @@ def get_mongo_connection(mongo_uri: Optional[str] = None, db_name: Optional[str]
     """Establish connection to MongoDB client and target database."""
     if pymongo is None:
         raise ImportError("pymongo is not installed. Please run 'pip install pymongo'.")
-    uri = (
-        mongo_uri or
-        os.getenv("MONGO") or
-        os.getenv("MONGO_URI") or
-        os.getenv("MONGODB_URI") or
-        "mongodb://admin:8ko92AWggrY2%21@38.45.64.201:27017/?authSource=admin"
-    )
-    target_db = db_name or os.getenv("FLIPKART_DB") or os.getenv("MONGO_DB") or DEFAULT_DB
+    uri = mongo_uri or DEFAULT_MONGO_URI
+    target_db = db_name or DEFAULT_DB
+    validate_db_safety(target_db)
     client = pymongo.MongoClient(uri, serverSelectionTimeoutMS=10000)
     client.admin.command('ping')
     return client, client[target_db]
@@ -871,21 +873,22 @@ async def run_flipkart_pdp_crawler(
     mode: str = "pending",
 ):
     """
-    Query Flipkart listing database ('flipkart.products') and extract full PDP details.
+    Query Flipkart listing database ('makeupkhoj.flipkart_makeupkhoj') and extract full PDP details.
     - mode='pending': Scrapes un-crawled products only.
     - mode='all': Re-scrapes ALL catalog products to detect price changes, update reviews, and sync price history.
     """
     client, db = get_mongo_connection(mongo_uri, mongo_db)
-    src_coll_name = source_collection or os.getenv("FLIPKART_COLLECTION") or DEFAULT_SOURCE_COLLECTION
+    src_coll_name = source_collection or DEFAULT_SOURCE_COLLECTION
     tgt_coll_name = target_collection or DEFAULT_TARGET_COLLECTION
 
     src_coll = db[src_coll_name]
     tgt_coll = db[tgt_coll_name]
-    sk_coll = client['scentkhoj']['products']
+    sk_coll = db['products']
 
-    # Ensure index on 'id' for target collection
+    # Ensure indexes on target collection
     tgt_coll.create_index("id", unique=True)
     tgt_coll.create_index("brand", unique=False)
+    tgt_coll.create_index("category_path", unique=False)
     tgt_coll.create_index("price", unique=False)
     tgt_coll.create_index("price_last_checked", unique=False)
 
@@ -1259,7 +1262,7 @@ def run_snippet_verification():
 # CLI Entrypoint
 # ==============================================================================
 def main():
-    parser = argparse.ArgumentParser(description="Flipkart Product Detail (PDP) Crawler for ScentKhoj")
+    parser = argparse.ArgumentParser(description="MakeupKhoj Flipkart Product Detail (PDP) Crawler")
     parser.add_argument("--mode", choices=["all", "pending"], default=None, help="Crawl mode: 'all' to re-crawl entire catalog (update prices, price history, reviews), 'pending' for unscraped products only")
     parser.add_argument("--all", dest="run_all", action="store_true", help="Re-crawl ALL catalog products (check price changes, record price history, update reviews/ratings)")
     parser.add_argument("--pending", dest="run_pending", action="store_true", help="Crawl ONLY pending / unscraped products")
@@ -1267,9 +1270,9 @@ def main():
     parser.add_argument("--concurrency", type=int, default=3, help="Concurrent request workers (default: 3)")
     parser.add_argument("--force", action="store_true", help="Re-scrape items even if already in product_data (alias for --all)")
     parser.add_argument("--mongo-uri", type=str, default=None, help="MongoDB connection URI")
-    parser.add_argument("--mongo-db", type=str, default="flipkart", help="MongoDB database name (default: 'flipkart')")
-    parser.add_argument("--source", type=str, default="products", help="Source collection (default: 'products')")
-    parser.add_argument("--target", type=str, default="product_data", help="Target collection (default: 'product_data')")
+    parser.add_argument("--mongo-db", type=str, default=DEFAULT_DB, help=f"MongoDB database name (default: '{DEFAULT_DB}')")
+    parser.add_argument("--source", type=str, default=DEFAULT_SOURCE_COLLECTION, help=f"Source collection (default: '{DEFAULT_SOURCE_COLLECTION}')")
+    parser.add_argument("--target", type=str, default=DEFAULT_TARGET_COLLECTION, help=f"Target collection (default: '{DEFAULT_TARGET_COLLECTION}')")
     parser.add_argument("--non-interactive", action="store_true", help="Run without prompts using CLI arguments")
     parser.add_argument("--test-snippet", action="store_true", help="Run verification test on sample snippet and exit")
 

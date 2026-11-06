@@ -1,9 +1,9 @@
 #!/usr/bin/env python3
 """
-Amazon Perfume Product Data Crawler - perfume-product-data.py
-Reads ASINs from the 'amazon_perfume' MongoDB collection, navigates to each product page,
+Amazon Makeup Product Data Crawler
+Reads ASINs from the 'amazon_makeupkhoj' MongoDB collection, navigates to each product page,
 and extracts complete product data using the in-browser DOM extraction engine from amazon-product-extractor-logic.js.
-Saves complete product datasets to the 'amazon_perfume_products' collection in MongoDB.
+Saves complete product datasets in-place to the 'amazon_makeupkhoj' collection in MongoDB.
 """
 
 import os
@@ -35,7 +35,7 @@ if sys.stdout.encoding and sys.stdout.encoding.lower() not in ('utf-8', 'utf8'):
 
 # Setup logging
 os.makedirs('logs', exist_ok=True)
-_file_handler = logging.FileHandler('logs/perfume_product_data.log', encoding='utf-8')
+_file_handler = logging.FileHandler('logs/amazon_makeup_product_data.log', encoding='utf-8')
 _file_handler.setFormatter(logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s'))
 
 _stream_handler = logging.StreamHandler(sys.stdout)
@@ -45,11 +45,19 @@ logging.basicConfig(
     level=logging.INFO,
     handlers=[_file_handler, _stream_handler]
 )
-logger = logging.getLogger("perfume-product-data")
+# Import MakeupKhoj DB config
+_crawler_root = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
+if _crawler_root not in sys.path:
+    sys.path.insert(0, _crawler_root)
 
-# Collections
-SOURCE_COLLECTION = "amazon_perfume"
-TARGET_COLLECTION = "amazon_perfume_products"
+from db_config import get_db, COLLECTIONS, DB_NAME, DEFAULT_MONGO_URI, validate_db_safety
+
+logger = logging.getLogger("amazon-makeup-pdp")
+
+# Target Database and Collection (Unified listing + PDP data inside 'amazon_makeupkhoj')
+TARGET_DB = DB_NAME  # 'makeupkhoj'
+TARGET_COLLECTION = COLLECTIONS['amazon']  # 'amazon_makeupkhoj'
+SOURCE_COLLECTION = TARGET_COLLECTION
 
 # Default Base URL & Location for Amazon India
 DEFAULT_BASE_URL = "https://www.amazon.in"
@@ -83,31 +91,41 @@ def get_extractor_js():
 
 
 class MongoProductManager:
-    """Manages reading ASINs from amazon_perfume and saving detailed products to amazon_perfume_products"""
+    """Manages reading ASINs from amazon_makeupkhoj and enriching them with full product catalog details"""
 
     def __init__(self, mongo_uri=None, db_name=None):
-        self.mongo_uri = mongo_uri or os.getenv('MONGO_URI', 'mongodb://admin:8ko92AWggrY2%21@38.45.64.201:27017/?authSource=admin')
-        self.db_name = db_name or os.getenv('MONGO_DATABASE', 'amazon')
+        self.mongo_uri = mongo_uri or DEFAULT_MONGO_URI
+        self.db_name = db_name or TARGET_DB
+        validate_db_safety(self.db_name)
         self.client = None
         self.db = None
-        self.source_col = None
-        self.target_col = None
+        self.col = None
+        self.brands_col = None
+        self.sk_products_col = None
         self._connect()
 
     def _connect(self):
         try:
-            logger.info(f"[MONGO] Connecting to {self.db_name}...")
+            logger.info(f"[MONGO] Connecting to {self.db_name}.{TARGET_COLLECTION}...")
             self.client = MongoClient(self.mongo_uri, serverSelectionTimeoutMS=6000)
             self.client.admin.command('ping')
             self.db = self.client[self.db_name]
-            self.source_col = self.db[SOURCE_COLLECTION]
-            self.target_col = self.db[TARGET_COLLECTION]
-            self.brands_col = self.client['scentkhoj']['brands']
-            self.sk_products_col = self.client['scentkhoj']['products']
+            self.col = self.db[TARGET_COLLECTION]
+            self.source_col = self.col
+            self.target_col = self.col
+            self.brands_col = self.db['brands']
+            self.sk_products_col = self.db['products']
 
-            # Create unique index on ASIN
+            # Create indexes
             self.target_col.create_index('asin', unique=True)
             self.target_col.create_index('brand', unique=False)
+            self.target_col.create_index('category_path', unique=False)
+            self.target_col.create_index('sub_category', unique=False)
+            self.target_col.create_index('scraped_at', unique=False)
+            self.target_col.create_index('price_last_checked', unique=False)
+            logger.info(f"[MONGO OK] Connected! Verified '{self.db_name}.{TARGET_COLLECTION}'. Master collections: 'products', 'brands'.")
+        except ServerSelectionTimeoutError as e:
+            logger.error(f"[MONGO ERROR] Cannot connect to MongoDB: {e}")
             self.target_col.create_index('scraped_at', unique=False)
             self.target_col.create_index('price_last_checked', unique=False)
             logger.info(f"[MONGO OK] Connected! Source: '{SOURCE_COLLECTION}' | Target: '{TARGET_COLLECTION}' | Brands: 'scentkhoj.brands' | Master: 'scentkhoj.products'.")
@@ -117,7 +135,7 @@ class MongoProductManager:
 
     def get_asins_to_scrape(self, mode='pending', force=False):
         """
-        Fetch ASINs from amazon_perfume.
+        Fetch ASINs from amazon_makeupkhoj.
         - mode='all' or force=True: Returns all catalog ASINs to recheck prices, history, reviews, and counts.
         - mode='pending': Returns only unscraped or incomplete ASINs.
         """
@@ -133,7 +151,7 @@ class MongoProductManager:
         scraped_asins = set(
             self.target_col.find(
                 {
-                    'brand': {'$nin': [None, '', 'Perfume', 'Fragrance', 'Pending']},
+                    'pdp_scraped': True,
                     'price': {'$exists': True, '$ne': None}
                 },
                 {'asin': 1}
@@ -144,7 +162,7 @@ class MongoProductManager:
             if doc.get('asin') and (
                 doc['asin'] not in scraped_asins or
                 not doc.get('brand') or
-                doc.get('brand') in ('Pending', 'Perfume', 'Fragrance')
+                doc.get('brand') in ('Pending', 'Makeup', 'Cosmetics')
             )
         ]
         logger.info(f"[ASIN STATUS] Mode: PENDING | Total in {SOURCE_COLLECTION}: {len(source_docs)} | Already Scraped: {len(scraped_asins)} | Pending: {len(pending)}")
@@ -152,9 +170,9 @@ class MongoProductManager:
 
     def save_product_detail(self, product_data):
         """
-        Upsert complete product detail into amazon_perfume_products.
+        Upsert complete product detail into amazon_makeupkhoj.
         Detects price changes, maintains price history, tracks rating & review count changes,
-        and synchronizes live changes to scentkhoj.products master catalog.
+        and synchronizes live changes to makeupkhoj.products master catalog.
         """
         asin = product_data.get('asin')
         if not asin:
@@ -279,11 +297,11 @@ class MongoProductManager:
             }
             if new_price is not None:
                 source_update['price'] = new_price
-            if brand and brand not in ('Perfume', 'Fragrance', 'Pending'):
+            if brand and brand not in ('Makeup', 'Cosmetics', 'Pending'):
                 source_update['brand'] = brand
                 source_update['brand_verified'] = True
 
-                # Upsert into scentkhoj.brands if not exists
+                # Upsert into makeupkhoj.brands if not exists
                 try:
                     brand_slug = re.sub(r'[^a-z0-9]+', '-', brand.lower()).strip('-')
                     if brand_slug:
@@ -537,12 +555,12 @@ class ProductDetailCrawler:
 
             # Extract authoritative brand name from brandName or specsTable
             extracted_brand = (raw_data.get('brandName') or '').strip()
-            if not extracted_brand or extracted_brand.lower() in ('perfume', 'fragrance', 'brand'):
+            if not extracted_brand or extracted_brand.lower() in ('makeup', 'cosmetics', 'brand'):
                 specs = raw_data.get('specsTable') or {}
                 extracted_brand = specs.get('Brand') or specs.get('Manufacturer') or ''
 
-            raw_data['brand'] = extracted_brand if (extracted_brand and extracted_brand.lower() not in ('perfume', 'fragrance')) else None
-            affiliate_url = f"{self.base_url}/dp/{asin}?tag=scentkhoj-21"
+            raw_data['brand'] = extracted_brand if (extracted_brand and extracted_brand.lower() not in ('makeup', 'cosmetics')) else None
+            affiliate_url = f"{self.base_url}/dp/{asin}?tag=makeupkhoj-21"
             raw_data['source_url'] = affiliate_url
             raw_data['url'] = affiliate_url
             raw_data['scraped_at'] = datetime.now(timezone.utc).isoformat()
@@ -562,17 +580,19 @@ class ProductDetailCrawler:
             return None
 
 
-def export_products_to_csv(output_file="amazon_perfume_products_export.csv"):
-    """Export the amazon_perfume_products collection to CSV"""
+def export_products_to_csv(output_file="amazon_makeupkhoj_products_export.csv"):
+    """Export the amazon_makeupkhoj collection to CSV"""
     mongo = MongoProductManager()
     cursor = mongo.target_col.find({})
     count = mongo.target_col.count_documents({})
     if count == 0:
-        print("\n  [INFO] The 'amazon_perfume_products' collection is currently empty.")
+        print(f"\n  [INFO] The '{TARGET_COLLECTION}' collection is currently empty.")
         return
 
     fieldnames = [
         'asin', 'brand', 'title', 'price', 'mrp', 'currency', 'discount',
+        'category', 'sub_category', 'sub_sub_category', 'category_path', 'category_name',
+        'shade', 'finish', 'formulation', 'coverage', 'skinType', 'spf', 'netQuantity',
         'averageRating', 'ratingsCount', 'boughtInPastMonth', 'inStock', 'stock',
         'sellerName', 'shipsFrom', 'mainImage', 'source_url', 'scraped_at'
     ]
@@ -588,7 +608,7 @@ def export_products_to_csv(output_file="amazon_perfume_products_export.csv"):
 
 
 def main():
-    parser = argparse.ArgumentParser(description="Amazon Perfume Product Data Crawler - Extracts full product PDP datasets into 'amazon_perfume_products'")
+    parser = argparse.ArgumentParser(description=f"Amazon Makeup Product Data Crawler - Enriches full PDP datasets into '{TARGET_DB}.{TARGET_COLLECTION}'")
     parser.add_argument('--mode', choices=['all', 'pending'], default=None, help="Crawl mode: 'all' to re-crawl entire catalog (update prices, price history, reviews), 'pending' for unscraped products only")
     parser.add_argument('--all', dest='run_all', action='store_true', help="Re-crawl ALL catalog products (check price changes, record price history, update reviews/ratings)")
     parser.add_argument('--pending', dest='run_pending', action='store_true', help="Crawl ONLY pending / unscraped products")
@@ -596,7 +616,7 @@ def main():
     parser.add_argument('--force', action='store_true', help="Force re-scraping of all catalog products (alias for --all)")
     parser.add_argument('--limit', type=int, default=0, help="Limit number of ASINs to scrape (0 = all)")
     parser.add_argument('--asin', type=str, help="Scrape a single specific ASIN")
-    parser.add_argument('--export-csv', action='store_true', help="Export current 'amazon_perfume_products' collection to CSV")
+    parser.add_argument('--export-csv', action='store_true', help=f"Export current '{TARGET_COLLECTION}' collection to CSV")
     args = parser.parse_args()
 
     # Direct CSV export requested
@@ -605,7 +625,7 @@ def main():
         return
 
     print("\n" + "=" * 75)
-    print("      AMAZON PERFUME PRODUCT DATA CRAWLER (PDP Extractor Engine)")
+    print(f"      AMAZON MAKEUP PRODUCT DATA CRAWLER (MongoDB: {TARGET_DB}.{TARGET_COLLECTION})")
     print("=" * 75)
 
     # Initialize MongoDB

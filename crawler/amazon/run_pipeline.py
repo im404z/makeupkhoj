@@ -35,24 +35,29 @@ load_dotenv()
 load_dotenv(dotenv_path='../.env')
 load_dotenv(dotenv_path='../../.env')
 
-MONGO_URI = os.getenv('MONGO_URI') or os.getenv('MONGODB_URI') or 'mongodb://admin:8ko92AWggrY2%21@38.45.64.201:27017/?authSource=admin'
+_crawler_root = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
+if _crawler_root not in sys.path:
+    sys.path.insert(0, _crawler_root)
+
+from db_config import get_db, COLLECTIONS, DB_NAME, DEFAULT_MONGO_URI, validate_db_safety
+
 SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
 PROJECT_ROOT = os.path.abspath(os.path.join(SCRIPT_DIR, '..', '..'))
 
 
 def get_mongo_counts():
-    """Fetch current record counts from MongoDB across collections"""
+    """Fetch current record counts from MongoDB across collections in makeupkhoj"""
     try:
-        client = MongoClient(MONGO_URI, serverSelectionTimeoutMS=4000)
-        sk_db = client['scentkhoj']
-        amz_db = client['amazon']
+        client = MongoClient(DEFAULT_MONGO_URI, serverSelectionTimeoutMS=4000)
+        db = client[DB_NAME]
+        amz_col = db[COLLECTIONS['amazon']]
         return {
-            'products': sk_db['products'].count_documents({}),
-            'brands': sk_db['brands'].count_documents({}),
-            'amazon_listings': amz_db['amazon_perfume'].count_documents({}),
-            'amazon_pdps': amz_db['amazon_perfume_products'].count_documents({}),
-            'pending_pdps': amz_db['amazon_perfume'].count_documents({'brand': {'$in': [None, '', 'Pending', 'Perfume']}}),
-            'multi_store': sk_db['products'].count_documents({'store_count': {'$gt': 1}})
+            'products': db['products'].count_documents({}),
+            'brands': db['brands'].count_documents({}),
+            'amazon_total': amz_col.count_documents({}),
+            'amazon_pdps': amz_col.count_documents({'pdp_scraped': True}),
+            'pending_pdps': amz_col.count_documents({'$or': [{'pdp_scraped': {'$ne': True}}, {'pdp_scraped': {'$exists': False}}]}),
+            'multi_store': db['products'].count_documents({'store_count': {'$gt': 1}})
         }
     except Exception as e:
         return {'error': str(e)}
@@ -62,17 +67,17 @@ def print_status_dashboard():
     """Print database counts and coverage dashboard"""
     counts = get_mongo_counts()
     print("\n" + "=" * 75)
-    print("                 SCENTKHOJ DATABASE STATUS DASHBOARD")
+    print(f"                 MAKEUPKHOJ DATABASE STATUS ({DB_NAME})")
     print("=" * 75)
     if 'error' in counts:
         print(f"  [ERROR] Could not connect to MongoDB: {counts['error']}")
     else:
-        print(f"  • Master Products (scentkhoj.products):        {counts['products']:,}")
-        print(f"  • Multi-Store Products (>= 2 stores):           {counts['multi_store']:,}")
-        print(f"  • Active Brands (scentkhoj.brands):             {counts['brands']:,}")
-        print(f"  • Amazon Search Listings (amazon_perfume):       {counts['amazon_listings']:,}")
-        print(f"  • Amazon Detailed PDPs (amazon_perfume_products):{counts['amazon_pdps']:,}")
-        print(f"  • Amazon Pending Brand / PDP Listings:          {counts['pending_pdps']:,}")
+        print(f"  • Master Products ({DB_NAME}.products):              {counts['products']:,}")
+        print(f"  • Multi-Store Products (>= 2 stores):                 {counts['multi_store']:,}")
+        print(f"  • Active Brands ({DB_NAME}.brands):                   {counts['brands']:,}")
+        print(f"  • Amazon Total Listings ({COLLECTIONS['amazon']}):      {counts['amazon_total']:,}")
+        print(f"  • Amazon PDP Enriched ({COLLECTIONS['amazon']}):        {counts['amazon_pdps']:,}")
+        print(f"  • Amazon Pending PDP Listings:                        {counts['pending_pdps']:,}")
     print("=" * 75 + "\n")
 
 
@@ -92,12 +97,11 @@ def run_command(cmd, cwd=PROJECT_ROOT):
 
 
 def step_crawl_category(max_pages=0, now=True):
-    """Run perfume-crawler.py on fragrance.txt (mixed category with title brand detection)"""
-    print("\n>>> STEP: CRAWLING MIXED CATEGORY LISTINGS (fragrance.txt) <<<")
+    """Run amazon_crawler.py on amazon makeup URLs"""
+    print("\n>>> STEP: CRAWLING AMAZON MAKEUP LISTINGS <<<")
     cmd = [
         sys.executable,
-        os.path.join(SCRIPT_DIR, 'perfume-crawler.py'),
-        '--category'
+        os.path.join(SCRIPT_DIR, 'amazon_crawler.py')
     ]
     if max_pages > 0:
         cmd.extend(['--max-pages', str(max_pages)])
@@ -107,12 +111,11 @@ def step_crawl_category(max_pages=0, now=True):
 
 
 def step_crawl_brands(max_pages=0, now=True):
-    """Run perfume-crawler.py on perfume-brand.txt (single brand facet URLs)"""
-    print("\n>>> STEP: CRAWLING BRAND FACET LISTINGS (perfume-brand.txt) <<<")
+    """Run amazon_crawler.py on specific subcategory or brand URLs"""
+    print("\n>>> STEP: CRAWLING AMAZON MAKEUP CATEGORIES <<<")
     cmd = [
         sys.executable,
-        os.path.join(SCRIPT_DIR, 'perfume-crawler.py'),
-        '--brands'
+        os.path.join(SCRIPT_DIR, 'amazon_crawler.py')
     ]
     if max_pages > 0:
         cmd.extend(['--max-pages', str(max_pages)])
@@ -122,11 +125,11 @@ def step_crawl_brands(max_pages=0, now=True):
 
 
 def step_crawl_pdp(limit=0, now=True):
-    """Run perfume-product-data.py to extract PDP details and backfill verified brands"""
-    print("\n>>> STEP: EXTRACTING PRODUCT DETAILS / PDP (perfume-product-data.py) <<<")
+    """Run amazon_pdp_crawler.py to extract PDP details and backfill verified brands"""
+    print("\n>>> STEP: EXTRACTING PRODUCT DETAILS / PDP (amazon_pdp_crawler.py) <<<")
     cmd = [
         sys.executable,
-        os.path.join(SCRIPT_DIR, 'perfume-product-data.py')
+        os.path.join(SCRIPT_DIR, 'amazon_pdp_crawler.py')
     ]
     if limit > 0:
         cmd.extend(['--limit', str(limit)])
@@ -201,12 +204,12 @@ def interactive_menu():
     """Interactive console menu for user selection"""
     while True:
         print("\n" + "=" * 75)
-        print("          SCENTKHOJ CRAWLER & CATALOG MASTER RUNNER")
+        print(f"       MAKEUPKHOJ AMAZON CRAWLER & CATALOG RUNNER ({DB_NAME})")
         print("=" * 75)
-        print("  [1] Crawl Mixed Categories     (fragrance.txt with Title Brand Detection)")
-        print("  [2] Crawl Brand Listings       (perfume-brand.txt)")
-        print("  [3] Crawl Product Details/PDP  (Extract PDP specs & fill pending brands)")
-        print("  [4] Sync Master SKUs & Catalog (Cross-marketplace matching & taxonomy: ALL)")
+        print("  [1] Crawl Makeup Categories    (amazon_makeup_urls.json - 24 categories)")
+        print("  [2] Crawl Brand Listings       (perfume-brand.txt / makeup brands)")
+        print("  [3] Crawl Product Details/PDP  (Extract PDP specs: shade, finish, ingredients)")
+        print("  [4] Sync Master SKUs & Catalog (Cross-marketplace matching: ALL)")
         print("  [5] Sync Amazon SKUs Only      (sync_catalog_skus.js --marketplace=amazon)")
         print("  [6] FULL AUTOMATED PIPELINE    (Category Crawl -> PDP Scraper -> Master SKUs)")
         print("  [7] View Database Status       (Records & coverage summary)")

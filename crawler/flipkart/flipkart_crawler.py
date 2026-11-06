@@ -1,10 +1,10 @@
 #!/usr/bin/env python3
 """
-Flipkart Perfume Crawler - ScentKhoj
-Crawls Flipkart perfume search listings across pages, parses product metadata,
-and upserts directly into MongoDB (Database: 'flipkart', Collection: 'products').
+Flipkart Makeup Crawler - MakeupKhoj
+Crawls Flipkart makeup category listings across pages, parses product metadata,
+and upserts directly into MongoDB (Database: 'makeupkhoj', Collection: 'flipkart_makeupkhoj').
 
-Compatible with ScentKhoj's marketplace architecture alongside Amazon and Myntra.
+Compatible with MakeupKhoj's marketplace architecture alongside Nykaa, Amazon and Myntra.
 """
 
 import os
@@ -68,24 +68,35 @@ try:
 except ImportError:
     pass
 
-# Default Configuration
-DEFAULT_START_URL = "https://www.flipkart.com/search?q=perfume&otracker=search&otracker1=search&marketplace=FLIPKART&as-show=on&as=off"
-DEFAULT_DB = "flipkart"
-DEFAULT_COLLECTION = "products"
+# Import MakeupKhoj DB config and Category Mapper
+_crawler_root = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
+if _crawler_root not in sys.path:
+    sys.path.insert(0, _crawler_root)
 
-# Known fragrance brands for accurate title parsing
-KNOWN_BRANDS = [
-    "Denver", "Wild Stone", "Bella Vita Luxury", "Bella Vita Organic", "Bella Vita",
-    "Fogg", "Engage", "Park Avenue", "Beardo", "The Man Company", "Ustraa", "Villain",
-    "Axe", "Set Wet", "Layer'r", "Layer'r Wottagirl", "Secret Temptation", "Plum", "Renee",
-    "Ramsons", "Yardley London", "Yardley", "Ajmal", "Armaf", "Lattafa", "Rasasi",
-    "Afnan", "Swiss Arabian", "Al Haramain", "Khadlaj", "Ahmed Al Maghribi", "Maison Alhambra",
-    "Carlton London", "Justin Whyte", "Skinn by Titan", "Skinn", "Titan", "Fastrack",
-    "Bombay Shaving Company", "Embark", "Body Cupid", "La Pink", "Perfume Planet",
-    "Davidoff", "Calvin Klein", "Guess", "Jaguar", "Nautica", "Ferrari", "Police",
-    "Dunhill", "Azzaro", "Mont Blanc", "Montblanc", "Bvlgari", "Hugo Boss", "Versace",
-    "United Colors of Benetton", "UCB", "Antonio Banderas", "Victoria's Secret", "Bath & Body Works"
-]
+from db_config import get_db, COLLECTIONS, DB_NAME, DEFAULT_MONGO_URI, validate_db_safety
+from category_mapper import get_marketplace_urls, lookup_category_by_url
+
+# Default Configuration (makeupkhoj.flipkart_makeupkhoj)
+DEFAULT_START_URL = "https://www.flipkart.com/beauty-and-grooming/makeup/pr?sid=g9b%2Cffi&p%5B%5D=facets.fulfilled_by%255B%255D%3DF-Assured&param=345678&BU=BGM"
+DEFAULT_DB = DB_NAME  # 'makeupkhoj'
+DEFAULT_COLLECTION = COLLECTIONS['flipkart']  # 'flipkart_makeupkhoj'
+
+# Load reference brands from central dictionary
+BRANDS_PATH = os.path.join(_crawler_root, "brands.json")
+KNOWN_BRANDS = []
+if os.path.isfile(BRANDS_PATH):
+    try:
+        with open(BRANDS_PATH, "r", encoding="utf-8") as bf:
+            KNOWN_BRANDS = json.load(bf)
+    except Exception:
+        pass
+if not KNOWN_BRANDS:
+    KNOWN_BRANDS = [
+        "Maybelline", "Lakme", "Lakmé", "L'Oreal", "L'Oreal Paris", "Sugar", "Sugar Cosmetics",
+        "Swiss Beauty", "Nykaa", "Kay Beauty", "Faces Canada", "Colorbar", "Mamaearth", "Plum",
+        "Renee", "Insight", "Mars", "Recode", "Elle 18", "Wet n Wild", "Blue Heaven", "MyGlamm",
+        "Biotique", "Lotus Herbals", "PAC", "Revlon", "Chambor", "MAC", "Huda Beauty", "Forever52"
+    ]
 
 
 # ==============================================================================
@@ -136,12 +147,12 @@ def parse_size_from_title(title: str) -> Optional[str]:
 
 def extract_brand_from_title(title: str, existing_brand: Optional[str] = None) -> str:
     """Smart brand detection from title prefix or known brand dictionary."""
-    if existing_brand and existing_brand.strip() and existing_brand.upper() not in ('N/A', 'NA', 'NONE', 'PERFUME'):
+    if existing_brand and existing_brand.strip() and existing_brand.upper() not in ('N/A', 'NA', 'NONE', 'MAKEUP', 'COSMETICS'):
         return clean_text(existing_brand)
 
     clean_t = clean_text(title)
     if not clean_t:
-        return "Perfume"
+        return "Makeup"
 
     # Match against known brands
     clean_t_lower = clean_t.lower()
@@ -155,7 +166,7 @@ def extract_brand_from_title(title: str, existing_brand: Optional[str] = None) -
     if first_clean and len(first_clean) >= 2:
         return first_clean
 
-    return "Perfume"
+    return "Makeup"
 
 
 def extract_gender(subtitle: str, title: str) -> str:
@@ -273,15 +284,10 @@ class MongoFlipkartManager:
     """Manages connection and batch upserts to the Flipkart MongoDB collection."""
 
     def __init__(self, mongo_uri: Optional[str] = None, db_name: Optional[str] = None, collection_name: Optional[str] = None):
-        self.mongo_uri = (
-            mongo_uri or
-            os.getenv("MONGO_URI") or
-            os.getenv("MONGODB_URI") or
-            os.getenv("MONGO") or
-            'mongodb://admin:8ko92AWggrY2%21@38.45.64.201:27017/?authSource=admin'
-        )
-        self.db_name = db_name or os.getenv("FLIPKART_DB") or os.getenv("MONGO_DB") or DEFAULT_DB
-        self.collection_name = collection_name or os.getenv("FLIPKART_COLLECTION") or os.getenv("MONGO_COLLECTION") or DEFAULT_COLLECTION
+        self.mongo_uri = mongo_uri or DEFAULT_MONGO_URI
+        self.db_name = db_name or DEFAULT_DB
+        self.collection_name = collection_name or DEFAULT_COLLECTION
+        validate_db_safety(self.db_name)
         self.client = None
         self.db = None
         self.collection = None
@@ -300,19 +306,22 @@ class MongoFlipkartManager:
             self.db = self.client[self.db_name]
             self.collection = self.db[self.collection_name]
 
-            # Setup indexes on unique product identifier and filter fields
+            # Setup indexes on unique product identifier, categories, and filter fields
             self.collection.create_index("id", unique=True)
             self.collection.create_index("pid", unique=False)
             self.collection.create_index("brand", unique=False)
+            self.collection.create_index("category_path", unique=False)
+            self.collection.create_index("sub_category", unique=False)
+            self.collection.create_index("sub_sub_category", unique=False)
             self.collection.create_index("price", unique=False)
             self.collection.create_index("crawled_at", unique=False)
-            logger.info(f"[MONGO OK] Connected! Index on 'id' verified for '{self.collection_name}'.")
+            logger.info(f"[MONGO OK] Connected! Index verified for '{self.db_name}.{self.collection_name}'.")
         except Exception as e:
             logger.error(f"[MONGO ERROR] Failed to connect to MongoDB: {e}")
             self.client = None
 
     def save_products(self, products: List[Dict[str, Any]]) -> int:
-        """Batch upsert products into Flipkart collection by 'id' with Price Shift Tracking."""
+        """Batch upsert products into flipkart_makeupkhoj collection by 'id' with Price Shift Tracking."""
         if not products or self.collection is None or UpdateOne is None:
             return 0
 
@@ -328,11 +337,11 @@ class MongoFlipkartManager:
         except Exception as fetch_err:
             logger.warning(f"[MONGO] Could not pre-fetch existing Flipkart records for price history: {fetch_err}")
 
-        # Scentkhoj master products collection
+        # Master products collection in makeupkhoj
         sk_products_col = None
-        if self.client:
+        if self.db is not None:
             try:
-                sk_products_col = self.client["scentkhoj"]["products"]
+                sk_products_col = self.db["products"]
             except Exception:
                 pass
 
@@ -475,13 +484,13 @@ class MongoFlipkartManager:
 # ==============================================================================
 # Flipkart Product Normalization
 # ==============================================================================
-def normalize_raw_item(raw: Dict[str, Any], page_no: int = 1) -> Optional[Dict[str, Any]]:
-    """Transform raw DOM extracted dictionary into unified ScentKhoj schema."""
+def normalize_raw_item(raw: Dict[str, Any], page_no: int = 1, category_meta: Optional[Dict[str, Any]] = None) -> Optional[Dict[str, Any]]:
+    """Transform raw DOM extracted dictionary into unified MakeupKhoj schema."""
     pid = clean_text(raw.get("pid"))
     if not pid:
         return None
 
-    full_title = clean_text(raw.get("title") or "Perfume")
+    full_title = clean_text(raw.get("title") or "Makeup")
     subtitle = clean_text(raw.get("subtitle") or "")
     brand = extract_brand_from_title(full_title)
     gender = extract_gender(subtitle, full_title)
@@ -526,6 +535,13 @@ def normalize_raw_item(raw: Dict[str, Any], page_no: int = 1) -> Optional[Dict[s
 
     now_iso = datetime.now(timezone.utc).isoformat()
 
+    cat = category_meta or {}
+    category = cat.get('category', 'Makeup')
+    sub_category = cat.get('sub_category', 'General')
+    sub_sub_category = cat.get('sub_sub_category', cat.get('category_name', 'Makeup'))
+    category_path = cat.get('category_path', f"Makeup > {sub_category} > {sub_sub_category}")
+    category_name = cat.get('category_name', sub_sub_category)
+
     return {
         "id": pid,
         "pid": pid,
@@ -549,7 +565,12 @@ def normalize_raw_item(raw: Dict[str, Any], page_no: int = 1) -> Optional[Dict[s
         "url": product_url,
         "image": raw_img,
         "images": [raw_img] if raw_img else [],
-        "category_name": "Perfume",
+        "category": category,
+        "sub_category": sub_category,
+        "sub_sub_category": sub_sub_category,
+        "category_path": category_path,
+        "category_name": category_name,
+        "category_url": cat.get('url', ''),
         "marketplace": "flipkart",
         "marketplace_name": "Flipkart",
         "page": page_no,
@@ -557,7 +578,7 @@ def normalize_raw_item(raw: Dict[str, Any], page_no: int = 1) -> Optional[Dict[s
     }
 
 
-def parse_html_with_soup(html_content: str, page_no: int = 1) -> List[Dict[str, Any]]:
+def parse_html_with_soup(html_content: str, page_no: int = 1, category_meta: Optional[Dict[str, Any]] = None) -> List[Dict[str, Any]]:
     """Fallback parser using BeautifulSoup when JavaScript evaluation is not available."""
     if not BeautifulSoup or not html_content:
         return []
@@ -630,7 +651,7 @@ def parse_html_with_soup(html_content: str, page_no: int = 1) -> List[Dict[str, 
             "badge": badge_text
         }
 
-        normalized = normalize_raw_item(raw_item, page_no)
+        normalized = normalize_raw_item(raw_item, page_no, category_meta=category_meta)
         if normalized:
             products.append(normalized)
 
@@ -641,14 +662,15 @@ def parse_html_with_soup(html_content: str, page_no: int = 1) -> List[Dict[str, 
 # Async Playwright Crawler Core
 # ==============================================================================
 async def crawl_flipkart(
-    query: str = "perfume",
+    query: Optional[str] = None,
     start_url: Optional[str] = None,
+    category_meta: Optional[Dict[str, Any]] = None,
     max_pages: int = 5,
     start_page: int = 1,
     headless: bool = True,
     delay: float = 3.0,
     export_csv: bool = False,
-    csv_filename: str = "flipkart_perfumes.csv",
+    csv_filename: str = "flipkart_makeupkhoj.csv",
     mongo_uri: Optional[str] = None,
     mongo_db: Optional[str] = None,
     mongo_collection: Optional[str] = None
@@ -657,7 +679,7 @@ async def crawl_flipkart(
     mongo = MongoFlipkartManager(mongo_uri=mongo_uri, db_name=mongo_db, collection_name=mongo_collection)
     all_products: Dict[str, Dict[str, Any]] = {}
 
-    base_url = start_url or f"https://www.flipkart.com/search?q={query}&otracker=search&otracker1=search&marketplace=FLIPKART&as-show=on&as=off"
+    base_url = start_url or (f"https://www.flipkart.com/search?q={query}&otracker=search&otracker1=search&marketplace=FLIPKART&as-show=on&as=off" if query else DEFAULT_START_URL)
 
     async with async_playwright() as p:
         logger.info(f"Launching Chromium browser (Headless: {headless})...")
@@ -751,21 +773,21 @@ async def crawl_flipkart(
                 raw_items = await page.evaluate(JS_FLIPKART_EXTRACT)
                 logger.info(f"[PAGE {current_page_no}] In-browser JS extracted {len(raw_items)} product cards.")
                 for r in raw_items:
-                    norm = normalize_raw_item(r, current_page_no)
+                    norm = normalize_raw_item(r, current_page_no, category_meta=category_meta)
                     if norm and norm.get("id"):
                         page_products.append(norm)
             except Exception as e:
                 logger.warning(f"In-browser JS evaluation encountered error: {e}. Falling back to BeautifulSoup...")
                 content = await page.content()
-                page_products = parse_html_with_soup(content, current_page_no)
+                page_products = parse_html_with_soup(content, current_page_no, category_meta=category_meta)
 
             # 2. Fallback check: if JS extraction was empty, parse HTML via BeautifulSoup
             if not page_products:
                 logger.info("JS extract returned 0 items. Falling back to BeautifulSoup HTML parse...")
                 content = await page.content()
-                page_products = parse_html_with_soup(content, current_page_no)
+                page_products = parse_html_with_soup(content, current_page_no, category_meta=category_meta)
 
-            logger.info(f"[PAGE {current_page_no}] Extracted {len(page_products)} valid perfume items.")
+            logger.info(f"[PAGE {current_page_no}] Extracted {len(page_products)} valid makeup items.")
 
             if not page_products or len(page_products) == 0:
                 logger.info(f"[PAGE {current_page_no}] 0 product cards found. Reached end of Flipkart search catalog.")
@@ -873,19 +895,20 @@ def run_snippet_test():
 # CLI Entrypoint
 # ==============================================================================
 def main():
-    parser = argparse.ArgumentParser(description="Flipkart Perfume Crawler for ScentKhoj (Saves to MongoDB)")
-    parser.add_argument("--query", type=str, default="perfume", help="Search query (default: 'perfume')")
+    parser = argparse.ArgumentParser(description=f"Flipkart Makeup Crawler - Saves to MongoDB '{DEFAULT_DB}.{DEFAULT_COLLECTION}'")
+    parser.add_argument("--query", type=str, help="Search query (e.g. 'lipstick', 'foundation')")
     parser.add_argument("--url", type=str, help="Custom Flipkart start URL")
-    parser.add_argument("--max-pages", type=int, default=5, help="Number of pages to crawl (default: 5, 0 = unlimited)")
+    parser.add_argument("--sub-cat", type=str, help="Filter by subcategory (Face, Lips, Eyes, Nails, Tools)")
+    parser.add_argument("--max-pages", type=int, default=5, help="Number of pages to crawl per category (default: 5, 0 = unlimited)")
     parser.add_argument("--start-page", type=int, default=1, help="Page to start crawling from (default: 1)")
     parser.add_argument("--headful", action="store_true", help="Launch headful browser window for debugging")
     parser.add_argument("--delay", type=float, default=2.5, help="Delay in seconds between pages (default: 2.5)")
     parser.add_argument("--export-csv", action="store_true", help="Also export crawled data to CSV")
-    parser.add_argument("--csv-file", type=str, default="flipkart_perfumes.csv", help="CSV export filename")
+    parser.add_argument("--csv-file", type=str, default="flipkart_makeupkhoj.csv", help="CSV export filename")
     parser.add_argument("--mongo-uri", type=str, help="Custom MongoDB connection string")
-    parser.add_argument("--mongo-db", type=str, help="Target MongoDB database (default: 'flipkart')")
-    parser.add_argument("--mongo-collection", type=str, help="Target MongoDB collection (default: 'products')")
-    parser.add_argument("--test-snippet", action="store_true", help="Test extraction on the user-provided sample snippet and exit")
+    parser.add_argument("--mongo-db", type=str, default=DEFAULT_DB, help=f"Target MongoDB database (default: '{DEFAULT_DB}')")
+    parser.add_argument("--mongo-collection", type=str, default=DEFAULT_COLLECTION, help=f"Target MongoDB collection (default: '{DEFAULT_COLLECTION}')")
+    parser.add_argument("--test-snippet", action="store_true", help="Test extraction on sample snippet and exit")
 
     args = parser.parse_args()
 
@@ -893,21 +916,44 @@ def main():
         run_snippet_test()
         return
 
-    asyncio.run(
-        crawl_flipkart(
-            query=args.query,
-            start_url=args.url,
-            max_pages=args.max_pages,
-            start_page=args.start_page,
-            headless=not args.headful,
-            delay=args.delay,
-            export_csv=args.export_csv,
-            csv_filename=args.csv_file,
-            mongo_uri=args.mongo_uri,
-            mongo_db=args.mongo_db,
-            mongo_collection=args.mongo_collection
-        )
-    )
+    # Determine targets
+    flipkart_makeup_urls = get_marketplace_urls('flipkart')
+
+    if args.url:
+        cat_meta = lookup_category_by_url(args.url.strip()) or {}
+        targets = [{'url': args.url.strip(), **cat_meta}]
+    elif args.query:
+        targets = [{'url': f"https://www.flipkart.com/search?q={args.query}&otracker=search&marketplace=FLIPKART", 'category_name': args.query, 'category_path': f"Makeup > {args.query}"}]
+    elif args.sub_cat:
+        sub_filter = args.sub_cat.strip().lower()
+        targets = [u for u in flipkart_makeup_urls if u.get('sub_category', '').lower() == sub_filter or sub_filter in u.get('sub_category', '').lower()]
+    else:
+        targets = flipkart_makeup_urls
+
+    print("\n" + "=" * 75)
+    print(f"      FLIPKART MAKEUP CRAWLER (MongoDB: {args.mongo_db}.{args.mongo_collection})")
+    print(f"      Total Target URLs to Crawl: {len(targets)}")
+    print("=" * 75)
+
+    async def _run_all():
+        for idx, item in enumerate(targets, start=1):
+            url = item['url']
+            print(f"\n[TARGET {idx}/{len(targets)}] {item.get('category_path', 'Makeup')} -> {url}")
+            await crawl_flipkart(
+                start_url=url,
+                category_meta=item,
+                max_pages=args.max_pages,
+                start_page=args.start_page,
+                headless=not args.headful,
+                delay=args.delay,
+                export_csv=args.export_csv,
+                csv_filename=args.csv_file,
+                mongo_uri=args.mongo_uri,
+                mongo_db=args.mongo_db,
+                mongo_collection=args.mongo_collection
+            )
+
+    asyncio.run(_run_all())
 
 
 if __name__ == "__main__":

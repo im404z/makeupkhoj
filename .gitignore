@@ -1,0 +1,20 @@
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Logs
+logs/
+*.log
+
+# Environments
+.env.local
+.venv/
+env/
+venv/
+ENV/
+
+# Playwright
+test-results/
+playwright-report/
+

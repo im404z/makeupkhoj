@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """
-Amazon Perfume Crawler - Self-Contained Crawler for MongoDB
-Crawls Amazon perfume brand URLs and stores all products into the single 'amazon_perfume' MongoDB collection.
+Amazon Makeup Crawler - Self-Contained Crawler for MongoDB
+Crawls Amazon makeup category URLs and stores all products into the single 'amazon_makeupkhoj' MongoDB collection.
 """
 
 import os
@@ -35,7 +35,7 @@ if sys.stdout.encoding and sys.stdout.encoding.lower() not in ('utf-8', 'utf8'):
 
 # Setup logging
 os.makedirs('logs', exist_ok=True)
-_file_handler = logging.FileHandler('logs/perfume_crawler.log', encoding='utf-8')
+_file_handler = logging.FileHandler('logs/amazon_makeup_crawler.log', encoding='utf-8')
 _file_handler.setFormatter(logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s'))
 
 _stream_handler = logging.StreamHandler(sys.stdout)
@@ -45,53 +45,19 @@ logging.basicConfig(
     level=logging.INFO,
     handlers=[_file_handler, _stream_handler]
 )
-logger = logging.getLogger("perfume-crawler")
+logger = logging.getLogger("amazon-makeup-crawler")
 
-# Target MongoDB Collection Name
-TARGET_COLLECTION = "amazon_perfume"
+# Import MakeupKhoj DB config and Category Mapper
+_crawler_root = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
+if _crawler_root not in sys.path:
+    sys.path.insert(0, _crawler_root)
 
-# 39 Hardcoded Perfume Brand Search URLs (from per.txt)
-HARDCODED_PERFUME_URLS = [
-    "https://www.amazon.in/s?k=perfume&rh=p_123%3A264380",
-    "https://www.amazon.in/s?k=perfume&rh=p_123%3A313726",
-    "https://www.amazon.in/s?k=perfume&rh=p_123%3A365460",
-    "https://www.amazon.in/s?k=perfume&rh=p_123%3A359300",
-    "https://www.amazon.in/s?k=perfume&rh=p_123%3A797123",
-    "https://www.amazon.in/s?k=perfume&rh=p_123%3A551011",
-    "https://www.amazon.in/s?k=perfume&rh=p_123%3A422455",
-    "https://www.amazon.in/s?k=perfume&rh=p_123%3A543860",
-    "https://www.amazon.in/s?k=perfume&rh=p_123%3A611147",
-    "https://www.amazon.in/s?k=perfume&rh=p_123%3A359001",
-    "https://www.amazon.in/s?k=perfume&rh=p_123%3A174303",
-    "https://www.amazon.in/s?k=perfume&rh=p_123%3A358949",
-    "https://www.amazon.in/s?k=perfume&rh=p_123%3A232762",
-    "https://www.amazon.in/s?k=perfume&rh=p_123%3A456483",
-    "https://www.amazon.in/s?k=perfume&rh=p_123%3A359082",
-    "https://www.amazon.in/s?k=perfume&rh=p_123%3A111033",
-    "https://www.amazon.in/s?k=perfume&rh=p_123%3A403945",
-    "https://www.amazon.in/s?k=perfume&rh=p_123%3A585075",
-    "https://www.amazon.in/s?k=perfume&rh=p_123%3A421299",
-    "https://www.amazon.in/s?k=perfume&rh=p_123%3A235612",
-    "https://www.amazon.in/s?k=perfume&rh=p_123%3A329466",
-    "https://www.amazon.in/s?k=perfume&rh=p_123%3A52131",
-    "https://www.amazon.in/s?k=perfume&rh=p_123%3A609580",
-    "https://www.amazon.in/s?k=perfume&rh=p_123%3A545518",
-    "https://www.amazon.in/s?k=perfume&rh=p_123%3A235090",
-    "https://www.amazon.in/s?k=perfume&rh=p_123%3A358757",
-    "https://www.amazon.in/s?k=perfume&rh=p_123%3A360712",
-    "https://www.amazon.in/s?k=perfume&rh=p_123%3A400108",
-    "https://www.amazon.in/s?k=perfume&rh=p_123%3A235847",
-    "https://www.amazon.in/s?k=perfume&rh=p_123%3A330118",
-    "https://www.amazon.in/s?k=perfume&rh=p_123%3A434872",
-    "https://www.amazon.in/s?k=perfume&rh=p_123%3A2050396",
-    "https://www.amazon.in/s?k=perfume&rh=p_123%3A105914",
-    "https://www.amazon.in/s?k=perfume&rh=p_123%3A411593",
-    "https://www.amazon.in/s?k=perfume&rh=p_123%3A390975",
-    "https://www.amazon.in/s?k=perfume&rh=p_123%3A438519",
-    "https://www.amazon.in/s?k=perfume&rh=p_123%3A1512939",
-    "https://www.amazon.in/s?k=perfume&rh=p_123%3A649771",
-    "https://www.amazon.in/s?k=perfume&rh=p_123%3A198664",
-]
+from db_config import get_db, COLLECTIONS, DB_NAME, DEFAULT_MONGO_URI, validate_db_safety
+from category_mapper import get_marketplace_urls, lookup_category_by_url
+
+# Target MongoDB Database & Collection (Isolated for MakeupKhoj)
+TARGET_DB = DB_NAME  # 'makeupkhoj'
+TARGET_COLLECTION = COLLECTIONS['amazon']  # 'amazon_makeupkhoj'
 
 # Amazon Site Configurations
 AMAZON_SITES = {
@@ -102,13 +68,14 @@ AMAZON_SITES = {
 }
 
 
-class MongoPerfumeManager:
-    """Handles MongoDB connection and batch upserts to amazon_perfume collection"""
+class MongoMakeupManager:
+    """Handles MongoDB connection and batch upserts to amazon_makeupkhoj collection in makeupkhoj DB"""
 
-    def __init__(self, mongo_uri=None, db_name=None, collection_name=TARGET_COLLECTION):
-        self.mongo_uri = mongo_uri or os.getenv('MONGO_URI', 'mongodb://admin:8ko92AWggrY2%21@38.45.64.201:27017/?authSource=admin')
-        self.db_name = db_name or os.getenv('MONGO_DATABASE', 'amazon')
-        self.collection_name = collection_name
+    def __init__(self, mongo_uri=None, db_name=None, collection_name=None):
+        self.mongo_uri = mongo_uri or DEFAULT_MONGO_URI
+        self.db_name = db_name or TARGET_DB
+        self.collection_name = collection_name or TARGET_COLLECTION
+        validate_db_safety(self.db_name)
         self.client = None
         self.db = None
         self.collection = None
@@ -122,17 +89,20 @@ class MongoPerfumeManager:
             self.db = self.client[self.db_name]
             self.collection = self.db[self.collection_name]
 
-            # Ensure unique index on ASIN
+            # Ensure indexes on ASIN, brand, category paths
             self.collection.create_index('asin', unique=True)
             self.collection.create_index('brand', unique=False)
+            self.collection.create_index('category_path', unique=False)
+            self.collection.create_index('sub_category', unique=False)
+            self.collection.create_index('sub_sub_category', unique=False)
             self.collection.create_index('extracted_at', unique=False)
-            logger.info(f"[MONGO OK] Connected! Index on 'asin' verified for '{self.collection_name}'.")
+            logger.info(f"[MONGO OK] Connected! Index on 'asin' verified for '{self.db_name}.{self.collection_name}'.")
         except ServerSelectionTimeoutError as e:
             logger.error(f"[MONGO ERROR] Cannot connect to MongoDB: {e}")
             raise
 
     def save_products(self, products):
-        """Batch upsert products into the single amazon_perfume collection by ASIN with Price Shift Tracking"""
+        """Batch upsert products into amazon_makeupkhoj collection by ASIN with Price Shift Tracking"""
         if not products:
             return 0, 0, 0
 
@@ -148,10 +118,10 @@ class MongoPerfumeManager:
         except Exception as fetch_err:
             logger.warning(f"[MONGO] Could not pre-fetch existing records for price history: {fetch_err}")
 
-        # Scentkhoj master products collection
+        # Master products collection in makeupkhoj
         sk_products_col = None
         try:
-            sk_products_col = self.client['scentkhoj']['products']
+            sk_products_col = self.db['products']
         except Exception:
             pass
 
@@ -291,144 +261,87 @@ class MongoPerfumeManager:
             return 0
 
     def get_known_brands(self):
-        """Fetch all reference brand names from scentkhoj.brands and scentkhoj.products"""
+        """Fetch all reference brand names from makeupkhoj.brands and nykaa_makeupkhoj"""
+        brands = set()
         try:
-            sk_db = self.client['scentkhoj']
-            brands = set(b['name'].strip() for b in sk_db['brands'].find({}, {'name': 1}) if b.get('name'))
-            for pb in sk_db['products'].distinct('brand'):
-                if pb and isinstance(pb, str) and pb.strip():
-                    brands.add(pb.strip())
-            logger.info(f"[BRANDS] Loaded {len(brands)} reference brands from scentkhoj.brands & products")
+            mk_db = self.client[self.db_name]
+            if 'brands' in mk_db.list_collection_names():
+                for b in mk_db['brands'].find({}, {'name': 1}):
+                    if b.get('name'):
+                        brands.add(b['name'].strip())
+            if 'nykaa_makeupkhoj' in mk_db.list_collection_names():
+                for pb in mk_db['nykaa_makeupkhoj'].distinct('brand'):
+                    if pb and isinstance(pb, str) and pb.strip():
+                        brands.add(pb.strip())
+            logger.info(f"[BRANDS] Loaded {len(brands)} reference brands from {self.db_name}")
             return list(brands)
         except Exception as e:
-            logger.warning(f"Could not load brands from scentkhoj: {e}")
+            logger.warning(f"Could not load brands from {self.db_name}: {e}")
             return []
 
 
 
-# Curated famous Indian and international fragrance brands popular in India
+# Curated famous Indian and international makeup brands popular in India
 FAMOUS_INDIAN_AND_GLOBAL_BRANDS = [
-    # Explicitly requested by user:
-    "Bath & Body Works", "Bath and Body Works",
     # Top Indian & D2C Brands:
-    "Bella Vita Luxury", "Bella Vita Organic", "Bella Vita", "BellaVita",
-    "Wild Stone Code", "Wild Stone CODE", "Wild Stone", "Code Steel",
-    "Denver Hamilton", "Denver",
-    "Skinn by Titan", "Titan Skinn", "Skinn", "Titan", "Fastrack",
-    "Plum BodyLovin'", "Plum Body Lovin", "Plum",
-    "The Man Company", "TMC",
-    "Bombay Shaving Company", "BSC",
-    "Beardo",
-    "Renee Cosmetics", "Renee Bloom", "Renee", "RENEE",
-    "Mamaearth",
-    "Ustraa",
-    "Engage L'Amante", "Engage",
-    "Park Avenue", "Raymond",
-    "Yardley London", "Yardley",
-    "Ramsons Perfumes", "Ramsons", "RAMSONS",
-    "Fogg Scent", "Fogg",
-    "Villain",
-    "Secret Temptation",
-    "Layer'r Wottagirl", "Layer'r", "Layerr",
-    "Envy 1000", "Envy",
-    "AdilQadri", "Adil Qadri",
-    "Carlton London",
-    "Forest Essentials",
-    "Kama Ayurveda",
-    "Biotique",
-    "Body Cupid",
-    "Just Herbs",
-    "Bryan & Candy",
-    "Khadi Natural", "Khadi Essentials",
-    "Ajmal Perfumes", "Ajmal",
-    "Al Nuaim", "Al-Nuaim",
-    "Sugandh Vyapar", "Sugandh Cafe",
-    "Naso Profumi", "Naso",
-    "Boond Fragrances", "Boond",
-    "Isak Fragrances", "Isak",
-    "Kastoor",
-    "All Good Scents",
-    "Bombay Perfumery",
-    "Embark Perfumes", "Embark",
-    "Nisara",
-    "Heavenduft", "Hasan Oud",
-    "One8 by Virat Kohli", "One8",
-    "French Essence",
-    "Moi by Nykaa", "Nykaa",
-    "Studiowest", "Westside", "FabIndia",
-    "Marks & Spencer", "M&S",
-    "Miniso", "Zara",
-    # Middle Eastern & Clone:
-    "Lattafa Perfumes", "Lattafa", "Maison Alhambra",
-    "Armaf Club De Nuit", "Armaf", "Sterling Parfums",
-    "Rasasi Hawas", "Rasasi",
-    "Afnan Perfumes", "Afnan",
-    "Swiss Arabian", "Al Haramain",
-    "Al Rehab", "Al-Rehab",
-    "Ahmed Al Maghribi",
-    "Paris Corner", "Pendora Scents", "Emir",
-    "Fragrance World", "Riiffs Parfums", "Riiffs", "Sapil",
-    "Creation Lamis", "Chris Adams", "Maryaj",
-    # Designer & Global Luxury:
-    "Calvin Klein", "CK", "Davidoff Cool Water", "Davidoff",
-    "Versace", "Jaguar", "Nautica", "Hugo Boss", "Boss",
-    "Bvlgari", "Bulgari", "United Colors of Benetton", "Benetton", "UCB",
-    "Montblanc", "Azzaro", "Carolina Herrera", "Paco Rabanne",
-    "Dolce & Gabbana", "D&G", "Ralph Lauren", "Polo Ralph Lauren", "Polo",
-    "Burberry", "Jean Paul Gaultier", "JPG", "Givenchy", "Kenzo",
-    "Issey Miyake", "Guerlain", "Prada", "Valentino", "Yves Saint Laurent", "YSL",
-    "Giorgio Armani", "Armani", "Emporio Armani", "Chanel", "Christian Dior", "Dior",
-    "Hermes", "Hermès", "Tom Ford", "Creed", "Parfums de Marly",
-    "Maison Francis Kurkdjian", "MFK", "Byredo", "Diptyque",
-    "Jo Malone London", "Jo Malone", "Acqua Di Parma", "Acqua di Parma",
-    "Mancera", "Montale", "Nishane", "Amouage", "Roja Parfums", "Roja",
-    "Victoria's Secret", "Body Fantasies", "The Body Shop", "Elizabeth Arden",
-    "Coach", "Jimmy Choo", "Michael Kors", "Guess", "Tommy Hilfiger",
-    "Ferrari", "Police", "Mercedes-Benz"
+    "Lakme", "Lakmé", "Sugar Cosmetics", "SUGAR", "Insight Cosmetics", "Insight",
+    "Swiss Beauty", "Colorbar", "Blue Heaven", "Mamaearth", "MyGlamm",
+    "Renee Cosmetics", "Renee", "RENEE", "Plum", "Just Herbs", "Disguise Cosmetics",
+    "MARS", "MARS Cosmetics", "PAC", "PAC Cosmetics", "Daily Life Forever52", "Forever52",
+    "Kay Beauty", "Nykaa Cosmetics", "Nykaa", "Elle 18", "Biotique",
+    "Faces Canada", "Faces", "Chambor", "Lotus Herbals", "Lotus Make-Up",
+    "Coloressence", "Dazller", "Miss Claire", "Recode", "Recode Studios",
+    # Global Drugstore & Mass:
+    "Maybelline New York", "Maybelline", "L'Oreal Paris", "L'Oréal Paris", "L'Oreal", "L'Oréal",
+    "NYX Professional Makeup", "NYX", "e.l.f. Cosmetics", "e.l.f.", "ELF",
+    "Wet n Wild", "Wet N Wild", "Milani", "Essence", "Catrice", "Kiko Milano", "Kiko",
+    "Rimmel London", "Rimmel", "Revlon", "Covergirl", "Bourjois",
+    "Makeup Revolution", "Revolution Beauty", "Revolution", "I Heart Revolution",
+    # Prestigious & Luxury:
+    "M.A.C", "MAC", "MAC Cosmetics", "Estee Lauder", "Estée Lauder", "Clinique", "Bobbi Brown",
+    "Smashbox", "NARS", "Benefit Cosmetics", "Benefit", "Too Faced", "Urban Decay",
+    "Huda Beauty", "Fenty Beauty", "Rare Beauty", "Charlotte Tilbury", "Anastasia Beverly Hills", "ABH",
+    "Laura Mercier", "Tarte", "KVD Beauty", "Kat Von D", "Morphe", "Sigma Beauty", "Sigma",
+    "Dior", "Christian Dior", "Chanel", "Yves Saint Laurent", "YSL", "Giorgio Armani", "Armani Beauty",
+    "Givenchy", "Guerlain", "Tom Ford", "Shiseido", "Lancome", "Lancôme", "Clarins"
 ]
 
 CANONICAL_BRAND_MAP = {
-    "bath and body works": "Bath & Body Works",
-    "bath & body works": "Bath & Body Works",
-    "bella vita organic": "Bella Vita Luxury",
-    "bellavita": "Bella Vita Luxury",
-    "bella vita": "Bella Vita Luxury",
-    "wild stone code": "Wild Stone Code",
-    "code steel": "Wild Stone Code",
-    "skinn by titan": "Skinn by Titan",
-    "titan skinn": "Skinn by Titan",
-    "plum bodylovin'": "Plum BodyLovin'",
-    "plum body lovin": "Plum BodyLovin'",
-    "the man company": "The Man Company",
-    "bombay shaving company": "Bombay Shaving Company",
+    "lakme": "Lakmé",
+    "sugar": "SUGAR Cosmetics",
+    "sugar cosmetics": "SUGAR Cosmetics",
+    "l'oreal": "L'Oréal Paris",
+    "l'oreal paris": "L'Oréal Paris",
+    "maybelline": "Maybelline New York",
+    "maybelline new york": "Maybelline New York",
+    "nyx": "NYX Professional Makeup",
+    "nyx professional makeup": "NYX Professional Makeup",
+    "elf": "e.l.f. Cosmetics",
+    "e.l.f.": "e.l.f. Cosmetics",
+    "e.l.f. cosmetics": "e.l.f. Cosmetics",
+    "mac": "M.A.C",
+    "m.a.c": "M.A.C",
+    "mac cosmetics": "M.A.C",
+    "renee": "Renee",
     "renee cosmetics": "Renee",
-    "renee bloom": "Renee",
-    "layer'r wottagirl": "Layer'r Wottagirl",
-    "layerr": "Layer'r Wottagirl",
-    "denver hamilton": "Denver",
-    "fogg scent": "Fogg",
-    "armaf club de nuit": "Armaf",
-    "rasasi hawas": "Rasasi",
-    "davidoff cool water": "Davidoff",
-    "calvin klein": "Calvin Klein",
-    "ck": "Calvin Klein",
-    "d&g": "Dolce & Gabbana",
-    "dolce & gabbana": "Dolce & Gabbana",
-    "ysl": "Yves Saint Laurent",
-    "yves saint laurent": "Yves Saint Laurent",
-    "jpg": "Jean Paul Gaultier",
-    "jean paul gaultier": "Jean Paul Gaultier",
-    "hugo boss": "Hugo Boss",
-    "christian dior": "Dior",
-    "paco rabanne": "Paco Rabanne",
-    "carolina herrera": "Carolina Herrera",
-    "adilqadri": "AdilQadri",
-    "adil qadri": "AdilQadri",
+    "charlotte tilbury": "Charlotte Tilbury",
+    "makeup revolution": "Makeup Revolution",
+    "swiss beauty": "Swiss Beauty",
+    "insight": "Insight Cosmetics",
+    "insight cosmetics": "Insight Cosmetics",
+    "kay beauty": "Kay Beauty",
+    "faces canada": "Faces Canada",
+    "pac": "PAC",
+    "pac cosmetics": "PAC",
+    "mars": "MARS",
+    "mars cosmetics": "MARS",
+    "forever52": "Daily Life Forever52",
+    "daily life forever52": "Daily Life Forever52",
 }
 
 
-class PerfumeCrawler:
-    """Headless Playwright Crawler designed specifically to crawl perfume listings"""
+class AmazonMakeupCrawler:
+    """Headless Playwright Crawler designed specifically to crawl Amazon makeup listings"""
 
     def __init__(self, base_url="https://www.amazon.in", zip_code="110037", mongo_manager=None):
         self.base_url = base_url
@@ -610,15 +523,15 @@ class PerfumeCrawler:
 
     def is_mixed_category_url(self, url, detected_brand):
         """Check if target URL is a mixed-category / broad search rather than a single-brand facet"""
-        # If url explicitly targets a category node (e.g. rh=n:1374298031 in fragrance.txt)
-        if 'rh=n%3a' in url.lower() or 'rh=n:' in url.lower() or 'node=' in url.lower():
+        # If url explicitly targets a category node
+        if 'rh=n%3a' in url.lower() or 'rh=n:' in url.lower() or 'node=' in url.lower() or 'bbn=' in url.lower():
             return True
-        # If URL does not have brand facet parameter (p_123)
-        if 'rh=p_123' not in url.lower():
+        # If URL does not have brand facet parameter (p_123 or p_89)
+        if 'rh=p_123' not in url.lower() and 'rh=p_89' not in url.lower():
             generic = {
-                'perfume', 'perfumes', 'fragrance', 'fragrances', 'beauty',
-                'all departments', 'all categories', 'deodorant', 'deodorants',
-                'body spray', 'body sprays', 'body mist', 'body mists'
+                'makeup', 'cosmetics', 'beauty', 'all departments', 'all categories',
+                'foundation', 'lipstick', 'mascara', 'eyeliner', 'blush', 'compact',
+                'eyeshadow', 'concealer', 'primer', 'nail polish'
             }
             if not detected_brand or detected_brand.lower() in generic:
                 return True
@@ -631,7 +544,7 @@ class PerfumeCrawler:
             brand_header = container.select_one('h5.s-line-clamp-1, span.a-size-base-plus.a-color-base')
             if brand_header:
                 txt = brand_header.get_text(strip=True)
-                if txt and len(txt) < 40 and not any(g in txt.lower() for g in ('perfume', 'fragrance', 'sponsored', 'deal', 'bought')):
+                if txt and len(txt) < 40 and not any(g in txt.lower() for g in ('makeup', 'cosmetics', 'sponsored', 'deal', 'bought')):
                     for b in self.sorted_brands:
                         if b.lower() == txt.lower() or (len(b) >= 4 and b.lower() in txt.lower()):
                             return CANONICAL_BRAND_MAP.get(b.lower(), b), 'card_header'
@@ -669,9 +582,9 @@ class PerfumeCrawler:
         """Auto-detect brand name or category from page HTML"""
         try:
             soup = BeautifulSoup(html, 'html.parser')
-            ignored = {"all departments", "all", "search in", "all categories", "aps", "perfume", "perfumes"}
+            ignored = {"all departments", "all", "search in", "all categories", "aps", "makeup", "cosmetics", "beauty"}
 
-            # 1. Refinements summary: "Selected filters: Wild Stone"
+            # 1. Refinements summary: "Selected filters: Lakmé"
             ref_summary = soup.find('div', {'id': 's-refinements-a11y-summary'})
             if ref_summary:
                 txt = ref_summary.get_text(strip=True)
@@ -703,7 +616,7 @@ class PerfumeCrawler:
                 if name and name.lower() not in ignored and len(name) < 40:
                     return name
 
-            # 5. Page Title: "Amazon.in: Brand Name : Perfume"
+            # 5. Page Title: "Amazon.in: Brand Name : Makeup"
             title_elem = soup.find('title')
             if title_elem:
                 title_text = title_elem.get_text(strip=True)
@@ -720,7 +633,7 @@ class PerfumeCrawler:
         except Exception as e:
             logger.warning(f"Brand detection warning: {e}")
 
-        return "Perfume"
+        return "Makeup"
 
     def extract_search_metadata(self, html):
         """Extract total results count and total pages"""
@@ -750,7 +663,7 @@ class PerfumeCrawler:
 
         return total_results, total_pages
 
-    def extract_products(self, html, current_url, brand_name, is_mixed=False):
+    def extract_products(self, html, current_url, brand_name, is_mixed=False, category_meta=None):
         """Extract all product cards from page HTML with multiple selector fallbacks"""
         soup = BeautifulSoup(html, 'html.parser')
         products = []
@@ -903,9 +816,18 @@ class PerfumeCrawler:
                     prod_brand = brand_name
                     brand_source = 'facet_url'
 
+                cat = category_meta or {}
+                category = cat.get('category', 'Makeup')
+                sub_category = cat.get('sub_category', 'General')
+                sub_sub_category = cat.get('sub_sub_category', cat.get('category_name', 'Makeup'))
+                category_path = cat.get('category_path', f"Makeup > {sub_category} > {sub_sub_category}")
+                category_name = cat.get('category_name', sub_sub_category)
+
                 products.append({
                     'asin': asin,
+                    'id': asin,
                     'title': title,
+                    'name': title,
                     'brand': prod_brand,
                     'brand_source': brand_source,
                     'mrp': mrp,
@@ -917,8 +839,15 @@ class PerfumeCrawler:
                     'badge': badge,
                     'url': product_url,
                     'image': image_url,
-                    'category_name': 'Perfume',
+                    'images': [image_url] if image_url and image_url != 'N/A' else [],
+                    'category': category,
+                    'sub_category': sub_category,
+                    'sub_sub_category': sub_sub_category,
+                    'category_path': category_path,
+                    'category_name': category_name,
                     'category_url': current_url,
+                    'marketplace': 'amazon',
+                    'marketplace_name': 'Amazon',
                     'extracted_at': datetime.now(timezone.utc).isoformat()
                 })
             except Exception:
@@ -926,9 +855,9 @@ class PerfumeCrawler:
 
         return products
 
-    def crawl_url(self, target_url, url_index=1, total_urls=1, max_pages_per_url=0):
+    def crawl_url(self, target_url, url_index=1, total_urls=1, max_pages_per_url=0, category_meta=None):
         """
-        Crawl a perfume URL across all pages and save directly to MongoDB amazon_perfume
+        Crawl an Amazon URL across all pages and save directly to MongoDB amazon_makeupkhoj
         max_pages_per_url: 0 for all pages, or positive integer to limit pages
         """
         logger.info(f"\n{'='*70}")
@@ -976,14 +905,14 @@ class PerfumeCrawler:
                         break
 
                 html = self.page.content()
-                page_products = self.extract_products(html, current_url, brand_name, is_mixed=is_mixed)
+                page_products = self.extract_products(html, current_url, brand_name, is_mixed=is_mixed, category_meta=category_meta)
                 logger.info(f"[{brand_name} - Page {page_num}] Extracted {len(page_products)} products.")
 
                 if not page_products or len(page_products) == 0:
                     logger.info(f"[{brand_name} - Page {page_num}] 0 product cards found. Reached end of catalog for this brand.")
                     break
 
-                # Save directly into MongoDB amazon_perfume in real time!
+                # Save directly into MongoDB amazon_makeupkhoj in real time!
                 if page_products and self.mongo:
                     for p in page_products:
                         p['page'] = page_num
@@ -1022,16 +951,16 @@ class PerfumeCrawler:
         return total_brand_products
 
 
-def export_collection_to_csv(output_file="amazon_perfume_export.csv"):
-    """Utility to export the entire amazon_perfume collection to CSV"""
-    mongo = MongoPerfumeManager()
+def export_collection_to_csv(output_file="amazon_makeupkhoj_export.csv"):
+    """Utility to export the entire amazon_makeupkhoj collection to CSV"""
+    mongo = MongoMakeupManager()
     cursor = mongo.collection.find({})
     count = mongo.get_total_count()
     if count == 0:
-        print("\n  [INFO] The 'amazon_perfume' collection is currently empty.")
+        print(f"\n  [INFO] The '{TARGET_COLLECTION}' collection is currently empty.")
         return
 
-    fieldnames = ['asin', 'brand', 'title', 'mrp', 'price', 'currency', 'rating', 'reviews_count', 'bought_in_past_month', 'badge', 'url', 'image', 'category_name', 'category_url', 'extracted_at']
+    fieldnames = ['asin', 'brand', 'title', 'mrp', 'price', 'currency', 'rating', 'reviews_count', 'bought_in_past_month', 'badge', 'url', 'image', 'category', 'sub_category', 'sub_sub_category', 'category_path', 'category_name', 'category_url', 'extracted_at']
     with open(output_file, 'w', newline='', encoding='utf-8') as f:
         writer = csv.DictWriter(f, fieldnames=fieldnames, extrasaction='ignore')
         writer.writeheader()
@@ -1039,19 +968,18 @@ def export_collection_to_csv(output_file="amazon_perfume_export.csv"):
         for doc in cursor:
             writer.writerow(doc)
             exported += 1
-    print(f"\n  [SUCCESS] Exported {exported} records from 'amazon_perfume' to {output_file}\n")
+    print(f"\n  [SUCCESS] Exported {exported} records from '{TARGET_COLLECTION}' to {output_file}\n")
 
 
 def main():
-    parser = argparse.ArgumentParser(description="Amazon Perfume Crawler - Saves to MongoDB table 'amazon_perfume'")
-    parser.add_argument('--now', action='store_true', help="Start crawling all 39 hardcoded URLs immediately without prompt")
-    parser.add_argument('--max-pages', type=int, default=0, help="Max pages per brand (0 = all pages)")
-    parser.add_argument('--start-from', type=int, default=1, help="Start from URL index (1-39)")
+    parser = argparse.ArgumentParser(description=f"Amazon Makeup Crawler - Saves to MongoDB collection '{TARGET_COLLECTION}' in '{TARGET_DB}' DB")
+    parser.add_argument('--now', action='store_true', help="Start crawling all URLs immediately without prompt")
+    parser.add_argument('--max-pages', type=int, default=0, help="Max pages per category (0 = all pages)")
+    parser.add_argument('--start-from', type=int, default=1, help="Start from URL index")
     parser.add_argument('--url', type=str, help="Crawl a single specific Amazon URL")
-    parser.add_argument('--file', type=str, help="Path to custom text file containing URLs")
-    parser.add_argument('--category', action='store_true', help="Crawl mixed category URLs from fragrance.txt")
-    parser.add_argument('--brands', action='store_true', help="Crawl brand URLs from perfume-brand.txt")
-    parser.add_argument('--export-csv', action='store_true', help="Export current 'amazon_perfume' collection to CSV")
+    parser.add_argument('--file', type=str, help="Path to custom text or json file containing URLs")
+    parser.add_argument('--sub-cat', type=str, help="Filter by subcategory (Face, Lips, Eyes, Nails, Tools)")
+    parser.add_argument('--export-csv', action='store_true', help=f"Export current '{TARGET_COLLECTION}' collection to CSV")
     args = parser.parse_args()
 
     # Direct CSV export requested
@@ -1060,12 +988,12 @@ def main():
         return
 
     print("\n" + "=" * 75)
-    print("        AMAZON PERFUME CRAWLER - ALL-IN-ONE (MongoDB: amazon_perfume)")
+    print(f"        AMAZON MAKEUP CRAWLER (MongoDB: {TARGET_DB}.{TARGET_COLLECTION})")
     print("=" * 75)
 
     # Initialize MongoDB
     try:
-        mongo = MongoPerfumeManager()
+        mongo = MongoMakeupManager()
         current_docs = mongo.get_total_count()
         print(f"  [+] MongoDB Status: Connected to '{mongo.db_name}' database")
         print(f"  [+] Target Table/Collection: '{TARGET_COLLECTION}' (Current records: {current_docs})")
@@ -1075,26 +1003,27 @@ def main():
         sys.exit(1)
 
     # Determine URLs to crawl
+    all_makeup_urls = get_marketplace_urls('amazon')
+
     if args.url:
-        urls = [args.url.strip()]
-        print(f"  [+] Crawling single provided URL: {urls[0]}")
+        cat_meta = lookup_category_by_url(args.url.strip()) or {}
+        urls = [{'url': args.url.strip(), **cat_meta}]
+        print(f"  [+] Crawling single provided URL: {urls[0]['url']}")
     elif args.file and os.path.isfile(args.file):
         with open(args.file, 'r', encoding='utf-8') as f:
-            urls = [line.strip() for line in f if line.strip() and not line.startswith('#')]
+            if args.file.endswith('.json'):
+                urls = json.load(f)
+            else:
+                raw_lines = [line.strip() for line in f if line.strip() and not line.startswith('#')]
+                urls = [{'url': u, **(lookup_category_by_url(u) or {})} for u in raw_lines]
         print(f"  [+] Loaded {len(urls)} URLs from file: {args.file}")
-    elif args.category or (not args.brands and os.path.isfile('crawler/amazon/fragrance.txt') and not args.file):
-        target_f = 'crawler/amazon/fragrance.txt' if os.path.isfile('crawler/amazon/fragrance.txt') else 'fragrance.txt'
-        with open(target_f, 'r', encoding='utf-8') as f:
-            urls = [line.strip() for line in f if line.strip() and not line.startswith('#')]
-        print(f"  [+] Loaded {len(urls)} Mixed Category URLs from: {target_f}")
-    elif args.brands or os.path.isfile('crawler/amazon/perfume-brand.txt'):
-        target_f = 'crawler/amazon/perfume-brand.txt' if os.path.isfile('crawler/amazon/perfume-brand.txt') else 'perfume-brand.txt'
-        with open(target_f, 'r', encoding='utf-8') as f:
-            urls = [line.strip() for line in f if line.strip() and not line.startswith('#')]
-        print(f"  [+] Loaded {len(urls)} Brand URLs from: {target_f}")
+    elif args.sub_cat:
+        sub_filter = args.sub_cat.strip().lower()
+        urls = [u for u in all_makeup_urls if u.get('sub_category', '').lower() == sub_filter or sub_filter in u.get('sub_category', '').lower()]
+        print(f"  [+] Loaded {len(urls)} Amazon Makeup URLs for Subcategory: '{args.sub_cat}'")
     else:
-        urls = HARDCODED_PERFUME_URLS
-        print(f"  [+] Loaded {len(urls)} Hardcoded Brand URLs (Amazon India Perfume)")
+        urls = all_makeup_urls
+        print(f"  [+] Loaded {len(urls)} Amazon Makeup Category URLs from Marketplace Makeup URLS")
 
     start_idx = max(1, args.start_from)
     if start_idx > 1:
@@ -1105,8 +1034,8 @@ def main():
     if not args.now:
         print("-" * 75)
         print("  Options:")
-        print("    [Enter] Start crawling all URLs into MongoDB 'amazon_perfume'")
-        print("    [c]     Export current MongoDB 'amazon_perfume' table to CSV")
+        print(f"    [Enter] Start crawling all URLs into MongoDB '{TARGET_DB}.{TARGET_COLLECTION}'")
+        print(f"    [c]     Export current MongoDB '{TARGET_COLLECTION}' table to CSV")
         print("    [q]     Exit")
         print("-" * 75)
         choice = input("  Select option [Press Enter to start]: ").strip().lower()
@@ -1118,7 +1047,7 @@ def main():
             return
 
     # Start Playwright crawler
-    crawler = PerfumeCrawler(base_url="https://www.amazon.in", zip_code="110037", mongo_manager=mongo)
+    crawler = AmazonMakeupCrawler(base_url="https://www.amazon.in", zip_code="110037", mongo_manager=mongo)
     if not crawler.start_browser():
         print("  [ERROR] Could not start browser. Exiting.")
         sys.exit(1)
@@ -1127,12 +1056,20 @@ def main():
     grand_total = 0
 
     try:
-        for idx, url in enumerate(urls, start=start_idx):
+        for idx, item in enumerate(urls, start=start_idx):
+            if isinstance(item, dict):
+                target_url = item['url']
+                cat_meta = item
+            else:
+                target_url = str(item)
+                cat_meta = lookup_category_by_url(target_url) or {}
+
             brand_products = crawler.crawl_url(
-                target_url=url,
+                target_url=target_url,
                 url_index=idx,
                 total_urls=len(urls) + start_idx - 1,
-                max_pages_per_url=args.max_pages
+                max_pages_per_url=args.max_pages,
+                category_meta=cat_meta
             )
             grand_total += brand_products
 

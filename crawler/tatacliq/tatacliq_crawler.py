@@ -68,15 +68,15 @@ try:
 except ImportError:
     pass
 
-DEFAULT_MONGO_URI = (
-    os.getenv("MONGO_URI") or
-    os.getenv("MONGO") or
-    os.getenv("MONGODB_URI") or
-    'mongodb://admin:8ko92AWggrY2%21@38.45.64.201:27017/?authSource=admin'
-)
+# Import MakeupKhoj DB config and Category Mapper
+_crawler_root = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
+if _crawler_root not in sys.path:
+    sys.path.insert(0, _crawler_root)
 
-DEFAULT_DB = "tatacliq"
-DEFAULT_COLLECTION = "products"
+from db_config import get_db, COLLECTIONS, DB_NAME, DEFAULT_MONGO_URI, validate_db_safety
+
+DEFAULT_DB = DB_NAME  # 'makeupkhoj'
+DEFAULT_COLLECTION = COLLECTIONS['tatacliq']  # 'tatacliq_makeupkhoj'
 API_ENDPOINT = "https://searchbff.tatacliq.com/products/mpl/search"
 
 # Setup Logging
@@ -274,6 +274,7 @@ def save_tatacliq_to_mongodb(
     uri = mongo_uri or DEFAULT_MONGO_URI
 
     try:
+        validate_db_safety(db_name)
         masked_uri = uri.split("@")[-1] if "@" in uri else uri
         client = pymongo.MongoClient(uri, serverSelectionTimeoutMS=10000)
         db = client[db_name]

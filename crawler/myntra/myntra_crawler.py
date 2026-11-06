@@ -33,7 +33,17 @@ try:
 except ImportError:
     pass
 
-DEFAULT_MONGO_URI = os.getenv("MONGO_URI") or os.getenv("MONGO") or os.getenv("MONGODB_URI") or 'mongodb://admin:8ko92AWggrY2%21@38.45.64.201:27017/?authSource=admin'
+# Import MakeupKhoj DB config and Category Mapper
+_crawler_root = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
+if _crawler_root not in sys.path:
+    sys.path.insert(0, _crawler_root)
+
+from db_config import get_db, COLLECTIONS, DB_NAME, DEFAULT_MONGO_URI, validate_db_safety
+from category_mapper import get_marketplace_urls, lookup_category_by_url
+
+DEFAULT_DB = DB_NAME  # 'makeupkhoj'
+DEFAULT_COLLECTION = COLLECTIONS['myntra']  # 'myntra_makeupkhoj'
+DEFAULT_START_URL = "https://www.myntra.com/makeup"
 
 try:
     import pymongo
@@ -49,15 +59,13 @@ logging.basicConfig(
     handlers=[logging.StreamHandler(sys.stdout)]
 )
 
-DEFAULT_START_URL = "https://www.myntra.com/perfume-and-body-mist"
-
 def save_to_mongodb(
     rows: List[Dict[str, Any]],
     mongo_uri: Optional[str] = None,
     db_name: Optional[str] = None,
     collection_name: Optional[str] = None
 ) -> int:
-    """Save products to MongoDB with upsert on 'id'."""
+    """Save products to MongoDB makeupkhoj.myntra_makeupkhoj with upsert on 'id'."""
     if not rows:
         return 0
 
@@ -65,17 +73,23 @@ def save_to_mongodb(
         logging.error("pymongo is not installed. Please run 'pip install pymongo'.")
         return 0
 
-    uri = mongo_uri or os.getenv("MONGO") or os.getenv("MONGO_URI") or os.getenv("MONGODB_URI") or DEFAULT_MONGO_URI
-
-    target_db = db_name or os.getenv("MONGO_DB") or "myntra"
-    target_coll = collection_name or os.getenv("MONGO_COLLECTION") or "products"
+    uri = mongo_uri or DEFAULT_MONGO_URI
+    target_db = db_name or DEFAULT_DB
+    target_coll = collection_name or DEFAULT_COLLECTION
+    validate_db_safety(target_db)
 
     try:
         masked_uri = uri.split("@")[-1] if "@" in uri else uri
-        logging.info(f"Connecting to MongoDB at {masked_uri}...")
+        logging.info(f"Connecting to MongoDB at {masked_uri} -> {target_db}.{target_coll}...")
         client = pymongo.MongoClient(uri, serverSelectionTimeoutMS=10000)
         db = client[target_db]
         collection = db[target_coll]
+
+        collection.create_index("id", unique=True)
+        collection.create_index("brand", unique=False)
+        collection.create_index("category_path", unique=False)
+        collection.create_index("sub_category", unique=False)
+        collection.create_index("crawled_at", unique=False)
 
         now_iso = datetime.now(timezone.utc).isoformat()
         operations = [
@@ -143,12 +157,12 @@ def update_prices_in_mongodb(
 
     try:
         client = pymongo.MongoClient(uri, serverSelectionTimeoutMS=10000)
-        myntra_db = client[os.getenv("MONGO_DB", "myntra")]
-        coll_products = myntra_db[os.getenv("MONGO_COLLECTION", "products")]
-        coll_pdp = myntra_db["product_data"]
-
-        sk_db = client["scentkhoj"]
-        coll_master = sk_db["products"]
+        target_db_name = os.getenv("MONGO_DB", DEFAULT_DB)
+        validate_db_safety(target_db_name)
+        myntra_db = client[target_db_name]
+        coll_products = myntra_db[DEFAULT_COLLECTION]
+        coll_pdp = coll_products
+        coll_master = myntra_db["products"]
 
         now_iso = datetime.now(timezone.utc).isoformat()
         today_str = datetime.now().strftime("%Y-%m-%d")
@@ -447,7 +461,7 @@ def print_price_update_summary(stats: Dict[str, Any], max_pages: int, duration_s
             print(f"  [{i}] {d.get('title')}")
             print(f"      Brand: {d.get('brand')} | Shift: INR {d.get('old_price')} -> INR {d.get('price')} (SAVE INR {d.get('diff')})")
             if d.get("slug"):
-                print(f"      Product URL: /perfume/{d.get('slug')}")
+                print(f"      Product URL: /products/{d.get('slug')}")
         print("-" * 78)
     print("=" * 78 + "\n")
 
@@ -614,7 +628,8 @@ def crawl_myntra_via_httpx(
     mongo_db: Optional[str] = None,
     mongo_collection: Optional[str] = None,
     is_price_update: bool = False,
-    sync_catalog: bool = True
+    sync_catalog: bool = True,
+    category_meta: Optional[Dict[str, Any]] = None
 ) -> int:
     """
     High-speed HTTP direct extractor for Myntra listings:
@@ -741,20 +756,38 @@ def crawl_myntra_via_httpx(
             first_img = images_list[0].get("src") if images_list and isinstance(images_list[0], dict) else ""
             raw_img = p.get("searchImage") or first_img
 
+            cat = category_meta or lookup_category_by_url(start_url) or {}
+            category = cat.get('category', 'Makeup')
+            sub_category = cat.get('sub_category', 'General')
+            sub_sub_category = cat.get('sub_sub_category', cat.get('category_name', 'Makeup'))
+            category_path = cat.get('category_path', f"Makeup > {sub_category} > {sub_sub_category}")
+            category_name = cat.get('category_name', sub_sub_category)
+
             record = {
                 "id": prod_id,
                 "brand": clean_text(p.get("brand") or "N/A"),
                 "name": clean_text(p.get("product") or p.get("productName") or "N/A"),
+                "title": clean_text(p.get("product") or p.get("productName") or "N/A"),
                 "currency": "INR",
                 "price": num_price,
                 "mrp": num_mrp,
                 "discount": discount,
                 "rating": rating,
                 "rating_count": rating_count,
+                "reviews_count": rating_count,
                 "sizes": clean_text(p.get("sizes") or "N/A"),
                 "is_ad": "Yes" if p.get("isPLA") else "No",
                 "url": clean_text(raw_url),
                 "image": clean_text(raw_img),
+                "images": [clean_text(raw_img)] if raw_img else [],
+                "category": category,
+                "sub_category": sub_category,
+                "sub_sub_category": sub_sub_category,
+                "category_path": category_path,
+                "category_name": category_name,
+                "category_url": cat.get('url', start_url),
+                "marketplace": "myntra",
+                "marketplace_name": "Myntra",
                 "page": page_no
             }
 
@@ -1081,71 +1114,80 @@ def get_interactive_inputs():
 
 
 def main():
-    parser = argparse.ArgumentParser(description="Myntra Listing Crawler & Price Updater")
+    parser = argparse.ArgumentParser(description=f"Myntra Makeup Crawler - Saves to MongoDB '{DEFAULT_DB}.{DEFAULT_COLLECTION}'")
     parser.add_argument("--url", type=str, help="Start URL to crawl")
-    parser.add_argument("--format", type=str, choices=["csv", "json", "both", "mongo", "mongodb", "all", "price_update"], help="Export format")
+    parser.add_argument("--sub-cat", type=str, help="Filter by subcategory (Face, Lips, Eyes, Nails)")
+    parser.add_argument("--format", type=str, default="mongo", choices=["csv", "json", "both", "mongo", "mongodb", "all", "price_update"], help="Export format (default: mongo)")
     parser.add_argument("--price-update", action="store_true", help="Run listing crawl and update all prices properly across MongoDB and Master Catalog")
-    parser.add_argument("--sync-catalog", action="store_true", default=True, help="Synchronize with Master Catalog (scentkhoj.products)")
+    parser.add_argument("--sync-catalog", action="store_true", default=True, help="Synchronize with Master Catalog (makeupkhoj.products)")
     parser.add_argument("--no-sync-catalog", dest="sync_catalog", action="store_false", help="Skip synchronizing with Master Catalog")
-    parser.add_argument("--output", type=str, help="Base output filename (without extension)")
-    parser.add_argument("--pages", type=int, help="Max pages to crawl (0 = full catalog)")
-    parser.add_argument("--mongo-uri", type=str, default=None, help="MongoDB connection URI")
-    parser.add_argument("--mongo-db", type=str, default=None, help="MongoDB database name")
-    parser.add_argument("--mongo-collection", type=str, default=None, help="MongoDB collection name")
-    parser.add_argument("--engine", type=str, choices=["browser", "http"], default=None, help="Crawl engine: 'browser' (Playwright Next-Button click) or 'http' (Direct query param ?p=)")
-    parser.add_argument("--non-interactive", action="store_true", help="Run non-interactively with defaults")
+    parser.add_argument("--output", type=str, default="myntra_makeupkhoj", help="Base output filename (without extension)")
+    parser.add_argument("--pages", type=int, default=5, help="Max pages to crawl per category (default: 5)")
+    parser.add_argument("--mongo-uri", type=str, default=DEFAULT_MONGO_URI, help="MongoDB connection URI")
+    parser.add_argument("--mongo-db", type=str, default=DEFAULT_DB, help=f"MongoDB database name (default: '{DEFAULT_DB}')")
+    parser.add_argument("--mongo-collection", type=str, default=DEFAULT_COLLECTION, help=f"MongoDB collection name (default: '{DEFAULT_COLLECTION}')")
+    parser.add_argument("--engine", type=str, choices=["browser", "http"], default="http", help="Crawl engine: 'http' (Fast direct JSON extraction) or 'browser'")
+    parser.add_argument("--non-interactive", action="store_true", default=True, help="Run non-interactively with defaults")
 
     args = parser.parse_args()
 
-    mongo_collection = args.mongo_collection
+    mongo_collection = args.mongo_collection or DEFAULT_COLLECTION
+    mongo_db = args.mongo_db or DEFAULT_DB
     sync_catalog = args.sync_catalog
+    is_price_update = args.price_update or (args.format == "price_update")
+    export_format = "price_update" if is_price_update else (args.format or "mongo")
 
-    if args.price_update or (args.format == "price_update"):
-        is_price_update = True
-        export_format = "price_update"
+    # Determine URLs
+    myntra_makeup_urls = get_marketplace_urls('myntra')
+
+    if args.url:
+        cat_meta = lookup_category_by_url(args.url.strip()) or {}
+        targets = [{'url': args.url.strip(), **cat_meta}]
+    elif args.sub_cat:
+        sub_filter = args.sub_cat.strip().lower()
+        targets = [u for u in myntra_makeup_urls if u.get('sub_category', '').lower() == sub_filter or sub_filter in u.get('sub_category', '').lower()]
     else:
-        is_price_update = False
-        export_format = args.format or "csv"
+        targets = myntra_makeup_urls
 
-    if args.url or args.non_interactive or args.price_update or (args.format is not None):
-        url = args.url or DEFAULT_START_URL
-        out_name = args.output or "myntra_products"
-        max_pages = args.pages if args.pages is not None else (10 if is_price_update else 5)
-        if args.engine:
-            use_browser = (args.engine == "browser")
-        else:
-            use_browser = (max_pages == 0 or max_pages > 11)
+    print("\n" + "=" * 75)
+    print(f"      MYNTRA MAKEUP CRAWLER (MongoDB: {mongo_db}.{mongo_collection})")
+    print(f"      Total Target URLs to Crawl: {len(targets)}")
+    print("=" * 75)
+
+    if args.engine == "browser":
+        async def _run_all_browser():
+            for idx, item in enumerate(targets, start=1):
+                target_url = item['url']
+                print(f"\n[TARGET {idx}/{len(targets)}] {item.get('category_path', 'Makeup')} -> {target_url}")
+                await crawl_myntra(
+                    start_url=target_url,
+                    export_format=export_format,
+                    base_filename=args.output,
+                    max_pages=args.pages,
+                    mongo_uri=args.mongo_uri,
+                    mongo_db=mongo_db,
+                    mongo_collection=mongo_collection,
+                    is_price_update=is_price_update,
+                    sync_catalog=sync_catalog,
+                    category_meta=item
+                )
+        asyncio.run(_run_all_browser())
     else:
-        url, export_format, out_name, max_pages, mongo_collection, is_price_update, sync_catalog, use_browser = get_interactive_inputs()
-
-    if not use_browser and (is_price_update or export_format in ["mongo", "mongodb", "all", "price_update"]):
-        logging.info("Executing direct listing extraction for Myntra via HTTP...")
-        scraped_count = crawl_myntra_via_httpx(
-            start_url=url,
-            export_format=export_format,
-            base_filename=out_name,
-            max_pages=max_pages,
-            mongo_uri=args.mongo_uri,
-            mongo_db=args.mongo_db,
-            mongo_collection=mongo_collection,
-            is_price_update=is_price_update,
-            sync_catalog=sync_catalog
-        )
-        if scraped_count > 0:
-            return
-        logging.warning("HTTP engine finished or extracted 0 items. Falling back to Browser Automation...")
-
-    asyncio.run(crawl_myntra(
-        start_url=url,
-        export_format=export_format,
-        base_filename=out_name,
-        max_pages=max_pages,
-        mongo_uri=args.mongo_uri,
-        mongo_db=args.mongo_db,
-        mongo_collection=mongo_collection,
-        is_price_update=is_price_update,
-        sync_catalog=sync_catalog
-    ))
+        for idx, item in enumerate(targets, start=1):
+            target_url = item['url']
+            print(f"\n[TARGET {idx}/{len(targets)}] {item.get('category_path', 'Makeup')} -> {target_url}")
+            crawl_myntra_via_httpx(
+                start_url=target_url,
+                export_format=export_format,
+                base_filename=args.output,
+                max_pages=args.pages,
+                mongo_uri=args.mongo_uri,
+                mongo_db=mongo_db,
+                mongo_collection=mongo_collection,
+                is_price_update=is_price_update,
+                sync_catalog=sync_catalog,
+                category_meta=item
+            )
 
 
 if __name__ == "__main__":
