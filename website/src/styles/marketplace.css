@@ -1,10 +1,10 @@
 /* Shared marketplace design system. Page components consume these tokens. */
-:root { --market-ink:#14243c; --market-muted:#687386; --market-coral:#ee5366; --market-coral-dark:#d7364c; --market-border:#e1e5ed; --market-bg:#f5f6f8; --market-green:#17833e; }
+:root { --market-ink:#14243c; --market-muted:#687386; --market-coral:#ee5366; --market-coral-dark:#d7364c; --market-coral-contrast:#b7243d; --market-border:#e1e5ed; --market-bg:#f5f6f8; --market-green:#17833e; }
 .site-main { flex:1; width:100%; max-width:1440px; margin:0 auto; padding:24px; }
 .brand-wordmark { font-size:32px; line-height:1; font-weight:800; letter-spacing:-1.7px; color:var(--market-ink); white-space:nowrap; }
 .brand-wordmark b { color:var(--market-coral); }
-.action-button { display:inline-flex; justify-content:center; align-items:center; gap:10px; padding:13px 19px; background:var(--market-coral); color:#fff; font-size:12px; font-weight:700; border:1px solid var(--market-coral); text-decoration:none; }
-.action-button:hover { background:var(--market-coral-dark); border-color:var(--market-coral-dark); }
+.action-button { display:inline-flex; justify-content:center; align-items:center; gap:10px; padding:13px 19px; background:var(--market-coral-contrast); color:#fff; font-size:12px; font-weight:700; border:1px solid var(--market-coral-contrast); text-decoration:none; }
+.action-button:hover { background:#941e33; border-color:#941e33; }
 .eyebrow { letter-spacing:.08em; font-size:10px; }
 /* Navigation and search */
 .market-header { background:#fff; border-bottom:1px solid var(--market-border); }
@@ -49,7 +49,7 @@
 .section-heading { display:flex; justify-content:space-between; gap:16px; margin-bottom:22px; align-items:center; }
 .section-heading h2 { font-family:inherit; font-size:24px; font-weight:750; letter-spacing:-.025em; color:var(--market-ink); line-height:1.25; }
 .section-heading .eyebrow { font-size:10px; color:var(--market-muted); margin-bottom:6px; }
-.section-heading>a { display:inline-flex; align-items:center; gap:8px; border:0; color:var(--market-coral); font-size:11px; font-weight:600; padding:9px 0; }
+.section-heading>a { display:inline-flex; align-items:center; gap:8px; border:0; color:var(--market-coral-contrast); font-size:11px; font-weight:600; padding:9px 0; }
 .category-photo-grid { grid-template-columns:repeat(8,minmax(0,1fr)); gap:15px; }
 .category-photo-card__image { aspect-ratio:1.12; background:#f8f2ee; }
 .category-photo-card__caption { justify-content:center; padding:12px 0 0; border:0; }
@@ -92,19 +92,19 @@
 .product-card__traits { display:none; }
 .price-display { display:flex; align-items:baseline; flex-wrap:wrap; gap:9px; color:var(--market-ink); }
 .price-display strong { font-size:22px; letter-spacing:-.04em; line-height:1.2; font-weight:750; }
-.price-display del { font-size:11px; color:#8b929d; }
+.price-display del { font-size:11px; color:#525f71; }
 .product-card .price-display { margin:12px 0 14px; }
 .price-display--large strong { font-size:36px; }
 .price-display--large del { font-size:17px; }
 .product-card__footer { border-top:1px solid #edf0f4; padding-top:10px; gap:8px; }
 .product-card__store { padding-right:0; border:0; }
 .product-card .store-logo { width:60px; height:21px; }
-.product-card__offer { color:var(--market-coral); font-weight:700; font-size:10px; gap:3px; white-space:nowrap; }
+.product-card__offer { color:var(--market-coral-contrast); font-weight:700; font-size:10px; gap:3px; white-space:nowrap; }
 .product-card__offer svg { width:13px; height:13px; }
 /**** Catalog filters, navigation and sorting ****/
 .breadcrumb { margin:0; padding:0 0 18px; font-size:11px; color:var(--market-muted); }
-.breadcrumb a { color:var(--market-muted); }
-.breadcrumb a:hover { color:var(--market-coral); }
+.breadcrumb a { color:#525f71; }
+.breadcrumb a:hover { color:var(--market-coral-contrast); }
 .breadcrumb [aria-current=page] { color:var(--market-ink); }
 .catalog-category-links { border-color:var(--market-border); margin-bottom:15px; gap:23px; padding:13px 0; }
 .catalog-category-links a { color:#526073; }

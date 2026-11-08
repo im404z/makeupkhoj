@@ -81,7 +81,7 @@ export default function RootLayout({
         <WebSiteJsonLd />
       </head>
       <body className="min-h-screen flex flex-col antialiased">
-        <Script id="google-tag-manager" strategy="afterInteractive">
+        <Script id="google-tag-manager" strategy="lazyOnload">
           {`
             window.dataLayer = window.dataLayer || [];
             function gtag() { window.dataLayer.push(arguments); }

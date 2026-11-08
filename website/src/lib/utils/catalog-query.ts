@@ -8,14 +8,18 @@ export function numericExpression(input: unknown) {
   } } }, in: '$$value.match' } }, to: 'double', onError: null, onNull: null } };
 }
 
-export function normalizePipeline(store: string): any[] {
+export const catalogRatingFields = {
+  rating: numericExpression({ $ifNull: ['$rating', '$averageRating'] }),
+  rating_count: numericExpression({ $ifNull: ['$rating_count', { $ifNull: ['$ratingsCount', '$reviews_count'] }] }),
+};
+
+export function normalizePipeline(store: string, ratingNormalized = false) {
   return [{ $set: {
     marketplace: store, marketplace_name: store === 'nykaa' ? 'Nykaa' : store[0].toUpperCase() + store.slice(1),
     id: { $convert: { input: { $ifNull: ['$id', { $ifNull: ['$asin', '$_id'] }] }, to: 'string', onError: '', onNull: '' } },
     name: { $ifNull: ['$name', { $ifNull: ['$title', 'Makeup'] }] },
     price: numericExpression({ $ifNull: ['$price', '$currentPrice'] }), mrp: numericExpression('$mrp'),
-    rating: numericExpression({ $ifNull: ['$rating', '$averageRating'] }),
-    rating_count: numericExpression({ $ifNull: ['$rating_count', { $ifNull: ['$ratingsCount', '$reviews_count'] }] }),
+    ...(ratingNormalized ? {} : catalogRatingFields),
     discount_percentage: numericExpression('$discount_percentage'),
   } }, { $set: {
     discount_percentage: { $cond: [{ $gt: ['$discount_percentage', 0] }, '$discount_percentage', { $cond: [

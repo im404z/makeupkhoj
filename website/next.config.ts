@@ -5,6 +5,8 @@ const nextConfig: NextConfig = {
   // Target search bots specifically for metadata resolution, allowing streaming HTML for human users
   htmlLimitedBots: /Googlebot|bingbot|Baiduspider|YandexBot|DuckDuckBot|Slurp/i,
   images: {
+    imageSizes: [32, 48, 64, 96, 128, 144, 160, 192, 224, 256, 320, 384],
+    qualities: [60, 75],
     remotePatterns: [
       { protocol: 'https', hostname: '*.myntassets.com' },
       { protocol: 'https', hostname: '*.flixcart.com' },

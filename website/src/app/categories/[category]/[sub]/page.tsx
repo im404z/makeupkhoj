@@ -2,7 +2,7 @@ import CategorySubcategories from '@/components/product/CategorySubcategories';
 import {prepareListingRequest} from '@/lib/seo/listing-request';
 import {catalogUrl} from '@/lib/utils/catalog-urls';
 import { parseCatalogFilters,CATALOG_PAGE_SIZE } from '@/lib/utils/catalog-query';
-import React from 'react';
+import { Suspense } from 'react';
 import { notFound, permanentRedirect } from 'next/navigation';
 import type { Metadata } from 'next';
 import ProductGrid from '@/components/product/ProductGrid';
@@ -93,7 +93,9 @@ export default async function SubCategoryPage({ params, searchParams }: SubCateg
         </p>
       </div>
 
-      <CategorySubcategories category={category} name={cat.name} active={sub} filters={sp}/>
+      <Suspense fallback={null}>
+        <CategorySubcategories category={category} name={cat.name} active={sub} filters={sp}/>
+      </Suspense>
       <div className="catalog-layout">
         <div className="catalog-filters">
           <ProductFilters currentCategory={category} currentSub={sub} />

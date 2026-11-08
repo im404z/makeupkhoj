@@ -4,9 +4,9 @@ import {connectDB} from '@/lib/mongodb';
 import {getModelByMarketplace} from '@/lib/models/Product';
 import {CATEGORY_LEAVES,categoryLeafMatch} from '@/lib/constants/category-leaves';
 import {CATALOG_STORES} from './catalog-query';
+import {cachedCatalogRead} from '@/lib/catalog-cache';
 
-// Request-scoped memoization only: subsequent requests see newly crawled records.
-export const categoryNavigation = cache(async (category:string) => {
+export const categoryNavigation = cache((category:string) => cachedCatalogRead('category-navigation', category, async () => {
   await connectDB();
   const results = await Promise.all(CATALOG_STORES.map(store =>
     getModelByMarketplace(store)!.aggregate([
@@ -20,4 +20,4 @@ export const categoryNavigation = cache(async (category:string) => {
     slug:leaf.slug,name:leaf.name,count:leaf.labels.reduce((sum,label)=>sum+(counts.get(label.toLowerCase())||0),0),
   })).filter(leaf=>leaf.count>0);
   return {items,total:items.reduce((sum,item)=>sum+item.count,0)};
-});
+}));

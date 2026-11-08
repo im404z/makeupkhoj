@@ -13,7 +13,7 @@ export default function Header(){
  return <header className="market-header"><div className="market-header__utility"><div><p>Compare beauty prices across your favourite stores</p><Link href="/price-drops">Latest price drops</Link></div></div>
  <div className="market-header__main"><BrandMark priority/>
  <form onSubmit={search} role="search" className="market-search"><label htmlFor="site-search" className="sr-only">Search makeup</label><input id="site-search" type="search" value={term} onChange={e=>setTerm(e.target.value)} placeholder="Search for makeup, brands or products"/><button aria-label="Search"><Search size={21}/></button></form>
- <Link href="/price-drops" className="market-header__shortcut"><TrendingDown size={21}/><span>Price drops</span></Link><Link href="/deals" className="market-header__shortcut"><Tags size={21}/><span>Best deals</span></Link>
+ <Link href="/price-drops" className="market-header__shortcut" aria-label="Price drops"><TrendingDown size={21} aria-hidden="true"/><span>Price drops</span></Link><Link href="/deals" className="market-header__shortcut" aria-label="Best deals"><Tags size={21} aria-hidden="true"/><span>Best deals</span></Link>
  <button className="market-header__menu" onClick={()=>setOpen(!open)} aria-label="Toggle navigation" aria-expanded={open}>{open?<X/>:<Menu/>}</button></div>
  <CategoryNavigation mobileOpen={open} onNavigate={()=>setOpen(false)}/></header>;
 }

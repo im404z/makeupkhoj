@@ -1,7 +1,7 @@
 import {prepareListingRequest} from '@/lib/seo/listing-request';
 import {catalogUrl} from '@/lib/utils/catalog-urls';
 import { parseCatalogFilters,CATALOG_PAGE_SIZE } from '@/lib/utils/catalog-query';
-import React from 'react';
+import { Suspense } from 'react';
 import CatalogBanner from '@/components/product/CatalogBanner';
 import CatalogQuickLinks from '@/components/product/CatalogQuickLinks';
 import type { Metadata } from 'next';
@@ -79,7 +79,9 @@ export default async function CategoryPage({ params, searchParams }: CategoryPag
       />
 
       <CatalogBanner title={cat ? cat.name : category} description={cat ? cat.description : 'Explore the collection and compare available store prices.'} category={category}/>
-      <CategorySubcategories category={category} name={cat.name} filters={sp}/>
+      <Suspense fallback={null}>
+        <CategorySubcategories category={category} name={cat.name} filters={sp}/>
+      </Suspense>
       <CatalogQuickLinks />
 
       <div className="catalog-layout">

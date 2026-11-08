@@ -1,0 +1,19 @@
+.matching-workspace .admin-metrics { grid-template-columns:repeat(3,minmax(0,1fr)); }
+.matching-controls { display:flex; flex-wrap:wrap; align-items:end; gap:12px; }
+.matching-controls label { flex:1; min-width:160px; }
+.matching-run { padding:16px; background:#f5f6f8; border-left:3px solid #ee5366; line-height:1.8; }
+.matching-pair { border:1px solid #e1e5ed; padding:20px; background:white; }
+.matching-pair header { display:flex; justify-content:space-between; gap:12px; margin-bottom:20px; font-size:12px; }
+.matching-pair__products { display:grid; grid-template-columns:1fr 1fr; gap:24px; }
+.matching-pair__products h3 { font-size:14px; line-height:1.6; margin:10px 0; }
+.matching-pair__products dl { font-size:12px; margin:12px 0; }
+.matching-pair__products dl>div { display:flex; gap:12px; padding:4px 0; }.matching-pair__products dt { color:#647084; min-width:60px; }
+.matching-source-image { position:relative; width:100%; height:140px; margin-bottom:12px; }.matching-source-image img { object-fit:contain!important; }
+.matching-conflict { padding:12px; background:#fff1f3; color:#a61d36; font-size:12px; margin:16px 0; }
+.matching-preview { position:fixed; z-index:100; left:50%; top:50%; transform:translate(-50%,-50%); width:min(90vw,540px); border:2px solid #14243c; box-shadow:0 0 0 100vmax #14243c99!important; }
+.matching-member { display:flex; align-items:center; gap:20px; padding:18px 0; border-bottom:1px solid #e1e5ed; font-size:12px; }.matching-member>div { flex:1; }.matching-member p { margin:8px 0; color:#647084; }
+.matching-bulk { display:flex; flex-wrap:wrap; gap:12px; align-items:center; padding:16px 20px; background:#f5f6f8; border-bottom:1px solid #e1e5ed; }.matching-bulk label,.matching-selection { display:flex; align-items:center; gap:8px; font-size:12px; }.matching-bulk p { margin-right:auto; }.matching-pair.is-selected { border-color:#ee5366; background:#fffafb; }.matching-results { padding:16px; margin:16px 0; background:#f5f6f8; font-size:12px; line-height:1.8; }
+.matching-overlay { position:fixed; inset:0; z-index:100; display:flex; align-items:center; justify-content:center; padding:20px; background:#14243c99; }.matching-overlay .matching-preview { position:static; transform:none; margin:0; max-height:90vh; overflow:auto; box-shadow:none!important; }.matching-preview__list { max-height:210px; overflow:auto; list-style:decimal; padding-left:20px; font-size:12px; line-height:1.8; margin-bottom:20px; }
+.matching-workspace .admin-panel-title { flex-wrap:wrap; gap:12px; }
+@media(max-width:700px) { .matching-bulk { padding:16px 12px; } }
+@media(max-width:640px) { .matching-sku { font-size:10px; color:#647084; overflow-wrap:anywhere; margin:12px 0; }.matching-workspace .admin-metrics { grid-template-columns:1fr 1fr; }.matching-pair { padding:12px; }.matching-pair__products { gap:12px; }.matching-pair header,.matching-member { flex-direction:column; align-items:start; }.matching-source-image { height:100px; }.matching-pair__products h3 { font-size:12px; } }

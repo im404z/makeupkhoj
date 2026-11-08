@@ -6,11 +6,10 @@ import type {Product} from '@/types/product';
 function date(value:string){const d=new Date(value);return Number.isFinite(d.getTime())?d.toLocaleString('en-IN',{timeZone:'Asia/Kolkata',day:'numeric',month:'short',year:'numeric'}):value;}
 function Facts({rows}:{rows:Array<string[]>}){return <dl className="product-data__facts">{rows.map(([label,value])=><div key={label}><dt>{label}</dt><dd>{value}</dd></div>)}</dl>;}
 function Source({product}:{product:Product}){return <header className="product-data__source"><MarketplaceLogo store={product.marketplace}/><p>{product.name}</p></header>;}
-export default function ProductDataSections({products,showRelated=false}:{products:Product[];showRelated?:boolean}){
- const sources=products.map(product=>({product,data:productDetails(product)}));
+export default function ProductDataSections({sources,relatedLink}:{sources:Array<{product:Product;data:ReturnType<typeof productDetails>}>;relatedLink?:React.ReactNode}){
  const hasReviews=sources.some(s=>s.data.reviews.length||s.data.photos.length||s.data.rating),hasHistory=sources.some(s=>s.data.history.length||Number(s.data.lowest)>0||Number(s.data.highest)>0);
  return <div className="product-data">
-  <nav className="product-detail__section-nav" aria-label="Product information sections"><a href="#product-information">Product details</a>{hasReviews&&<a href="#customer-reviews">Ratings & reviews</a>}{hasHistory&&<a href="#price-history">Price history</a>}{showRelated&&<a href="#related-products">Related products</a>}</nav>
+  <nav className="product-detail__section-nav" aria-label="Product information sections"><a href="#product-information">Product details</a>{hasReviews&&<a href="#customer-reviews">Ratings & reviews</a>}{hasHistory&&<a href="#price-history">Price history</a>}{relatedLink}</nav>
   <section id="product-information" className="product-data__section"><div className="product-data__heading"><p className="eyebrow">Know your product</p><h2>Product details</h2><p>Specifications and store information from the latest saved marketplace data.</p></div>
    {sources.map(({product,data})=><article key={product.marketplace+product._id} className="product-data__store"><Source product={product}/>{data.description&&<p className="product-data__description">{data.description}</p>}
     {data.highlights.length>0&&<div><h3>Highlights</h3><ul className="product-data__highlights">{data.highlights.map(value=><li key={value}>{value}</li>)}</ul></div>}
