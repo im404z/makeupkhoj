@@ -3,7 +3,7 @@ import { CATEGORIES } from '@/lib/constants/categories';
 import { getAllBrandsList } from '@/lib/utils/products';
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
-  const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://makeupkhoj.com';
+  const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://www.makeupkhoj.shop';
   const now = new Date();
 
   // Static core routes
