@@ -1,4 +1,5 @@
 import type { Metadata } from 'next';
+import Script from 'next/script';
 import './globals.css';
 import {nohemi} from './fonts';
 import Header from '@/components/layout/Header';
@@ -80,6 +81,18 @@ export default function RootLayout({
         <WebSiteJsonLd />
       </head>
       <body className="min-h-screen flex flex-col antialiased">
+        <Script id="google-tag-manager" strategy="afterInteractive">
+          {`
+            window.dataLayer = window.dataLayer || [];
+            function gtag() { window.dataLayer.push(arguments); }
+            gtag('js', new Date());
+            window.dataLayer.push({ 'gtm.start': Date.now(), event: 'gtm.js' });
+            var script = document.createElement('script');
+            script.async = true;
+            script.src = 'https://www.googletagmanager.com/gtm.js?id=GTM-MLTRJ3S2';
+            document.head.appendChild(script);
+          `}
+        </Script>
         <Header />
         <main className="site-main">
           {children}
