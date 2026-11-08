@@ -857,17 +857,15 @@ async def run_pdp_crawler(
     total_in_src = src_coll.count_documents({})
     logging.info(f"Connected to MongoDB. Source collection '{src_coll_name}' has {total_in_src} items.")
 
-    # Find already scraped IDs in target collection if skip_existing is True
-    existing_ids = set()
+    # Build query according to mode (listing and PDP data are stored together in the same collection)
     if skip_existing:
-        logging.info(f"Checking existing items in target collection '{tgt_coll_name}'...")
-        existing_ids = set(tgt_coll.distinct("id"))
-        logging.info(f"Found {len(existing_ids)} items already in '{tgt_coll_name}'.")
-
-    # Build query
-    query = {}
-    if skip_existing and existing_ids:
-        query = {"id": {"$nin": list(existing_ids)}}
+        logging.info(f"[CRAWL MODE: PENDING ONLY] Targeting unscraped Myntra products in '{src_coll_name}'...")
+        query = {"$or": [{"pdp_scraped": {"$ne": True}}, {"pdp_scraped": {"$exists": False}}]}
+        pending_count = src_coll.count_documents(query)
+        logging.info(f"Found {pending_count} pending items in '{src_coll_name}'.")
+    else:
+        logging.info(f"[CRAWL MODE: ALL CATALOG] Re-checking all {total_in_src} Myntra products in '{src_coll_name}'.")
+        query = {}
 
     cursor = src_coll.find(query, {"id": 1, "url": 1, "name": 1, "brand": 1})
     if is_price_update:
@@ -911,9 +909,17 @@ async def run_pdp_crawler(
                 if pdp_data and pdp_data.get("id"):
                     now_iso = datetime.now(timezone.utc).isoformat()
                     pdp_data["crawled_at"] = now_iso
+                    pdp_data["updated_at"] = now_iso
                     pdp_data["price_last_checked"] = now_iso
+                    pdp_data["pdp_scraped"] = True
+                    pdp_data["pdp_scraped_at"] = now_iso
 
-                    # 1. Real-time upsert to MongoDB product_data collection
+                    if pdp_data.get("name"):
+                        pdp_data["name"] = re.sub(r'^(?:sponsored\s*ad\s*[-–—:]*\s*|sponsored\s*[-–—:]*\s*)', '', pdp_data["name"], flags=re.IGNORECASE).strip()
+                    if pdp_data.get("title"):
+                        pdp_data["title"] = re.sub(r'^(?:sponsored\s*ad\s*[-–—:]*\s*|sponsored\s*[-–—:]*\s*)', '', pdp_data["title"], flags=re.IGNORECASE).strip()
+
+                    # 1. Real-time upsert to MongoDB collection
                     try:
                         tgt_coll.update_one(
                             {"id": pdp_data["id"]},
@@ -923,21 +929,26 @@ async def run_pdp_crawler(
                         saved_count += 1
                         stats["product_data_saved"] += 1
 
-                        # 2. Update price in source collection (myntra.products)
-                        src_coll.update_one(
-                            {"id": pdp_data["id"]},
-                            {"$set": {
-                                "price": pdp_data.get("price"),
-                                "mrp": pdp_data.get("mrp"),
-                                "discount": pdp_data.get("discount"),
-                                "rating": pdp_data.get("rating"),
-                                "rating_count": pdp_data.get("rating_count"),
-                                "price_last_checked": now_iso
-                            }}
-                        )
-                        stats["products_updated"] += 1
+                        # 2. Update price in source collection if separate from target
+                        if src_coll_name != tgt_coll_name:
+                            src_coll.update_one(
+                                {"id": pdp_data["id"]},
+                                {"$set": {
+                                    "pdp_scraped": True,
+                                    "pdp_scraped_at": now_iso,
+                                    "price": pdp_data.get("price"),
+                                    "mrp": pdp_data.get("mrp"),
+                                    "discount": pdp_data.get("discount"),
+                                    "rating": pdp_data.get("rating"),
+                                    "rating_count": pdp_data.get("rating_count"),
+                                    "price_last_checked": now_iso
+                                }}
+                            )
+                            stats["products_updated"] += 1
+                        else:
+                            stats["products_updated"] += 1
 
-                        # 3. Update master catalog (scentkhoj.products) with price shift tracking
+                        # 3. Update master catalog with price shift tracking
                         update_master_catalog_for_pdp(sk_coll, pdp_data, stats)
 
                         logging.info(
@@ -1030,6 +1041,8 @@ def main():
     parser.add_argument("--sync-catalog", action="store_true", default=True, help="Synchronize with Master Catalog (sync_catalog_skus.js)")
     parser.add_argument("--no-sync-catalog", dest="sync_catalog", action="store_false", help="Skip synchronizing with Master Catalog")
     parser.add_argument("--force", action="store_true", help="Re-scrape items even if already in product_data")
+    parser.add_argument("--pending", dest="pending", action="store_true", default=True, help="Scrape only pending items")
+    parser.add_argument("--all", dest="force", action="store_true", help="Re-scrape all items")
     parser.add_argument("--mongo-uri", type=str, default=None, help="MongoDB connection URI")
     parser.add_argument("--mongo-db", type=str, default=DEFAULT_DB, help=f"MongoDB database name (default: '{DEFAULT_DB}')")
     parser.add_argument("--source", type=str, default=DEFAULT_COLLECTION, help=f"Source collection (default: '{DEFAULT_COLLECTION}')")

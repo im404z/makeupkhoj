@@ -1,10 +1,11 @@
 import type { CategoryInfo } from '@/types/product';
+import { CATEGORY_LEAVES } from './category-leaves';
 
 export const CATEGORIES: CategoryInfo[] = [
   {
     slug: 'lip-makeup',
     name: 'Lip Makeup',
-    image: '/assets/categories/lip-makeup.png',
+    image: '/assets/categories/shop-lip-makeup.webp',
     description: 'Discover lipsticks, lip glosses, lip liners and liquid lip colours from top brands with best price comparisons.',
     subcategories: [
       { slug: 'lipstick', name: 'Lipstick', parent: 'lip-makeup' },
@@ -18,7 +19,7 @@ export const CATEGORIES: CategoryInfo[] = [
   {
     slug: 'face-makeup',
     name: 'Face Makeup',
-    image: '/assets/categories/face-makeup.png',
+    image: '/assets/categories/shop-face-makeup.webp',
     description: 'Find foundations, concealers, primers, compact powders and setting sprays for flawless everyday and glam looks.',
     subcategories: [
       { slug: 'foundation', name: 'Foundation', parent: 'face-makeup' },
@@ -33,7 +34,7 @@ export const CATEGORIES: CategoryInfo[] = [
   {
     slug: 'eye-makeup',
     name: 'Eye Makeup',
-    image: '/assets/categories/eye-makeup.png',
+    image: '/assets/categories/shop-eye-makeup.webp',
     description: 'Explore mascaras, eyeliners, kajal, eyeshadow palettes and eyebrow products across all major stores.',
     subcategories: [
       { slug: 'eyeliner', name: 'Eyeliner', parent: 'eye-makeup' },
@@ -47,7 +48,7 @@ export const CATEGORIES: CategoryInfo[] = [
   {
     slug: 'cheeks',
     name: 'Cheeks',
-    image: '/assets/categories/cheeks.png',
+    image: '/assets/categories/shop-cheeks.webp',
     description: 'Blush, highlighters, bronzers and contours in liquid, powder and cream finishes at the lowest prices.',
     subcategories: [
       { slug: 'blush', name: 'Blush', parent: 'cheeks' },
@@ -60,7 +61,7 @@ export const CATEGORIES: CategoryInfo[] = [
   {
     slug: 'makeup-kits',
     name: 'Makeup Kits',
-    image: '/assets/categories/makeup-kits.png',
+    image: '/assets/categories/shop-makeup-kits.webp',
     description: 'All-in-one makeup sets, bridal kits, gift sets and travel combos compared across stores.',
     subcategories: [
       { slug: 'bridal-kit', name: 'Bridal Makeup Kit', parent: 'makeup-kits' },
@@ -72,7 +73,7 @@ export const CATEGORIES: CategoryInfo[] = [
   {
     slug: 'tools-and-brushes',
     name: 'Tools & Brushes',
-    image: '/assets/categories/tools-and-brushes.png',
+    image: '/assets/categories/shop-tools-and-brushes.webp',
     description: 'Professional makeup brush sets, beauty sponges, eyelash curlers and applicators.',
     subcategories: [
       { slug: 'brush-sets', name: 'Brush Sets', parent: 'tools-and-brushes' },
@@ -84,7 +85,7 @@ export const CATEGORIES: CategoryInfo[] = [
   {
     slug: 'nails',
     name: 'Nails',
-    image: '/assets/categories/nails.png',
+    image: '/assets/categories/shop-nails.webp',
     description: 'Nail polishes, gel polish, nail art, nail strengtheners and polish removers.',
     subcategories: [
       { slug: 'nail-polish', name: 'Nail Polish', parent: 'nails' },
@@ -96,7 +97,7 @@ export const CATEGORIES: CategoryInfo[] = [
   {
     slug: 'makeup-remover',
     name: 'Makeup Remover',
-    image: '/assets/categories/makeup-remover.png',
+    image: '/assets/categories/shop-makeup-remover.webp',
     description: 'Micellar water, cleansing balms, makeup wipes and bi-phase removers for gentle removal.',
     subcategories: [
       { slug: 'micellar-water', name: 'Micellar Water', parent: 'makeup-remover' },
@@ -106,6 +107,14 @@ export const CATEGORIES: CategoryInfo[] = [
     ],
   },
 ];
+
+// Keep old URLs recognizable for redirects, but only advertise recorded types.
+export const LEGACY_SUBCATEGORY_SLUGS:Record<string,string[]> = Object.fromEntries(
+  CATEGORIES.map(category=>[category.slug,category.subcategories.map(sub=>sub.slug)])
+);
+for (const category of CATEGORIES) {
+  category.subcategories = (CATEGORY_LEAVES[category.slug] || []).map(leaf=>({slug:leaf.slug,name:leaf.name,parent:category.slug}));
+}
 
 // Helper to find category info by slug or name
 export function getCategoryBySlug(slug: string): CategoryInfo | undefined {

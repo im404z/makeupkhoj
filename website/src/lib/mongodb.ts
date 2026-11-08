@@ -1,12 +1,6 @@
 // MongoDB connection singleton for Next.js
 import mongoose from 'mongoose';
 
-const MONGODB_URI = process.env.MONGODB_URI!;
-
-if (!MONGODB_URI) {
-  throw new Error('Please define MONGODB_URI in .env.local');
-}
-
 interface GlobalMongoose {
   conn: typeof mongoose | null;
   promise: Promise<typeof mongoose> | null;
@@ -21,10 +15,15 @@ const cached: GlobalMongoose = global._mongoose ?? { conn: null, promise: null }
 if (!global._mongoose) global._mongoose = cached;
 
 export async function connectDB() {
+  const uri = process.env.MONGODB_URI;
+  if (!uri) {
+    throw new Error('Please define MONGODB_URI in .env.local');
+  }
+
   if (cached.conn) return cached.conn;
 
   if (!cached.promise) {
-    cached.promise = mongoose.connect(MONGODB_URI, {
+    cached.promise = mongoose.connect(uri, {
       dbName: process.env.MASTER_DB ?? 'makeupkhoj',
       bufferCommands: false,
     });

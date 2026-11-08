@@ -9,14 +9,13 @@ export default function robots(): MetadataRoute.Robots {
         userAgent: '*',
         allow: '/',
         disallow: [
+          '/admin',
           '/api/',
-          '/search',
-          '/*?*sort=*',
-          '/*?*page=*',
+          '/buy/',
         ],
       },
     ],
-    sitemap: `${baseUrl}/sitemap.xml`,
+    sitemap: `${baseUrl}/sitemap-index.xml`,
   };
 }
 

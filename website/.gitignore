@@ -12,9 +12,12 @@
 
 # testing
 /coverage
+/.admin/
 
 # next.js
 /.next/
+/.next-verify/
+/.next-product-fix/
 /out/
 
 # production
@@ -39,3 +42,7 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+/.next-design/
+
+/.next-ui/

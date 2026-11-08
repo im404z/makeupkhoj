@@ -12,6 +12,7 @@ import tempfile
 import time
 from datetime import datetime, timezone
 from typing import Dict, Any, List, Optional
+from urllib.parse import urlsplit, urlunsplit, parse_qsl, urlencode
 
 if sys.stdout.encoding and sys.stdout.encoding.lower() not in ("utf-8", "utf8"):
     try:
@@ -59,6 +60,19 @@ logging.basicConfig(
     handlers=[logging.StreamHandler(sys.stdout)]
 )
 
+def ensure_listing_indexes(collection):
+    """Reuse existing indexes without silently changing their constraints."""
+    indexes = collection.index_information()
+    for field in ("id", "brand", "category_path", "sub_category", "crawled_at"):
+        existing = [spec for spec in indexes.values()
+                    if list(spec.get("key", [])) == [(field, 1)]]
+        if existing:
+            if field == "id" and not any(spec.get("unique") for spec in existing):
+                logging.warning("Reusing non-unique id index. Concurrent writers require a unique-id migration after auditing duplicates.")
+            continue
+        collection.create_index(field, unique=(field == "id"))
+
+
 def save_to_mongodb(
     rows: List[Dict[str, Any]],
     mongo_uri: Optional[str] = None,
@@ -78,6 +92,7 @@ def save_to_mongodb(
     target_coll = collection_name or DEFAULT_COLLECTION
     validate_db_safety(target_db)
 
+    client = None
     try:
         masked_uri = uri.split("@")[-1] if "@" in uri else uri
         logging.info(f"Connecting to MongoDB at {masked_uri} -> {target_db}.{target_coll}...")
@@ -85,11 +100,7 @@ def save_to_mongodb(
         db = client[target_db]
         collection = db[target_coll]
 
-        collection.create_index("id", unique=True)
-        collection.create_index("brand", unique=False)
-        collection.create_index("category_path", unique=False)
-        collection.create_index("sub_category", unique=False)
-        collection.create_index("crawled_at", unique=False)
+        ensure_listing_indexes(collection)
 
         now_iso = datetime.now(timezone.utc).isoformat()
         operations = [
@@ -107,11 +118,13 @@ def save_to_mongodb(
             f"Database: '{target_db}', Collection: '{target_coll}' "
             f"(Matched: {result.matched_count}, Modified: {result.modified_count}, Upserted: {result.upserted_count})"
         )
-        client.close()
         return len(rows)
     except Exception as e:
         logging.error(f"Failed to save products to MongoDB: {e}")
         return 0
+    finally:
+        if client is not None:
+            client.close()
 
 
 def init_price_update_stats() -> Dict[str, Any]:
@@ -690,8 +703,10 @@ def crawl_myntra_via_httpx(
 
     for page_no in range(1, limit_pages + 1):
         actual_pages_crawled += 1
-        sep = "&" if "?" in start_url else "?"
-        page_url = f"{start_url}{sep}p={page_no}"
+        parsed_url = urlsplit(start_url)
+        params = [(k, v) for k, v in parse_qsl(parsed_url.query, keep_blank_values=True) if k != "p"]
+        params.append(("p", str(page_no)))
+        page_url = urlunsplit(parsed_url._replace(query=urlencode(params)))
         logging.info(f"[MYNTRA HTTP] Page {page_no}/{page_label}: Fetching {page_url}...")
 
         html_text = fetch_myntra_html(page_url)
@@ -831,7 +846,8 @@ async def crawl_myntra(
     mongo_db: Optional[str] = None,
     mongo_collection: Optional[str] = None,
     is_price_update: bool = False,
-    sync_catalog: bool = True
+    sync_catalog: bool = True,
+    category_meta: Optional[Dict[str, Any]] = None
 ):
     products_dict: Dict[str, Dict[str, Any]] = {}
     start_time = time.time()
@@ -893,6 +909,13 @@ async def crawl_myntra(
             next_btn = await scroll_to_bottom_and_find_next(page)
 
             items = await extract_page_products(page, page_no)
+            cat = category_meta or lookup_category_by_url(start_url) or {}
+            for item in items:
+                item.update({key: cat[key] for key in (
+                    "category", "sub_category", "sub_sub_category", "category_path", "category_name"
+                ) if key in cat})
+                item.update(title=item["name"], marketplace="myntra", marketplace_name="Myntra",
+                            category_url=cat.get("url", start_url))
             new_items_on_page = []
             for item in items:
                 item_id = item["id"]
@@ -974,7 +997,7 @@ async def crawl_myntra(
         if export_format in ["csv", "both", "all"]:
             csv_filename = f"{base_filename}.csv" if not base_filename.endswith(".csv") else base_filename
             with open(csv_filename, "w", newline="", encoding="utf-8") as f:
-                writer = csv.DictWriter(f, fieldnames=fieldnames)
+                writer = csv.DictWriter(f, fieldnames=fieldnames, extrasaction="ignore")
                 writer.writeheader()
                 writer.writerows(rows)
             logging.info(f"SUCCESS: Saved {len(rows)} products to CSV -> '{csv_filename}'")

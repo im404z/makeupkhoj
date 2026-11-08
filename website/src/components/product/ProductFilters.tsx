@@ -1,6 +1,9 @@
 'use client';
+import {catalogUrl} from '@/lib/utils/catalog-urls';
+import {slugify} from '@/lib/utils/format';
 
-import React from 'react';
+import React, { useState } from 'react';
+import useSWR from 'swr';
 import { useRouter, useSearchParams, usePathname } from 'next/navigation';
 import { Filter, RotateCcw } from 'lucide-react';
 import { CATEGORIES } from '@/lib/constants/categories';
@@ -14,9 +17,13 @@ export default function ProductFilters({ currentCategory, currentSub }: ProductF
   const router = useRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams();
+  const [brandSearch, setBrandSearch] = useState('');
+  const [priceError, setPriceError] = useState('');
+  const [filtersOpen,setFiltersOpen]=useState(false);
+  const { data: brandData } = useSWR<{brands:Array<{name:string;count:number}>}>('/api/brands', async (url:string) => {const r=await fetch(url);if(!r.ok)throw Error('Could not load brands');return r.json();}, { revalidateOnFocus: false });
 
   // Selected filters from URL
-  const selectedBrands = searchParams.getAll('brand');
+  const selectedBrands = searchParams.getAll('brand').map(slugify);
   const selectedMarketplaces = searchParams.getAll('marketplace');
   const selectedMinDiscount = searchParams.get('minDiscount') || '';
   const selectedRating = searchParams.get('rating') || '';
@@ -30,13 +37,14 @@ export default function ProductFilters({ currentCategory, currentSub }: ProductF
     } else {
       params.set(key, value);
     }
-    router.push(`${pathname}?${params.toString()}`);
+    router.push(catalogUrl(pathname,params));
   };
 
   const toggleArrayParam = (key: string, value: string) => {
     const params = new URLSearchParams(searchParams.toString());
     params.set('page', '1');
-    const existing = params.getAll(key);
+    if(key==='brand')value=slugify(value);
+    const existing = params.getAll(key).map(v=>key==='brand'?slugify(v):v);
     params.delete(key);
     if (existing.includes(value)) {
       existing.filter((v) => v !== value).forEach((v) => params.append(key, v));
@@ -47,10 +55,10 @@ export default function ProductFilters({ currentCategory, currentSub }: ProductF
   };
 
   const clearAllFilters = () => {
-    router.push(pathname);
+    router.push(catalogUrl(pathname,{q:searchParams.get('q')||undefined}));
   };
 
-  const topBrands = [
+  const fallbackBrands = [
     'Lakmé',
     'Maybelline New York',
     'Charlotte Tilbury',
@@ -66,6 +74,9 @@ export default function ProductFilters({ currentCategory, currentSub }: ProductF
     'MARS',
     'Kay Beauty',
   ];
+  const brandNames=brandData?.brands.map(b=>b.name)||fallbackBrands;
+  const topBrands = [...new Set([...selectedBrands.map(value=>brandNames.find(name=>slugify(name)===value)||value), ...brandNames])]
+    .filter(b=>b.toLowerCase().includes(brandSearch.toLowerCase())).slice(0,100);
 
   const marketplaces = [
     { id: 'nykaa', label: 'Nykaa' },
@@ -79,10 +90,10 @@ export default function ProductFilters({ currentCategory, currentSub }: ProductF
     selectedMarketplaces.length > 0 ||
     selectedMinDiscount !== '' ||
     selectedRating !== '' ||
-    inStockOnly;
+    inStockOnly || !!searchParams.get('minPrice') || !!searchParams.get('maxPrice') || !!searchParams.get('finish');
 
   return (
-    <aside className="bg-white rounded-3xl border border-pink-100 p-5 shadow-sm space-y-6">
+    <div className={'market-filter-panel'+(filtersOpen?' market-filter-panel--open':'')}><button type="button" className="market-filter-toggle" aria-expanded={filtersOpen} onClick={()=>setFiltersOpen(!filtersOpen)}><Filter size={16}/>{filtersOpen?'Close filters':'Filter products'}{hasActiveFilters&&' · Active'}</button><aside className="market-filters bg-white rounded-3xl border border-pink-100 p-5 shadow-sm space-y-6">
       <div className="flex items-center justify-between pb-3 border-b border-pink-100">
         <div className="flex items-center gap-2">
           <Filter className="w-4 h-4 text-pink-600" />
@@ -99,6 +110,17 @@ export default function ProductFilters({ currentCategory, currentSub }: ProductF
         )}
       </div>
 
+      <form key={searchParams.toString()} onSubmit={e=>{
+        e.preventDefault();const form=new FormData(e.currentTarget),min=String(form.get('minPrice')||''),max=String(form.get('maxPrice')||'');
+        if(min&&max&&Number(min)>Number(max)){setPriceError('Maximum must be at least the minimum.');return;}
+        const params=new URLSearchParams(searchParams.toString());params.set('page','1');
+        for(const [key,value] of [['minPrice',min],['maxPrice',max]]){if(value)params.set(key,value);else params.delete(key);}
+        setPriceError('');router.push(catalogUrl(pathname,params));
+      }} className="space-y-3">
+        <h3 className="eyebrow">Price range · INR</h3>
+        <div className="grid grid-cols-2 gap-2"><label><span className="sr-only">Minimum price</span><input name="minPrice" type="number" min="0" inputMode="numeric" placeholder="Min ₹" defaultValue={searchParams.get('minPrice')||''} className="w-full min-w-0 border border-[#deded5] p-2 text-xs"/></label><label><span className="sr-only">Maximum price</span><input name="maxPrice" type="number" min="0" inputMode="numeric" placeholder="Max ₹" defaultValue={searchParams.get('maxPrice')||''} className="w-full min-w-0 border border-[#deded5] p-2 text-xs"/></label></div>
+        <button className="w-full border border-[#deded5] py-2 text-xs">Apply price</button>{priceError&&<p role="alert" className="text-xs text-red-700">{priceError}</p>}
+      </form>
       {/* Marketplaces */}
       <div>
         <h3 className="text-xs font-bold text-neutral-800 uppercase tracking-wider mb-2.5">
@@ -168,7 +190,7 @@ export default function ProductFilters({ currentCategory, currentSub }: ProductF
                     : 'bg-white text-neutral-700 border-neutral-200 hover:border-pink-300'
                 }`}
               >
-                ★ {r} & Above
+                {r} / 5 & Above
               </button>
             );
           })}
@@ -178,11 +200,12 @@ export default function ProductFilters({ currentCategory, currentSub }: ProductF
       {/* Brands */}
       <div>
         <h3 className="text-xs font-bold text-neutral-800 uppercase tracking-wider mb-2.5">
-          Popular Brands
+          Brands
         </h3>
+        <input aria-label="Find a brand" placeholder="Find a brand" value={brandSearch} onChange={e=>setBrandSearch(e.target.value)} className="w-full border border-[#deded5] p-2 text-xs mb-3"/>
         <div className="space-y-1.5 max-h-56 overflow-y-auto pr-1">
           {topBrands.map((b) => {
-            const checked = selectedBrands.includes(b);
+            const checked = selectedBrands.includes(slugify(b));
             return (
               <label
                 key={b}
@@ -200,7 +223,9 @@ export default function ProductFilters({ currentCategory, currentSub }: ProductF
           })}
         </div>
       </div>
-    </aside>
+      <label className="flex gap-2 text-xs items-center"><input type="checkbox" checked={inStockOnly} onChange={()=>updateParam('inStock',inStockOnly?null:'true')}/>In stock only</label>
+      <label className="block"><span className="eyebrow block mb-3">Finish</span><select aria-label="Finish" value={searchParams.get('finish')||''} onChange={e=>updateParam('finish',e.target.value)} className="w-full border border-[#deded5] p-2 text-xs"><option value="">All finishes</option>{['Matte','Dewy','Satin','Glossy','Shimmer','Natural'].map(v=><option key={v}>{v}</option>)}</select></label>
+    </aside></div>
   );
 }
 

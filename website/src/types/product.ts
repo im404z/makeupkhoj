@@ -19,6 +19,9 @@ export interface PriceHistory {
 }
 
 export interface Product {
+  price_drop?: {previous:number;observed:number;at:string|Date};
+  price_drop_amount?:number;
+  price_drop_percent?:number;
   _id: string;
   id: string;
   name: string;
@@ -83,6 +86,7 @@ export interface Product {
   crawled_at?: string;
   updated_at?: string;
   page_no?: number;
+  comparison?: {href:string;sku:string;stores:string[];priceStore?:string};
 }
 
 export interface ProductFilters {

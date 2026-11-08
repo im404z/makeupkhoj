@@ -15,7 +15,7 @@ import logging
 import argparse
 from datetime import datetime, timezone
 from urllib.parse import urlparse, parse_qs
-from playwright.sync_api import sync_playwright, TimeoutError as PlaywrightTimeout
+from playwright.sync_api import sync_playwright, TimeoutError as PlaywrightTimeout, Error as PlaywrightError
 from bs4 import BeautifulSoup
 from pymongo import MongoClient, UpdateOne
 from pymongo.errors import ServerSelectionTimeoutError
@@ -714,6 +714,14 @@ class AmazonMakeupCrawler:
                     if link:
                         title = link.get_text(strip=True)
 
+                if title and title != 'N/A':
+                    title = re.sub(
+                        r'^(?:sponsored\s*ad\s*[-–—:]*\s*|sponsored\s*[-–—:]*\s*|deal\s+of\s+the\s+day\s*[-–—:]*\s*|buy\s+)',
+                        '',
+                        title,
+                        flags=re.IGNORECASE
+                    ).strip()
+
                 # 3. Product URL with Affiliate Tag
                 product_url = f"{self.base_url}/dp/{asin}?tag=scentkhoj-21"
                 dp = container.select_one('a[href*="/dp/"]')
@@ -864,14 +872,22 @@ class AmazonMakeupCrawler:
         logger.info(f"[URL {url_index}/{total_urls}] Starting Crawl: {target_url}")
         logger.info(f"{'='*70}")
 
-        # Load page 1
-        try:
-            self.page.goto(target_url, wait_until='domcontentloaded', timeout=60000)
-            self.random_delay(1.5, 3.0)
-            self.set_location_zipcode()
-        except PlaywrightTimeout:
-            logger.error(f"[TIMEOUT] Page 1 took too long to load for: {target_url}")
-            return 0
+        # Load page 1 with retry
+        loaded = False
+        for attempt in range(1, 4):
+            try:
+                self.page.goto(target_url, wait_until='domcontentloaded', timeout=60000)
+                self.random_delay(1.5, 3.0)
+                self.set_location_zipcode()
+                loaded = True
+                break
+            except (PlaywrightTimeout, PlaywrightError, Exception) as e:
+                logger.warning(f"[NAV RETRY {attempt}/3] Error loading page 1 for {target_url}: {e}")
+                if attempt < 3:
+                    time.sleep(attempt * 3)
+                else:
+                    logger.error(f"[FAILED] Could not load page 1 after 3 attempts: {target_url}")
+                    return 0
 
         self.scroll_page()
         page1_html = self.page.content()
@@ -896,12 +912,21 @@ class AmazonMakeupCrawler:
             try:
                 logger.info(f"[{brand_name}] Loading Page {page_num}...")
                 if page_num > 1:
-                    try:
-                        self.page.goto(current_url, wait_until='domcontentloaded', timeout=60000)
-                        self.random_delay(2.0, 3.5)
-                        self.scroll_page()
-                    except PlaywrightTimeout:
-                        logger.error(f"[TIMEOUT] Failed to load Page {page_num} for {brand_name}")
+                    page_loaded = False
+                    for attempt in range(1, 4):
+                        try:
+                            self.page.goto(current_url, wait_until='domcontentloaded', timeout=60000)
+                            self.random_delay(2.0, 3.5)
+                            self.scroll_page()
+                            page_loaded = True
+                            break
+                        except (PlaywrightTimeout, PlaywrightError, Exception) as e:
+                            logger.warning(f"[NAV RETRY {attempt}/3] Error loading Page {page_num} for {brand_name}: {e}")
+                            if attempt < 3:
+                                time.sleep(attempt * 3)
+                            else:
+                                logger.error(f"[FAILED] Failed to load Page {page_num} for {brand_name}")
+                    if not page_loaded:
                         break
 
                 html = self.page.content()

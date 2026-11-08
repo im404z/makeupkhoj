@@ -280,12 +280,15 @@ def save_tatacliq_to_mongodb(
         db = client[db_name]
         collection = db[collection_name]
 
-        # Ensure indexes
-        collection.create_index("id", unique=True)
-        collection.create_index("product_id", unique=False)
-        collection.create_index("brand", unique=False)
-        collection.create_index("crawled_at", unique=False)
-        collection.create_index("price", unique=False)
+        # Ensure indexes safely
+        try:
+            existing_indexes = collection.index_information()
+            for field in ("id", "product_id", "brand", "crawled_at", "price"):
+                existing = [spec for spec in existing_indexes.values() if list(spec.get("key", [])) == [(field, 1)]]
+                if not existing:
+                    collection.create_index(field, unique=False)
+        except Exception:
+            pass
 
         # Pre-fetch existing docs to track price history & shifts
         row_ids = [str(r.get("id")) for r in rows if r.get("id")]

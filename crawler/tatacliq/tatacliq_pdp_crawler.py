@@ -772,17 +772,20 @@ class TataCliqPDPCrawler:
 
         try:
             validate_db_safety(DEFAULT_DB)
-            validate_db_safety(DEFAULT_DB)
-        client = pymongo.MongoClient(self.mongo_uri, serverSelectionTimeoutMS=10000)
+            client = pymongo.MongoClient(self.mongo_uri, serverSelectionTimeoutMS=10000)
             db = client[DEFAULT_DB]
             pdp_col = db[DEFAULT_TARGET_COLLECTION]
             prod_col = db[DEFAULT_SOURCE_COLLECTION]
 
-            # Ensure indexes
-            pdp_col.create_index("id", unique=True)
-            pdp_col.create_index("product_id", unique=False)
-            pdp_col.create_index("brand", unique=False)
-            pdp_col.create_index("crawled_at", unique=False)
+            # Ensure indexes safely
+            try:
+                existing_indexes = pdp_col.index_information()
+                for field in ("id", "product_id", "brand", "crawled_at"):
+                    existing = [spec for spec in existing_indexes.values() if list(spec.get("key", [])) == [(field, 1)]]
+                    if not existing:
+                        pdp_col.create_index(field, unique=False)
+            except Exception:
+                pass
 
             doc_id = pdp_doc["id"]
             now_iso = datetime.now(timezone.utc).isoformat()

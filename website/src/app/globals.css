@@ -1,51 +1,18 @@
 @import "tailwindcss";
-
-:root {
-  --background: #fffafa;
-  --foreground: #2d2328;
-  --primary: #e91e8c;
-  --primary-hover: #d2157a;
-  --primary-light: #fff0f6;
-  --secondary: #ff6b9d;
-  --accent: #fce7f3;
-  --border-light: #fbcfe8;
-}
-
-body {
-  background-color: var(--background);
-  color: var(--foreground);
-  font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
-  overflow-x: hidden;
-}
-
-/* Custom utility & beauty aesthetics */
-.bg-beauty-gradient {
-  background: linear-gradient(135deg, #fff0f6 0%, #fff7ed 50%, #fdf2f8 100%);
-}
-
-.text-gradient {
-  background: linear-gradient(90deg, #e91e8c 0%, #ff4d6d 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-}
-
-.shadow-soft-pink {
-  box-shadow: 0 10px 25px -5px rgba(233, 30, 140, 0.08), 0 8px 10px -6px rgba(233, 30, 140, 0.04);
-}
-
-.hover-lift {
-  transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.2s ease;
-}
-.hover-lift:hover {
-  transform: translateY(-3px);
-  box-shadow: 0 12px 20px -3px rgba(233, 30, 140, 0.12);
-}
-
-::selection { background: #fbcfe8; color: #831843; }
-a, button, input, select { -webkit-tap-highlight-color: transparent; }
-a:focus-visible, button:focus-visible, select:focus-visible { outline: 2px solid #db2777; outline-offset: 4px; }
-button { cursor: pointer; }
-h1, h2, h3 { text-wrap: balance; }
-@media (prefers-reduced-motion: reduce) {
-  *, *::before, *::after { transition: none !important; animation: none !important; }
-}
+@import "../styles/components.css";
+@import "../styles/marketplace.css";
+@import "../styles/typography.css";
+@import "../styles/comparison.css";
+@import "../styles/product-data.css";
+@theme inline { --color-pink-50:#fff1f3; --color-pink-100:#f9dce1; --color-pink-200:#f5b9c3; --color-pink-400:#f27486; --color-pink-500:#ee5366; --color-pink-600:#d93650; --color-pink-700:#b7243d; --color-pink-800:#941e33; }
+:root { --background:#f5f6f8; --foreground:#14243c; --primary:#ee5366; --border-light:#e1e5ed; }
+* { box-sizing:border-box; } body { margin:0; background:var(--background); color:var(--foreground); font-family:var(--font-nohemi),"Segoe UI",Arial,Helvetica,sans-serif; font-size:14px; -webkit-font-smoothing:antialiased; }
+h1,h2,h3 { text-wrap:balance; } button,input,select,textarea { font:inherit; } button,a,input,select { -webkit-tap-highlight-color:transparent; } button { cursor:pointer; } button:disabled { cursor:not-allowed; opacity:.5; }
+:focus-visible { outline:2px solid #874737; outline-offset:4px; } ::selection { background:#ded1bd; }
+[class*="rounded"] { border-radius:0!important; } [class*="shadow"] { box-shadow:none!important; } [class*="bg-gradient"],.bg-beauty-gradient { background-image:none!important; background-color:#f0ede7; }
+.text-gradient { color:#874737; background:none; -webkit-text-fill-color:currentColor; } .hover-lift { transition:border-color .2s; } .hover-lift:hover { transform:none; }
+.editorial { font-family:var(--font-nohemi),"Segoe UI",Arial,Helvetica,sans-serif; font-weight:var(--type-semibold); letter-spacing:-.035em; } .eyebrow { font-size:10px; text-transform:uppercase; letter-spacing:.18em; font-weight:600; }
+.store-logo { width:72px; height:26px; object-fit:contain; mix-blend-mode:multiply; }
+.admin-input { width:100%; border:1px solid #d9dad3; background:white; padding:11px 12px; min-height:43px; } .admin-button { display:inline-flex; align-items:center; justify-content:center; gap:8px; padding:11px 18px; background:#272e26; color:white; border:1px solid #272e26; font-size:12px; } .admin-secondary { background:transparent; color:#272e26; border-color:#d9dad3; }
+.admin-table { width:100%; border-collapse:collapse; text-align:left; font-size:12px; } .admin-table th { font-weight:500; text-transform:uppercase; letter-spacing:.1em; font-size:10px; color:#686b62; } .admin-table th,.admin-table td { padding:16px; border-bottom:1px solid #e2e3dc; } .admin-label { display:block; font-size:11px; margin-bottom:7px; color:#5e645b; }
+@media(prefers-reduced-motion:reduce) { *,*::before,*::after { animation:none!important; transition:none!important; } }

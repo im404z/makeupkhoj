@@ -1,0 +1,18 @@
+import assert from 'node:assert/strict';
+import {identity,compareIdentity,fingerprint,brandKey} from '../src/lib/matching/title-matcher.mjs';
+const item=(title,extra={})=>identity({title,brand:'Maybelline New York',...extra});
+assert.equal(brandKey('Maybelline New York'),brandKey('Maybelline'));
+assert.equal(item('Blush 0.01 L').quantity,item('Blush 10 ml').quantity);
+assert.equal(item('Powder 1000 mg').quantity,item('Powder 1 g').quantity);
+assert.notEqual(item('Blush 10 ml').quantity,item('Blush 10 g').quantity);
+assert(compareIdentity(item('Blush 10 ml'),item('Blush 20 ml')).conflicts.some(s=>s.startsWith('quantity')));
+assert(compareIdentity(item('Lipstick pack of 2'),item('Lipstick pack of 4')).conflicts.some(s=>s.startsWith('pack')));
+assert(compareIdentity(item('Blush',{shade:'Rose'}),item('Blush',{shade:'Coral'})).conflicts.some(s=>s.startsWith('shade')));
+assert(compareIdentity(item('Primer SPF 30'),item('Primer SPF 50')).conflicts.some(s=>s.startsWith('spf')));
+assert(compareIdentity(item('Blush 10 ml'),item('Blush')).missing.includes('quantity'));
+assert(compareIdentity(item('Foundation'),item('Concealer')).conflicts.some(s=>s.startsWith('type')));
+assert(compareIdentity(item('Fit Me Foundation 128'),item('Fit Me Foundation 220')).missing.includes('different numeric title tokens'));
+assert.equal(item('Sponsored Ad - Fit Me Foundation').title,'fit me foundation');
+assert.equal(fingerprint(item('Blush 10ml',{price:100})),fingerprint(item('Blush 10ml',{price:900})));
+assert(compareIdentity(item('Super Stay Matte Lipstick 5 ml'),item('Super Stay Matte Lipstick, 5ml')).score>80);
+console.log('Title matcher: 14 identity and variant checks passed.');

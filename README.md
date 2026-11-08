@@ -1,5 +1,17 @@
 # MakeupKhoj 💄
 
+## Website production server
+
+For individual marketplace listing and PDP refresh commands, price history, and admin time-window controls, see [Crawler refresh and price drops](CRAWLER-REFRESH.md).
+
+Start the website with the root `ecosystem.config.js` on port **7857**. See [PM2 setup and domain guide](PM2-SETUP.md) for installation, environment settings, startup, logs, and domain configuration.
+
+```sh
+npm --prefix website run build
+pm2 start ecosystem.config.js
+pm2 save
+```
+
 **MakeupKhoj** is an automated multi-marketplace product comparison and catalog intelligence platform for Indian cosmetics and beauty products.
 
 It crawls, indexes, and tracks real-time pricing, discounts, shade varieties, formulation specs, and verified buyer reviews across **Nykaa**, **Amazon India**, **Flipkart**, and **Myntra**.

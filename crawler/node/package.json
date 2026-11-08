@@ -1,0 +1,8 @@
+{
+  "name": "makeupkhoj-crawler-runner",
+  "private": true,
+  "type": "module",
+  "engines": { "node": ">=22" },
+  "scripts": { "start": "node src/cli.js", "test": "node --test" },
+  "dependencies": { "crawlee": "^3.18.0", "playwright": "^1.56.0", "mongodb": "^6.0.0", "dotenv": "^16.0.0", "cheerio": "^1.0.0" }
+}

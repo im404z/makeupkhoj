@@ -885,15 +885,19 @@ async def run_flipkart_pdp_crawler(
     tgt_coll = db[tgt_coll_name]
     sk_coll = db['products']
 
-    # Ensure indexes on target collection
-    tgt_coll.create_index("id", unique=True)
-    tgt_coll.create_index("brand", unique=False)
-    tgt_coll.create_index("category_path", unique=False)
-    tgt_coll.create_index("price", unique=False)
-    tgt_coll.create_index("price_last_checked", unique=False)
+    # Ensure indexes on target collection safely
+    try:
+        existing_indexes = tgt_coll.index_information()
+        for field in ("id", "brand", "category_path", "price", "price_last_checked"):
+            existing = [spec for spec in existing_indexes.values() if list(spec.get("key", [])) == [(field, 1)]]
+            if existing:
+                continue
+            tgt_coll.create_index(field, unique=False)
+    except Exception as e:
+        logger.warning(f"Could not verify or create index: {e}")
 
     total_in_src = src_coll.count_documents({})
-    logger.info(f"Connected to MongoDB. Source collection '{src_coll_name}' has {total_in_src} items | Target: '{tgt_coll_name}' | Master: 'scentkhoj.products'.")
+    logger.info(f"Connected to MongoDB. Source collection '{src_coll_name}' has {total_in_src} items | Target: '{tgt_coll_name}'.")
 
     # Build query according to mode
     is_all_mode = (mode == "all" or not skip_existing)
@@ -902,9 +906,9 @@ async def run_flipkart_pdp_crawler(
         cursor = src_coll.find({}, {"id": 1, "pid": 1, "url": 1, "name": 1, "title": 1, "brand": 1, "rating": 1, "rating_count": 1, "reviews_count": 1, "image": 1})
     else:
         logger.info(f"[CRAWL MODE: PENDING ONLY] Targeting unscraped Flipkart products.")
-        existing_ids = set(tgt_coll.find({"price": {"$exists": True, "$ne": None}}, {"id": 1}).distinct("id"))
-        logger.info(f"Found {len(existing_ids)} items already in '{tgt_coll_name}'.")
-        query = {"id": {"$nin": list(existing_ids)}} if existing_ids else {}
+        query = {"$or": [{"pdp_scraped": {"$ne": True}}, {"pdp_scraped": {"$exists": False}}]}
+        pending_count = src_coll.count_documents(query)
+        logger.info(f"Found {pending_count} pending items in '{src_coll_name}'.")
         cursor = src_coll.find(query, {"id": 1, "pid": 1, "url": 1, "name": 1, "title": 1, "brand": 1, "rating": 1, "rating_count": 1, "reviews_count": 1, "image": 1})
 
     if limit:
@@ -948,6 +952,8 @@ async def run_flipkart_pdp_crawler(
                 pdp_data["crawled_at"] = now_iso
                 pdp_data["updated_at"] = now_iso
                 pdp_data["price_last_checked"] = now_iso
+                pdp_data["pdp_scraped"] = True
+                pdp_data["pdp_scraped_at"] = now_iso
 
                 # Fallback from listing document if PDP had missing fields
                 if not pdp_data.get("rating") and prod.get("rating"):
@@ -1065,6 +1071,8 @@ async def run_flipkart_pdp_crawler(
                     src_coll.update_one(
                         {"id": prod_id},
                         {"$set": {
+                            "pdp_scraped": True,
+                            "pdp_scraped_at": now_iso,
                             "pdp_crawled": True,
                             "pdp_updated_at": now_iso,
                             "price_last_checked": now_iso,

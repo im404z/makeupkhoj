@@ -1,0 +1,37 @@
+{
+  "tool": "Built-in ImageGen",
+  "assets": [
+    {
+      "file": "public/assets/categories/editorial-lip-makeup.webp",
+      "prompt": "Create a square 1:1 premium editorial product photograph for a minimalist makeup website category tile: three uncapped lipstick bullets in muted nude, dusty rose and brick red, one clear nude gloss. A carefully composed still life viewed from a slightly elevated three-quarter angle on matte warm ivory limestone, subtle natural side lighting and gentle shadows. Muted ivory, sand, dusty clay and olive-grey palette. Products centered and fully within the frame with 12% breathing room around all sides. Photorealistic, tactile, sophisticated cosmetics campaign photography. Consistent softly textured beige backdrop. No text, no lettering, no labels, no brand logos, no humans, no hands, no stars, no sparkles, no decorative graphics, no frames. This is a photo asset, not a UI mockup."
+    },
+    {
+      "file": "public/assets/categories/editorial-face-makeup.webp",
+      "prompt": "Create a square 1:1 premium editorial product photograph for a minimalist makeup website category tile: two frosted glass foundation bottles, one open beige face powder compact and one small concealer wand. A carefully composed still life viewed from a slightly elevated three-quarter angle on matte warm ivory limestone, subtle natural side lighting and gentle shadows. Muted ivory, sand, dusty clay and olive-grey palette. Products centered and fully within the frame with 12% breathing room around all sides. Photorealistic, tactile, sophisticated cosmetics campaign photography. Consistent softly textured beige backdrop. No text, no lettering, no labels, no brand logos, no humans, no hands, no stars, no sparkles, no decorative graphics, no frames. This is a photo asset, not a UI mockup."
+    },
+    {
+      "file": "public/assets/categories/editorial-eye-makeup.webp",
+      "prompt": "Create a square 1:1 premium editorial product photograph for a minimalist makeup website category tile: a black mascara with brush, charcoal eyeliner pencil and a small four-pan neutral taupe eyeshadow palette. A carefully composed still life viewed from a slightly elevated three-quarter angle on matte warm ivory limestone, subtle natural side lighting and gentle shadows. Muted ivory, sand, dusty clay and olive-grey palette. Products centered and fully within the frame with 12% breathing room around all sides. Photorealistic, tactile, sophisticated cosmetics campaign photography. Consistent softly textured beige backdrop. No text, no lettering, no labels, no brand logos, no humans, no hands, no stars, no sparkles, no decorative graphics, no frames. This is a photo asset, not a UI mockup."
+    },
+    {
+      "file": "public/assets/categories/editorial-cheeks.webp",
+      "prompt": "Create a square 1:1 premium editorial product photograph for a minimalist makeup website category tile: a dusty rose blush compact, a muted peach cream blush pot and one soft angled blush brush. A carefully composed still life viewed from a slightly elevated three-quarter angle on matte warm ivory limestone, subtle natural side lighting and gentle shadows. Muted ivory, sand, dusty clay and olive-grey palette. Products centered and fully within the frame with 12% breathing room around all sides. Photorealistic, tactile, sophisticated cosmetics campaign photography. Consistent softly textured beige backdrop. No text, no lettering, no labels, no brand logos, no humans, no hands, no stars, no sparkles, no decorative graphics, no frames. This is a photo asset, not a UI mockup."
+    },
+    {
+      "file": "public/assets/categories/editorial-makeup-kits.webp",
+      "prompt": "Create a square 1:1 premium editorial product photograph for a minimalist makeup website category tile: a neatly arranged small complete makeup set with foundation, compact, nude lipstick, mascara and two brushes beside an open warm ivory rectangular makeup case. A carefully composed still life viewed from a slightly elevated three-quarter angle on matte warm ivory limestone, subtle natural side lighting and gentle shadows. Muted ivory, sand, dusty clay and olive-grey palette. Products centered and fully within the frame with 12% breathing room around all sides. Photorealistic, tactile, sophisticated cosmetics campaign photography. Consistent softly textured beige backdrop. No text, no lettering, no labels, no brand logos, no humans, no hands, no stars, no sparkles, no decorative graphics, no frames. This is a photo asset, not a UI mockup."
+    },
+    {
+      "file": "public/assets/categories/editorial-tools-and-brushes.webp",
+      "prompt": "Create a square 1:1 premium editorial product photograph for a minimalist makeup website category tile: five professional makeup brushes in dark olive and natural wood handles laid in a careful parallel arrangement, one beige makeup sponge. A carefully composed still life viewed from a slightly elevated three-quarter angle on matte warm ivory limestone, subtle natural side lighting and gentle shadows. Muted ivory, sand, dusty clay and olive-grey palette. Products centered and fully within the frame with 12% breathing room around all sides. Photorealistic, tactile, sophisticated cosmetics campaign photography. Consistent softly textured beige backdrop. No text, no lettering, no labels, no brand logos, no humans, no hands, no stars, no sparkles, no decorative graphics, no frames. This is a photo asset, not a UI mockup."
+    },
+    {
+      "file": "public/assets/categories/editorial-nails.webp",
+      "prompt": "Create a square 1:1 premium editorial product photograph for a minimalist makeup website category tile: three elegant unbranded glass nail-polish bottles in dusty rose, taupe and warm nude, one bottle open showing its brush, absolutely no lipstick. A carefully composed still life viewed from a slightly elevated three-quarter angle on matte warm ivory limestone, subtle natural side lighting and gentle shadows. Muted ivory, sand, dusty clay and olive-grey palette. Products centered and fully within the frame with 12% breathing room around all sides. Photorealistic, tactile, sophisticated cosmetics campaign photography. Consistent softly textured beige backdrop. No text, no lettering, no labels, no brand logos, no humans, no hands, no stars, no sparkles, no decorative graphics, no frames. This is a photo asset, not a UI mockup."
+    },
+    {
+      "file": "public/assets/categories/editorial-makeup-remover.webp",
+      "prompt": "Create a square 1:1 premium editorial product photograph for a minimalist makeup website category tile: an unbranded frosted glass micellar-water bottle, an open cleansing-balm jar and two soft reusable cotton pads. A carefully composed still life viewed from a slightly elevated three-quarter angle on matte warm ivory limestone, subtle natural side lighting and gentle shadows. Muted ivory, sand, dusty clay and olive-grey palette. Products centered and fully within the frame with 12% breathing room around all sides. Photorealistic, tactile, sophisticated cosmetics campaign photography. Consistent softly textured beige backdrop. No text, no lettering, no labels, no brand logos, no humans, no hands, no stars, no sparkles, no decorative graphics, no frames. This is a photo asset, not a UI mockup."
+    }
+  ]
+}

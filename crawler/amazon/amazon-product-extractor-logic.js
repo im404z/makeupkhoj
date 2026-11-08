@@ -7,7 +7,7 @@ const rawData = await page.evaluate(({ targetAsin, baseUrl }) => {
 
   // 1. Title
   const titleEl = document.querySelector('#productTitle, #title, h1.a-size-large');
-  const title = titleEl ? clean(titleEl.innerText) : '';
+  const title = titleEl ? clean(titleEl.innerText).replace(/^(?:sponsored\s*ad\s*[-–—:]*\s*|sponsored\s*[-–—:]*\s*|deal\s+of\s+the\s+day\s*[-–—:]*\s*|buy\s+)/i, '').trim() : '';
 
   // 2. Brand Detection
   let brandName = '';

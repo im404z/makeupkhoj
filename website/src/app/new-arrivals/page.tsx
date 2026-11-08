@@ -1,3 +1,8 @@
+import {prepareListingRequest} from '@/lib/seo/listing-request';
+import {catalogUrl} from '@/lib/utils/catalog-urls';
+import {notFound} from 'next/navigation';
+import { ItemListJsonLd } from '@/components/seo/JsonLd';
+import { parseCatalogFilters,CATALOG_PAGE_SIZE } from '@/lib/utils/catalog-query';
 import React from 'react';
 import type { Metadata } from 'next';
 import ProductGrid from '@/components/product/ProductGrid';
@@ -6,36 +11,35 @@ import SortBar from '@/components/product/SortBar';
 import Pagination from '@/components/ui/Pagination';
 import Breadcrumb from '@/components/layout/Breadcrumb';
 import { queryProducts } from '@/lib/utils/products';
-import { constructMetadata } from '@/lib/utils/seo';
+import { constructMetadata, collectionMetadata } from '@/lib/utils/seo';
 
-export const metadata: Metadata = constructMetadata({
-  title: 'New Makeup Arrivals - Latest Cosmetic Launches',
-  description: 'Discover the latest makeup launches in India. Shop newly added lipsticks, eyeshadow palettes, foundations and skincare-infused makeup.',
-  canonical: '/new-arrivals',
-});
+export async function generateMetadata({searchParams}:{searchParams:Promise<Record<string,string|string[]|undefined>>}):Promise<Metadata>{return collectionMetadata("New makeup listings","Explore the latest makeup added to our catalog. Discover lip, face and eye products and compare available marketplace prices.","/new-arrivals",await searchParams);}
 
 interface NewArrivalsPageProps {
   searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
 }
 
 export default async function NewArrivalsPage({ searchParams }: NewArrivalsPageProps) {
-  const sp = await searchParams;
+  const sp = prepareListingRequest('/new-arrivals',await searchParams);
   const page = Number(sp.page) || 1;
   const sort = typeof sp.sort === 'string' ? sp.sort : 'newest';
 
   const result = await queryProducts({
+    ...parseCatalogFilters(sp),
     page,
-    limit: 24,
+    limit: CATALOG_PAGE_SIZE,
     sort,
   });
 
+  if(result.page>result.totalPages)notFound();
   return (
     <div>
+      <ItemListJsonLd name="New makeup listings" description="Explore makeup listings and compare marketplace prices." products={result.products} total={result.total} page={result.page} url={catalogUrl('/new-arrivals',sp)}/>
       <Breadcrumb items={[{ label: 'New Arrivals' }]} />
 
       <div className="mb-6">
         <span className="text-[11px] font-bold text-pink-600 uppercase tracking-wider bg-pink-50 px-2.5 py-1 rounded-full border border-pink-100 inline-block mb-2">
-          ✨ Fresh Beauty Launches
+          Fresh Beauty Launches
         </span>
         <h1 className="text-2xl sm:text-3xl font-black text-neutral-900 tracking-tight">
           New Makeup Arrivals

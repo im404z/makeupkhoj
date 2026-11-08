@@ -1,0 +1,35 @@
+# MakeupKhoj - India's Real-Time Cosmetics Price Discovery & Comparison
+
+> MakeupKhoj is an open, independent price comparison platform indexing authentic cosmetics across India's leading retailers: Nykaa, Amazon India, Flipkart, and Myntra.
+
+## Mission
+To help shoppers find genuine cosmetics, track real discounts, compare shades, and discover the lowest recorded marketplace price without browsing multiple apps.
+
+## Primary Entities & Categorization
+- **Lip Makeup**: Lipsticks, Liquid Lipsticks, Lip Glosses, Lip Liners, Lip Balms, Lip Tints.
+- **Face Makeup**: Foundations, Concealers, Primers, Compact Powders, BB & CC Creams, Setting Sprays, Loose Powders.
+- **Eye Makeup**: Mascaras, Eyeliners, Kajal, Eyeshadow Palettes, Eyebrow Pencils, False Eyelashes.
+- **Cheeks**: Blush, Highlighters, Bronzers, Contours, Face Palettes.
+- **Nails & Tools**: Nail Polish, Makeup Brushes, Sponges, Tools, Makeup Kits, Makeup Removers.
+
+## Marketplaces Indexed
+- **Nykaa**: India's specialized beauty destination.
+- **Amazon India**: Verified brand stores and official beauty distributors.
+- **Flipkart**: Authorized cosmetics sellers and brand partners.
+- **Myntra**: Curated beauty and personal care flagships.
+
+## Key URL Paths
+- `/`: Homepage with daily price edits, trending cosmetics, and budget curations under ₹500.
+- `/categories`: Full taxonomy of cosmetics categories and subcategories.
+- `/brands`: Directory of verified cosmetic brands (Lakmé, Maybelline, L'Oréal Paris, Swiss Beauty, MAC, etc.).
+- `/compare-products`: Master product comparison catalog with multi-store offers grouped together.
+- `/deals`: Live discount feed of genuine items with at least 15% discount.
+- `/price-drops`: Verified price drop alerts (20%+ discount).
+- `/new-arrivals`: Recently indexed products and beauty launches.
+- `/product/[slug]`: Master comparison detail page with store-by-store offers, price history, customer reviews, and shade specifications.
+
+## Data Freshness & Methodology
+- Prices are recorded directly from official public listings.
+- Only identical variants (matching brand, formulation, shade code, and volume/gram weight) are grouped for price comparison.
+- Unbiased customer reviews and ratings are segregated by marketplace for transparency.
+

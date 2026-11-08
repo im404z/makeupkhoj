@@ -187,7 +187,7 @@ def run_myntra_listing(max_pages=0, headful=False):
 
 
 def run_myntra_pdp(limit=0, headful=False):
-    cmd = [sys.executable, os.path.join(SCRIPT_DIR, 'myntra', 'myntra_pdp_crawler.py'), '--non-interactive']
+    cmd = [sys.executable, os.path.join(SCRIPT_DIR, 'myntra', 'myntra_pdp_crawler.py'), '--pending', '--non-interactive']
     if limit > 0:
         cmd.extend(['--limit', str(limit)])
     return execute_subcommand(cmd, "Myntra Makeup PDP Spec Extractor")

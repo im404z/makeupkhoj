@@ -34,7 +34,7 @@ export default function PrivacyPage() {
 
         <h2 className="text-lg font-bold text-neutral-900 pt-2">3. Outbound Retailer Links</h2>
         <p>
-          When you click on a store link (e.g., Nykaa, Amazon, Flipkart, Myntra), you leave MakeupKhoj and are redirected to the merchant&apos;s site. Please consult the privacy policy of each retailer for their specific data handling practices.
+          When outbound click tracking is enabled, we store aggregate daily counts by product, marketplace and link method. These counts do not include visitor IP addresses, identities or tracking cookies. Some store links are affiliate links, which may earn us a commission. When you click on a store link (e.g., Nykaa, Amazon, Flipkart, Myntra), you leave MakeupKhoj and are redirected to the merchant&apos;s site. Please consult the privacy policy of each retailer for their specific data handling practices.
         </p>
 
         <h2 className="text-lg font-bold text-neutral-900 pt-2">4. Contact</h2>

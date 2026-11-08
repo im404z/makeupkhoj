@@ -1,3 +1,4 @@
+import { JsonLd } from '@/components/seo/JsonLd';
 import React from 'react';
 import type { Metadata } from 'next';
 import Link from 'next/link';
@@ -6,9 +7,9 @@ import { getAllBrandsList } from '@/lib/utils/products';
 import { constructMetadata } from '@/lib/utils/seo';
 
 export const metadata: Metadata = constructMetadata({
-  title: 'All Makeup Brands - 100% Genuine Cosmetics Directory',
+  title: 'Makeup and cosmetics brand directory',
   description:
-    'Discover every top cosmetics brand on MakeupKhoj: Maybelline, Lakmé, Charlotte Tilbury, MAC, L\'Oréal, Swiss Beauty and 1,000+ more.',
+    'Browse makeup brands indexed across Nykaa, Amazon, Flipkart and Myntra. Explore each brand catalog and compare available product prices.',
   canonical: '/brands',
 });
 
@@ -30,8 +31,10 @@ export default async function AllBrandsPage() {
     return a.localeCompare(b);
   });
 
+  const base=process.env.NEXT_PUBLIC_SITE_URL||'https://makeupkhoj.com';
   return (
     <div>
+      <JsonLd data={{'@context':'https://schema.org','@type':'CollectionPage',name:'Makeup brands',url:base+'/brands',mainEntity:{'@type':'ItemList',itemListElement:brands.map((b,i)=>({'@type':'ListItem',position:i+1,item:{'@type':'Brand',name:b.name,url:base+'/brands/'+b.slug}}))}}}/>
       <Breadcrumb items={[{ label: 'All Brands' }]} />
 
       <div className="mb-8">

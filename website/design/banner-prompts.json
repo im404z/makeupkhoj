@@ -1,0 +1,17 @@
+{
+  "tool": "Built-in image_gen",
+  "assets": [
+    {
+      "file": "public/assets/banners/editorial-hero.webp",
+      "prompt": "Create a premium editorial beauty still-life photograph for a minimalist Indian makeup price comparison website. Wide landscape 3:2 composition. Warm ivory limestone surface and pale beige plaster background, subtle olive-grey shadows, side-lit natural daylight. Carefully arranged unbranded cream foundation bottles, a taupe compact, a muted terracotta lipstick, one slim makeup brush. Objects concentrated in the right two thirds, calm negative space in upper left. Restrained palette ivory, sand, stone, dusty clay and dark olive. Realistic product photography, sophisticated magazine art direction, quiet and tactile, no text, no lettering, no logo, no stars, no sparkle decorations, no ribbons, no graphic frames. Flat rectangular photograph, no UI mockup."
+    },
+    {
+      "file": "public/assets/banners/editorial-lips.webp",
+      "prompt": "Premium editorial product photograph for a minimalist lip makeup category banner, wide landscape 3:2. A small sculptural arrangement of three unbranded lipsticks with muted brick red, dusty rose and warm nude lipstick bullets, one clear nude lip gloss, on a matte dusty clay rose rectangular plinth. Warm ivory background, soft directional daylight and natural shadows. Luxury magazine still life, realistic materials, lots of breathing room, elegant subdued colors matching ivory, olive and terracotta website. No text, no letters, no logos, no stars, no sparkles, no humans, no UI."
+    },
+    {
+      "file": "public/assets/banners/editorial-eyes.webp",
+      "prompt": "Premium editorial product photograph for a minimalist eye makeup category banner, wide landscape 3:2. Unbranded black mascara tube with exposed fine brush, slim charcoal eyeliner pencil, a small neutral taupe eyeshadow palette and one angled brush, arranged on pale olive-grey stone. Warm ivory backdrop, natural side light, crisp soft shadows. Muted olive, charcoal, stone and cream palette, luxury magazine still-life photography, realistic tactile materials, ample negative space, no text, no logo, no stars, no sparkles, no people, no UI."
+    }
+  ]
+}

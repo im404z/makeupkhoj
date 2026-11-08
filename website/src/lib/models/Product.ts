@@ -111,7 +111,7 @@ export function getMyntraModel() { return getProductModel('myntra_makeupkhoj'); 
 export function getTatacliqModel() { return getProductModel('tatacliq_makeupkhoj'); }
 
 export function getAllModels() {
-  return Object.values(MARKETPLACE_COLLECTIONS).map(col => getProductModel(col));
+  return ['nykaa', 'amazon', 'flipkart', 'myntra'].map(store => getProductModel(MARKETPLACE_COLLECTIONS[store as keyof typeof MARKETPLACE_COLLECTIONS]));
 }
 
 export function getModelByMarketplace(marketplace: string) {

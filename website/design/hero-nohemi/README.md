@@ -1,0 +1,1 @@
+The banner now uses `public/assets/banners/marketplace-products.webp`, generated with the built-in image tool. It contains only makeup products, with no people, faces, hands or characters. The exact prompt is in `product-only-prompt.txt`. The older portrait asset is retained but is not referenced by the homepage or catalog banner.

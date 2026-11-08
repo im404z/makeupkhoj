@@ -13,6 +13,8 @@ export function formatDiscount(pct: number | undefined | null): string {
 export function slugify(text: string): string {
   return text
     .toString()
+    .normalize('NFKD')
+    .replace(/[\u0300-\u036f]/g, '')
     .toLowerCase()
     .trim()
     .replace(/\s+/g, '-')
@@ -30,7 +32,7 @@ export function createProductSlug(product: {
 }): string {
   const brandPart = product.brand ? slugify(product.brand) : '';
   const namePart = slugify(product.name);
-  const idPart = (product.id || String(product._id || '')).slice(-8);
+  const idPart = (product.id || String(product._id || '')).slice(-8).replace(/[^a-zA-Z0-9]/g, '');
   
   if (brandPart && !namePart.startsWith(brandPart)) {
     return `${brandPart}-${namePart}-${idPart}`;
@@ -55,3 +57,9 @@ export function calculateSavings(mrp?: number, price?: number): number {
   return Math.round(mrp - price);
 }
 
+export function formatRating(value: unknown): string | null {
+  if (typeof value !== 'number' && typeof value !== 'string') return null;
+  const match = String(value).replace(/,/g, '').match(/\d+(?:\.\d+)?/);
+  const rating = match ? Number(match[0]) : NaN;
+  return Number.isFinite(rating) && rating > 0 && rating <= 5 ? rating.toFixed(1) : null;
+}

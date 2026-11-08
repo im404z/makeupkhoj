@@ -1,0 +1,216 @@
+[
+  {
+    "id": "maybelline",
+    "name": "Maybelline New York",
+    "website": "https://www.maybelline.co.in/",
+    "status": "downloaded",
+    "asset": "/assets/brands/maybelline.png",
+    "sourceUrl": "https://www.maybelline.co.in/-/media/project/loreal/brand-sites/mny/apac/in/logo-and-favicon/logos-logo-small.svg?rev=14d3a164846d424ba0ed2ba6f3249aa7",
+    "sourceAlt": "Maybelline New York | Go to Home Page",
+    "width": 155,
+    "height": 25,
+    "dark": true
+  },
+  {
+    "id": "loreal",
+    "name": "L’Oréal Paris",
+    "website": "https://www.lorealparis.co.in/",
+    "status": "downloaded",
+    "asset": "/assets/brands/loreal.png",
+    "sourceUrl": "https://www.lorealparis.co.in/-/media/project/loreal/brand-sites/oap/shared/baseline/navigationext/loreal-paris-black-logo.svg",
+    "dark": false,
+    "sourcePage": "https://www.lorealparis.co.in/",
+    "sourceAlt": "L’Oréal Paris logo"
+  },
+  {
+    "id": "lakme",
+    "name": "Lakmé",
+    "website": "https://www.lakmeindia.com/",
+    "status": "downloaded",
+    "asset": "/assets/brands/lakme.png",
+    "sourceUrl": "https://www.lakmeindia.com/cdn/shop/files/Logo_25e91fba-34be-4ca3-9719-385bb7685d60_155x.png?v=1738136097",
+    "sourceAlt": "Lakmē",
+    "width": 155,
+    "height": 66,
+    "dark": true
+  },
+  {
+    "id": "nyx",
+    "name": "NYX Professional Makeup",
+    "website": "https://www.nyxcosmetics.com/",
+    "status": "unavailable"
+  },
+  {
+    "id": "elf",
+    "name": "e.l.f. Cosmetics",
+    "website": "https://www.elfcosmetics.com/",
+    "status": "downloaded",
+    "asset": "/assets/brands/elf.png",
+    "sourceUrl": "https://cdn.shopify.com/oxygen-v2/52705/112854/231813/4981537/assets/logo-yTU_Uur5.svg?width=28&height=28&crop=center",
+    "sourceAlt": "e.l.f. Cosmetics",
+    "width": 48,
+    "height": 48,
+    "dark": true
+  },
+  {
+    "id": "swiss-beauty",
+    "name": "Swiss Beauty",
+    "website": "https://swissbeauty.in/",
+    "status": "downloaded",
+    "asset": "/assets/brands/swiss-beauty.png",
+    "sourceUrl": "https://cdn.shopify.com/s/files/1/0595/6691/5779/files/image_2_280x.png",
+    "dark": true
+  },
+  {
+    "id": "mac",
+    "name": "M.A.C",
+    "website": "https://www.maccosmetics.in/",
+    "status": "downloaded",
+    "asset": "/assets/brands/mac.png",
+    "sourceUrl": "https://www.maccosmetics.in/mc_logo.png",
+    "sourceAlt": "",
+    "width": 5463,
+    "height": 593,
+    "dark": false
+  },
+  {
+    "id": "sugar",
+    "name": "SUGAR Cosmetics",
+    "website": "https://www.sugarcosmetics.com/",
+    "status": "downloaded",
+    "asset": "/assets/brands/sugar.png",
+    "sourceUrl": "https://www.sugarcosmetics.com/cdn/shop/files/Logo_2-min-ezgif.com-optimize.gif?v=1793862992&width=800",
+    "sourceAlt": "",
+    "width": 800,
+    "height": 281,
+    "dark": false
+  },
+  {
+    "id": "charlotte-tilbury",
+    "name": "Charlotte Tilbury",
+    "website": "https://www.charlottetilbury.com/",
+    "status": "downloaded",
+    "asset": "/assets/brands/charlotte-tilbury.png",
+    "sourceUrl": "https://thumb.wikimedia.org/wikipedia/commons/thumb/3/39/CharlotteTilbury_logo.svg/960px-CharlotteTilbury_logo.svg.png?utm_source=commons.wikimedia.org&utm_campaign=index&utm_content=thumbnail&_=20211202181318",
+    "sourcePage": "https://commons.wikimedia.org/wiki/File:CharlotteTilbury_logo.svg",
+    "sourceAlt": "File:CharlotteTilbury logo.svg",
+    "dark": false,
+    "license": "CC BY-SA 4.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
+    "author": "Charlotte Tilbury",
+    "modifications": "Rasterized and resized for web presentation"
+  },
+  {
+    "id": "makeup-revolution",
+    "name": "Makeup Revolution",
+    "website": "https://www.revolutionbeauty.com/",
+    "status": "downloaded",
+    "asset": "/assets/brands/makeup-revolution.png",
+    "sourceUrl": "https://www.revolutionbeauty.com/cdn/shop/files/REVOLUTION-BEAUTY-LONDON_APPROVED-2026_WHITE.png?v=1772195037&width=160",
+    "sourceAlt": "",
+    "width": 160,
+    "height": 28,
+    "dark": true
+  },
+  {
+    "id": "insight",
+    "name": "Insight Cosmetics",
+    "website": "https://insightcosmetics.in/",
+    "status": "downloaded",
+    "asset": "/assets/brands/insight.png",
+    "sourceUrl": "https://insightcosmetics.in/cdn/shop/files/insight-logo.svg?v=1707911254&width=320",
+    "sourceAlt": "",
+    "width": 122,
+    "height": 45,
+    "dark": false
+  },
+  {
+    "id": "pac",
+    "name": "PAC",
+    "website": "https://www.paccosmetics.com/",
+    "status": "downloaded",
+    "asset": "/assets/brands/pac.png",
+    "sourceUrl": "https://www.paccosmetics.com/cdn/shop/files/LOGO_White.png?v=1702369204&width=100",
+    "sourceAlt": "",
+    "width": 100,
+    "height": 100,
+    "dark": true
+  },
+  {
+    "id": "nars",
+    "name": "NARS",
+    "website": "https://www.narscosmetics.com/",
+    "status": "downloaded",
+    "asset": "/assets/brands/nars.png",
+    "sourceUrl": "https://www.narscosmetics.com/on/demandware.static/Sites-nars_us-Site/-/default/dw4cbd08ff/images/nars-logo-white.png",
+    "dark": true
+  },
+  {
+    "id": "forever52",
+    "name": "Daily Life Forever52",
+    "website": "https://www.forever52.in/",
+    "status": "downloaded",
+    "asset": "/assets/brands/forever52.png",
+    "sourceUrl": "https://www.forever52.in/cdn/shop/files/final_static_logo-03_a43308e6-b295-4861-9df5-a82723c6d6cf.png?height=50&v=1772193221",
+    "sourceAlt": "Daily Life Forever52",
+    "width": 210,
+    "height": 50,
+    "dark": false
+  },
+  {
+    "id": "benefit",
+    "name": "Benefit Cosmetics",
+    "website": "https://www.benefitcosmetics.com/",
+    "status": "downloaded",
+    "asset": "/assets/brands/benefit.png",
+    "sourceUrl": "https://www.benefitcosmetics.com/on/demandware.static/Sites-benco-us-Site/-/default/dwf2345cc4/images/logo-small.svg",
+    "sourcePage": "https://www.benefitcosmetics.com/",
+    "sourceAlt": "Benefit Cosmetics logo",
+    "dark": false
+  },
+  {
+    "id": "mars",
+    "name": "MARS",
+    "website": "https://marscosmetics.in/",
+    "status": "downloaded",
+    "asset": "/assets/brands/mars.png",
+    "sourceUrl": "https://marscosmetics.in/cdn/shop/files/LOGO_WHITE-_MARS_53df8062-5f84-48be-8ba2-040963552e1e_120x.png?v=1717479443",
+    "sourceAlt": "MARS Cosmetics ",
+    "width": 120,
+    "height": 31,
+    "dark": true
+  },
+  {
+    "id": "kay-beauty",
+    "name": "Kay Beauty",
+    "website": "https://www.kaybeauty.com/",
+    "status": "downloaded",
+    "asset": "/assets/brands/kay-beauty.png",
+    "sourceUrl": "https://www.kaybeauty.com/cdn/shop/files/kay-logo_1_a6dc86b3-a1c3-4186-a113-639c5e0ef34a_145x.png?v=1748601002",
+    "dark": true
+  },
+  {
+    "id": "dior",
+    "name": "Dior",
+    "website": "https://www.dior.com/en_in/beauty",
+    "status": "unavailable"
+  },
+  {
+    "id": "colorbar",
+    "name": "Colorbar",
+    "website": "https://www.colorbarcosmetics.com/",
+    "status": "downloaded",
+    "asset": "/assets/brands/colorbar.png",
+    "sourceUrl": "https://colorbarcosmetics.com/cdn/shop/files/logo-black.png?v=1757413225&width=440",
+    "sourceAlt": "COLORBAR COSMETICS PRIVATE LIMITED",
+    "width": 440,
+    "height": 61,
+    "dark": false
+  },
+  {
+    "id": "blue-heaven",
+    "name": "Blue Heaven",
+    "website": "https://www.blueheavencosmetics.in/",
+    "status": "unavailable"
+  }
+]

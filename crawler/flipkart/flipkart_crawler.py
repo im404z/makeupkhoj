@@ -306,15 +306,15 @@ class MongoFlipkartManager:
             self.db = self.client[self.db_name]
             self.collection = self.db[self.collection_name]
 
-            # Setup indexes on unique product identifier, categories, and filter fields
-            self.collection.create_index("id", unique=True)
-            self.collection.create_index("pid", unique=False)
-            self.collection.create_index("brand", unique=False)
-            self.collection.create_index("category_path", unique=False)
-            self.collection.create_index("sub_category", unique=False)
-            self.collection.create_index("sub_sub_category", unique=False)
-            self.collection.create_index("price", unique=False)
-            self.collection.create_index("crawled_at", unique=False)
+            # Setup indexes on unique product identifier, categories, and filter fields safely
+            try:
+                existing_indexes = self.collection.index_information()
+                for field in ("id", "pid", "brand", "category_path", "sub_category", "sub_sub_category", "price", "crawled_at"):
+                    existing = [spec for spec in existing_indexes.values() if list(spec.get("key", [])) == [(field, 1)]]
+                    if not existing:
+                        self.collection.create_index(field, unique=False)
+            except Exception as idx_err:
+                logger.warning(f"[MONGO INDEX WARNING] {idx_err}")
             logger.info(f"[MONGO OK] Connected! Index verified for '{self.db_name}.{self.collection_name}'.")
         except Exception as e:
             logger.error(f"[MONGO ERROR] Failed to connect to MongoDB: {e}")

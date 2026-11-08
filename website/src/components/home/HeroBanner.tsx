@@ -1,16 +1,9 @@
-import Image from 'next/image';
 import Link from 'next/link';
-import { ArrowRight } from 'lucide-react';
-
-export default function HeroBanner() {
-  return (
-    <section className="hero-banner mb-7 overflow-hidden rounded-3xl border border-pink-100 bg-[#fce4ec]">
-      <h1 className="sr-only">Find, compare and shop your favourite makeup</h1>
-      <Image src="/assets/banners/hero-banner.jpg" alt="Find, compare and shop your favourite makeup across Myntra, Nykaa, Amazon and Flipkart" width={1728} height={768} priority sizes="(max-width: 1280px) 100vw, 1216px" className="h-auto w-full" />
-      <div className="flex flex-wrap items-center justify-between gap-4 bg-white/65 px-5 py-4 sm:px-8">
-        <p className="text-sm text-neutral-600">Your next beauty favourite. A better price.</p>
-        <Link href="/products" className="inline-flex items-center gap-2 rounded-full bg-pink-600 px-6 py-3 text-sm font-semibold text-white transition-colors hover:bg-pink-700">Explore Makeup <ArrowRight size={16} /></Link>
-      </div>
-    </section>
-  );
-}
+import Image from 'next/image';
+import {ArrowRight,ArrowUpRight,ArrowLeftRight} from 'lucide-react';
+import StoreStrip from '@/components/ui/StoreStrip';
+export default function HeroBanner(){return <section className="discovery-hero" aria-label="Discover and compare makeup">
+ <div className="discovery-hero__main"><div className="discovery-hero__copy"><p className="discovery-hero__eyebrow"><i/>THE BEAUTY PRICE EDIT</p><h1>Beauty you love.<br/><em>Better prices.</em><span className="sr-only"> - India's Makeup Price Comparison</span></h1><p className="discovery-hero__description">Your favourite makeup, compared across four stores. Discover your next beauty essential and choose the offer that works for you.</p><div className="discovery-hero__actions"><Link href="/products" className="action-button">Find your favourites<ArrowRight size={16}/></Link><Link href="/deals" className="discovery-hero__secondary">Explore deals<ArrowUpRight size={15}/></Link></div><div className="discovery-hero__note"><ArrowLeftRight size={16}/><p>One search. More ways to compare.</p></div></div>
+ <div className="discovery-hero__visual"><Image src="/assets/banners/marketplace-products.webp" alt="A studio arrangement of foundation, lipsticks, blush, setting spray and makeup brushes" fill priority sizes="(max-width:700px) 100vw,55vw" className="discovery-hero__photo"/><div className="discovery-hero__image-label"><p>FIND YOUR EVERYDAY FAVOURITES</p><Link href="/categories">Discover makeup<ArrowUpRight size={15}/></Link></div><Link href="/products?maxPrice=500" className="discovery-hero__budget"><p>THE BUDGET EDIT</p><strong>Beauty under ₹500</strong><ArrowUpRight size={17}/></Link></div></div>
+ <div className="discovery-hero__stores"><div className="discovery-hero__stores-copy"><p>YOUR STORES. ONE PLACE.</p><h2>Compare before you choose.</h2></div><StoreStrip/></div>
+ </section>;}

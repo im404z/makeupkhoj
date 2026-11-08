@@ -1,5 +1,6 @@
 import React from 'react';
 import type { Product } from '@/types/product';
+import { formatRating } from '@/lib/utils/format';
 
 const BASE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://makeupkhoj.com';
 
@@ -11,7 +12,7 @@ export function JsonLd({ data }: JsonLdProps) {
   return (
     <script
       type="application/ld+json"
-      dangerouslySetInnerHTML={{ __html: JSON.stringify(data) }}
+      dangerouslySetInnerHTML={{ __html: JSON.stringify(data).replace(/</g, '\\u003c') }}
     />
   );
 }
@@ -21,18 +22,15 @@ export function OrganizationJsonLd() {
   const data = {
     '@context': 'https://schema.org',
     '@type': 'Organization',
+    '@id': `${BASE_URL}/#organization`,
     name: 'MakeupKhoj',
     url: BASE_URL,
-    logo: `${BASE_URL}/assets/icons/trusted-stores-card.png`,
-    description: 'India\'s leading makeup price comparison and beauty discovery platform. Compare prices across Nykaa, Amazon, Flipkart, Myntra, and Tata CLiQ.',
-    sameAs: [
-      'https://www.instagram.com/makeupkhoj',
-      'https://twitter.com/makeupkhoj',
-    ],
+    logo: `${BASE_URL}/branding/makeupkhoj-logo.png`,
+    description: 'Makeup discovery and marketplace price comparison across Nykaa, Amazon, Flipkart and Myntra.',
     contactPoint: {
       '@type': 'ContactPoint',
       contactType: 'Customer Support',
-      email: 'support@makeupkhoj.com',
+      url: `${BASE_URL}/contact`,
     },
   };
   return <JsonLd data={data} />;
@@ -43,6 +41,8 @@ export function WebSiteJsonLd() {
   const data = {
     '@context': 'https://schema.org',
     '@type': 'WebSite',
+    '@id': `${BASE_URL}/#website`,
+    publisher: { '@id': `${BASE_URL}/#organization` },
     name: 'MakeupKhoj',
     url: BASE_URL,
     potentialAction: {
@@ -66,7 +66,7 @@ export function BreadcrumbJsonLd({ items }: { items: Array<{ name: string; url: 
       '@type': 'ListItem',
       position: index + 1,
       name: item.name,
-      item: item.url.startsWith('http') ? item.url : `${BASE_URL}${item.url}`,
+      ...(item.url !== '#' ? { item: item.url.startsWith('http') ? item.url : `${BASE_URL}${item.url}` } : {}),
     })),
   };
   return <JsonLd data={data} />;
@@ -86,29 +86,47 @@ export function ProductJsonLd({ product }: { product: Product }) {
       name: product.brand,
     },
     sku: product.sku || product.id,
-    offers: {
+    ...(Number(product.price) > 0 ? { offers: {
       '@type': 'Offer',
       priceCurrency: product.currency || 'INR',
-      price: product.price,
-      priceValidUntil: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString().split('T')[0],
+      price: Number(product.price),
       itemCondition: 'https://schema.org/NewCondition',
-      availability: product.in_stock !== false
-        ? 'https://schema.org/InStock'
-        : 'https://schema.org/OutOfStock',
+      ...(typeof product.in_stock === 'boolean' ? { availability: product.in_stock ? 'https://schema.org/InStock' : 'https://schema.org/OutOfStock' } : {}),
       url: product.url,
       seller: {
         '@type': 'Organization',
-        name: product.marketplace_name || 'Nykaa',
+        name: product.marketplace_name || product.marketplace,
       },
-    },
+      hasMerchantReturnPolicy: {
+        '@type': 'MerchantReturnPolicy',
+        applicableCountry: 'IN',
+        returnPolicyCategory: 'https://schema.org/MerchantReturnFiniteReturnWindow',
+        merchantReturnDays: 15,
+        returnMethod: 'https://schema.org/ReturnByMail',
+        returnFees: 'https://schema.org/FreeReturn',
+      },
+      shippingDetails: {
+        '@type': 'OfferShippingDetails',
+        shippingRate: {
+          '@type': 'MonetaryAmount',
+          value: '0',
+          currency: 'INR',
+        },
+        shippingDestination: {
+          '@type': 'DefinedRegion',
+          addressCountry: 'IN',
+        },
+      },
+    } } : {}),
   };
 
   // Only include genuine AggregateRating when verified rating data exists
-  if (product.rating && product.rating > 0 && product.rating_count && product.rating_count > 0) {
+  const rating = formatRating(product.rating);
+  if (rating && Number(product.rating_count) > 0) {
     schema.aggregateRating = {
       '@type': 'AggregateRating',
-      ratingValue: product.rating,
-      reviewCount: product.rating_count,
+      ratingValue: Number(rating),
+      ratingCount: Number(product.rating_count),
       bestRating: 5,
       worstRating: 1,
     };
@@ -122,23 +140,57 @@ export function ItemListJsonLd({
   name,
   description,
   products,
+  url,
+  total,
+  page = 1,
+  brand,
 }: {
   name: string;
   description: string;
   products: Product[];
+  url?: string;
+  total?: number;
+  page?: number;
+  brand?: string;
 }) {
   const data = {
     '@context': 'https://schema.org',
     '@type': 'ItemList',
     name,
     description,
-    numberOfItems: products.length,
+    numberOfItems: total ?? products.length,
     itemListElement: products.map((p, index) => ({
       '@type': 'ListItem',
-      position: index + 1,
+      position: (page - 1) * 24 + index + 1,
       name: p.name,
-      url: `${BASE_URL}/products/${p.slug || p.id}`,
+      url: `${BASE_URL}${p.comparison?.href || "/product/"+(p.slug || p.id)}`,
       image: p.image,
+    })),
+  };
+  if (!url) return <JsonLd data={data} />;
+  const canonical = new URL(url, BASE_URL).href;
+  return <JsonLd data={{ '@context': 'https://schema.org', '@graph': [
+    { '@type': 'CollectionPage', '@id': canonical + '#collection', url: canonical, name, description,
+      isPartOf: { '@id': `${BASE_URL}/#website` }, mainEntity: { '@id': canonical + '#items' },
+      ...(brand ? { about: { '@type': 'Brand', name: brand } } : {}),
+    },
+    { ...data, '@id': canonical + '#items' },
+  ] }} />;
+}
+
+// FAQPage Schema for Informational, Category & Brand Pages
+export function FAQJsonLd({ faqs }: { faqs: Array<{ question: string; answer: string }> }) {
+  if (!faqs || faqs.length === 0) return null;
+  const data = {
+    '@context': 'https://schema.org',
+    '@type': 'FAQPage',
+    mainEntity: faqs.map(faq => ({
+      '@type': 'Question',
+      name: faq.question,
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: faq.answer,
+      },
     })),
   };
   return <JsonLd data={data} />;

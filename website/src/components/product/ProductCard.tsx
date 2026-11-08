@@ -1,106 +1,43 @@
-import React from 'react';
 import Link from 'next/link';
-import Image from 'next/image';
-import { Star } from 'lucide-react';
+import { ArrowUpRight } from 'lucide-react';
 import type { Product } from '@/types/product';
-import { formatPrice, formatDiscount } from '@/lib/utils/format';
-import { MARKETPLACES } from '@/lib/constants/marketplaces';
+import { formatRating,formatPrice } from '@/lib/utils/format';
+import MarketplaceLogo from '@/components/ui/MarketplaceLogo';
+import ProductImage from './ProductImage';
+import SaveProductButton from './SaveProductButton';
+import PriceDisplay from './PriceDisplay';
 
-interface ProductCardProps {
-  product: Product;
-}
+export default function ProductCard({ product,comparison:providedComparison }: { product: Product; comparison?:{href:string;sku:string;stores:string[];syncedAt?:string;priceStore?:string} }) {
+  const comparison=providedComparison||product.comparison;
+  const name = product.name || product.title || 'Makeup';
+  const href = comparison?.href || '/product/' + (product.slug || product.id);
+  const rating = formatRating(product.rating);
+  const count = Number(product.rating_count);
+  const price = Number(product.price);
+  const mrp = Number(product.mrp);
+  const recordedDiscount = Number(product.discount_percentage);
+  const discount = Math.max(0, Math.min(100, Math.round(recordedDiscount > 0 ? recordedDiscount : price > 0 && mrp > price ? (mrp-price)/mrp*100 : 0)));
 
-export default function ProductCard({ product }: ProductCardProps) {
-  const marketplace = MARKETPLACES[product.marketplace] || {
-    name: product.marketplace_name || 'Store',
-    color: '#e91e8c',
-    badgeBg: 'bg-pink-100 text-pink-700 border-pink-200',
-  };
-
-  const productUrl = `/products/${product.slug || product.id}`;
-  const imgUrl = product.image || '/assets/banners/hero-banner.jpg';
-
-  return (
-    <div className="group relative bg-white rounded-2xl border border-pink-100/70 p-3 flex flex-col justify-between hover-lift shadow-sm hover:border-pink-200">
-      {/* Top badges */}
-      <div className="absolute top-4 left-4 z-10 flex flex-col gap-1 items-start">
-        {product.discount_percentage && product.discount_percentage > 0 ? (
-          <span className="bg-gradient-to-r from-pink-600 to-rose-500 text-white text-[11px] font-bold px-2 py-0.5 rounded-full shadow-sm">
-            {formatDiscount(product.discount_percentage)}
-          </span>
-        ) : null}
-
-        {product.bestseller_tag ? (
-          <span className="bg-amber-500 text-white text-[10px] font-bold px-2 py-0.5 rounded-full shadow-sm">
-            ★ Bestseller
-          </span>
-        ) : null}
-      </div>
-
-      {/* Product Image */}
-      <Link href={productUrl} className="block relative w-full pt-[100%] rounded-xl overflow-hidden bg-pink-50/30 mb-3">
-        <Image
-          src={imgUrl}
-          alt={product.name}
-          fill
-          sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 25vw"
-          className="object-contain p-2 group-hover:scale-105 transition-transform duration-300"
-          loading="lazy"
-        />
+  return <article className="product-card">
+    <div className="product-card__visual">
+      <Link href={href} className="product-card__image" aria-label={'View ' + name}>
+        <ProductImage src={product.high_res_image || product.image || ''} alt={name}/>
       </Link>
-
-      {/* Product Details */}
-      <div className="flex-1 flex flex-col">
-        {/* Brand */}
-        <div className="text-[11px] font-bold uppercase tracking-wider text-neutral-400 mb-1">
-          {product.brand || 'Beauty'}
-        </div>
-
-        {/* Title */}
-        <Link href={productUrl} className="block group-hover:text-pink-600 transition-colors mb-2">
-          <h3 className="text-xs sm:text-sm font-semibold text-neutral-800 line-clamp-2 leading-snug" title={product.name}>
-            {product.name}
-          </h3>
-        </Link>
-
-        {/* Rating if available */}
-        {product.rating && product.rating > 0 ? (
-          <div className="flex items-center gap-1.5 mb-2">
-            <span className="inline-flex items-center gap-0.5 bg-emerald-50 text-emerald-700 text-[11px] font-bold px-1.5 py-0.5 rounded border border-emerald-200">
-              {product.rating.toFixed(1)}
-              <Star className="w-3 h-3 fill-emerald-600 text-emerald-600" />
-            </span>
-            {product.rating_count ? (
-              <span className="text-[11px] text-neutral-400">
-                ({product.rating_count > 999 ? `${(product.rating_count / 1000).toFixed(0)}k` : product.rating_count})
-              </span>
-            ) : null}
-          </div>
-        ) : null}
-
-        {/* Price & MRP */}
-        <div className="mt-auto pt-2 flex items-baseline gap-2">
-          <span className="text-base sm:text-lg font-extrabold text-neutral-900">
-            {formatPrice(product.price)}
-          </span>
-          {product.mrp && product.mrp > product.price ? (
-            <span className="text-xs text-neutral-400 line-through">
-              {formatPrice(product.mrp)}
-            </span>
-          ) : null}
-        </div>
-
-        {/* Marketplace & Compare footer */}
-        <div className="mt-3 pt-2 border-t border-pink-50 flex items-center justify-between">
-          <span className={`text-[10px] font-semibold px-2 py-0.5 rounded-full border ${marketplace.badgeBg}`}>
-            {marketplace.name}
-          </span>
-          <span className="text-[11px] text-pink-600 font-semibold group-hover:translate-x-0.5 transition-transform flex items-center gap-0.5">
-            Compare 4 Stores →
-          </span>
-        </div>
+      {discount > 0 && <span className="product-card__badge">{discount}% OFF</span>}
+      <SaveProductButton productKey={comparison?.sku||product.marketplace+':'+(product.id||product._id)} name={name}/>
+    </div>
+    <div className="product-card__body">
+      <p className="product-card__brand">{product.brand || 'Beauty'}</p>
+      <Link href={href}><h3 className="product-card__title" title={name}>{name}</h3></Link>
+      <div className="product-card__rating">
+        {comparison?<span className="comparison-card__summary">{comparison.stores.length>1?comparison.stores.length+' stores · '+(comparison.priceStore?'price at '+comparison.priceStore:'matched variant'):'Single-store listing'}</span>:rating ? <><strong>{rating} / 5</strong>{Number.isFinite(count)&&count>0&&<span>({count.toLocaleString('en-IN')} {count===1?'rating':'ratings'})</span>}</> : <span>Explore product details</span>}
+      </div>
+      <PriceDisplay price={price} mrp={mrp}/>
+      {product.price_drop&&Number(product.price_drop_amount)>0&&<p className="text-xs text-green-800 my-2">Down {formatPrice(product.price_drop_amount)} from {formatPrice(product.price_drop.previous)} at {product.marketplace}</p>}
+      <div className={"product-card__footer"+(comparison?" product-card__footer--comparison":"")}>
+        <span className={'product-card__store'+(comparison?' comparison-card__stores':'')}>{comparison?comparison.stores.map(store=><MarketplaceLogo key={store} store={store}/>):<MarketplaceLogo store={product.marketplace}/>}</span>
+        <Link href={href} className="product-card__offer">{comparison&&comparison.stores.length===1?'View offer':'Compare prices'} <ArrowUpRight size={17} strokeWidth={1.5}/></Link>
       </div>
     </div>
-  );
+  </article>;
 }
-

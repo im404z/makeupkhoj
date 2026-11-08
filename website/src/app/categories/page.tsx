@@ -1,3 +1,4 @@
+import { JsonLd } from '@/components/seo/JsonLd';
 import React from 'react';
 import type { Metadata } from 'next';
 import Link from 'next/link';
@@ -15,8 +16,10 @@ export const metadata: Metadata = constructMetadata({
 });
 
 export default function AllCategoriesPage() {
+  const base=process.env.NEXT_PUBLIC_SITE_URL||'https://makeupkhoj.com';
   return (
     <div>
+      <JsonLd data={{'@context':'https://schema.org','@type':'CollectionPage',name:'Makeup categories',url:base+'/categories',mainEntity:{'@type':'ItemList',itemListElement:CATEGORIES.map((c,i)=>({'@type':'ListItem',position:i+1,item:{'@type':'CollectionPage',name:c.name,url:base+'/categories/'+c.slug}}))}}}/>
       <Breadcrumb items={[{ label: 'All Categories' }]} />
 
       <div className="mb-8">

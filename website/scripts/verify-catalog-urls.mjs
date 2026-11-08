@@ -1,0 +1,25 @@
+import assert from 'node:assert/strict';
+import fs from 'node:fs';
+import vm from 'node:vm';
+import ts from 'typescript';
+function load(path,deps={}){const exports={};const code=ts.transpileModule(fs.readFileSync(path,'utf8'),{compilerOptions:{module:ts.ModuleKind.CommonJS,target:ts.ScriptTarget.ES2022}}).outputText;vm.runInNewContext(code,{exports,require:name=>deps[name],URLSearchParams,URL,process:{env:{}}});return exports;}
+const format=load('src/lib/utils/format.ts');
+const urls=load('src/lib/utils/catalog-urls.ts',{'./format':format});
+const {catalogUrl}=urls;
+assert.equal(catalogUrl('/products',{page:'1',sort:'popular',utm_source:'test'}),'/products');
+assert.equal(catalogUrl('/products',{marketplace:['NYKAA','amazon','amazon'],brand:['Lakmé','lakme'],page:'02',sort:'price_asc'}),'/products?brand=lakme&marketplace=amazon&marketplace=nykaa&sort=price_asc&page=2');
+assert.equal(catalogUrl('/products',{maxPrice:'0500',minPrice:'100',rating:'4.0'}),'/products?minPrice=100&maxPrice=500&rating=4');
+assert.equal(catalogUrl('/products',{marketplace:'invalid',sort:'invalid',rating:'99',minPrice:'NaN',page:'-2'}),'/products');
+assert.equal(catalogUrl('/new-arrivals',{sort:'newest'}),'/new-arrivals');
+assert.equal(catalogUrl('/deals',{sort:'discount_desc',minDiscount:'15'}),'/deals');
+assert.equal(catalogUrl('/deals',{sort:'popular'}),'/deals?sort=popular');
+assert.equal(catalogUrl('/price-drops',{minDiscount:'50'}),'/price-drops?minDiscount=50');
+assert.equal(catalogUrl('/brands/lakme',{brand:'maybelline',page:'2'}),'/brands/lakme?page=2');
+assert.equal(catalogUrl('/categories/lip-makeup/lipstick',{category:'Face',sub_category:'Foundation',marketplace:'nykaa'}),'/categories/lip-makeup/lipstick?marketplace=nykaa');
+assert.equal(catalogUrl('/search',{q:'  red & nude  '}),'/search?q=red+%26+nude');
+const metadata=load('src/lib/utils/seo.ts',{'./catalog-urls':urls,'@/lib/seo/listing-request':{validateListingPage:async()=>{}}});
+assert.equal((await metadata.collectionMetadata('Products','Description','/products',{page:'2'})).robots.index,true);
+assert.equal((await metadata.collectionMetadata('Products','Description','/products',{marketplace:'amazon'})).robots.index,false);
+assert.equal((await metadata.collectionMetadata('Newest','Description','/new-arrivals',{sort:'newest'})).robots.index,true);
+const search=await metadata.collectionMetadata('Search','Description','/search',{q:'lipstick'});assert.equal(search.robots.index,false);assert.match(search.alternates.canonical,/\/search\?q=lipstick$/);
+console.log('PASS: deterministic URLs, deduplication, brand slugs, route defaults, parameter validation, fixed route context, page-one removal, pagination canonicals, filtered noindex, search canonicals.');

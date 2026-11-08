@@ -1,5 +1,9 @@
 # MakeupKhoj Multi-Marketplace Crawler Suite
 
+Native Node.js / Crawlee implementation: see [node/README.md](node/README.md) for
+proxy sessions, concurrent browser requests, listing/PDP crawlers and commands.
+The Python commands below remain available separately.
+
 High-speed, resilient multi-marketplace web crawler and Product Details Page (PDP) extraction suite tailored for Indian makeup and cosmetic e-commerce platforms.
 
 Supports all **81 category URLs** across the top 4 beauty marketplaces:
@@ -57,7 +61,7 @@ Every crawled document is enriched with standardized category taxonomy and cosme
 
 ## 3. Quick Start: Unified Master Runner
 
-The master runner [`crawler/run_master_crawler.py`](file:///z:/laragon/www/makeupkhoj/crawler/run_master_crawler.py) provides a single interactive CLI dashboard to view catalog counts, launch listing crawlers, and run PDP extractors.
+The master runner [`crawler/run_master_crawler.py`](file:///d:/laragon/www/makeupkhoj/crawler/run_master_crawler.py) provides a single interactive CLI dashboard to view catalog counts, launch listing crawlers, and run PDP extractors.
 
 ### Check Database Status & Record Counts
 ```powershell
@@ -75,13 +79,13 @@ python crawler/run_master_crawler.py
 
 > [!TIP]
 > **Looking for full catalog crawl without page limits?**
-> See **[`crawler/FULL_CATALOG_CRAWL_COMMANDS.md`](file:///z:/laragon/www/makeupkhoj/crawler/FULL_CATALOG_CRAWL_COMMANDS.md)** for complete commands with `--max-pages 0` (unlimited pages until the end of every category).
+> See **[`crawler/FULL_CATALOG_CRAWL_COMMANDS.md`](file:///d:/laragon/www/makeupkhoj/crawler/FULL_CATALOG_CRAWL_COMMANDS.md)** for complete commands with `--max-pages 0` (unlimited pages until the end of every category).
 
 ```powershell
 # FULL CATALOG CRAWL (All Pages & All Categories):
 python crawler/run_master_crawler.py --platform nykaa --type listing --max-pages 0
 python crawler/run_master_crawler.py --platform amazon --type listing --max-pages 0
-python crawler/run_master_crawler.py --platform flipkart --type listing --max-pages 0
+python crawler/run_master_crawler.py --platform flipkart --type pdp --max-pages 0
 python crawler/run_master_crawler.py --platform myntra --type listing --max-pages 0
 
 # Crawl ALL 4 platforms sequentially (FULL CATALOG - All 81 Categories):
