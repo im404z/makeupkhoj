@@ -8,6 +8,7 @@ import type { Product } from '@/types/product';
 import { cache } from 'react';
 import { ObjectId } from 'mongodb';
 import { categoryLeafMatch } from '@/lib/constants/category-leaves';
+import { cachedCatalogRead } from '@/lib/catalog-cache';
 export interface ProductQueryResult { products: Product[]; total: number; page: number; limit: number; totalPages: number; facets?: { brands: Array<{ name: string; count: number }>; categories: Array<{ name: string; count: number }>; marketplaces: Array<{ name: string; count: number }>; priceRange: { min: number; max: number } } }
 export interface CatalogParams { page?: number; limit?: number; category?: string; sub_category?: string; brand?: string | string[]; marketplace?: string | string[]; minPrice?: number; maxPrice?: number; minDiscount?: number; rating?: number; inStockOnly?: boolean; finish?: string; coverage?: string; skinType?: string; search?: string; sort?: string }
 export function normalizeProduct(doc: any, store?: string): Product {
@@ -28,7 +29,16 @@ export function normalizeProduct(doc: any, store?: string): Product {
   if (!raw.slug || !/^[-a-zA-Z0-9_]+$/.test(raw.slug)) raw.slug = createProductSlug(raw);
   return raw as Product;
 }
-export async function queryProducts(params: CatalogParams & {categorySlug?:string;subSlug?:string;priceDropSince?:Date;maxResults?:number}): Promise<ProductQueryResult> {
+type ProductQueryParams = CatalogParams & {categorySlug?:string;subSlug?:string;priceDropSince?:Date;maxResults?:number};
+
+export async function queryProducts(params: ProductQueryParams): Promise<ProductQueryResult> {
+  const load = () => queryProductsFromDB(params);
+  if (params.search || params.priceDropSince || (params.page ?? 1) > 20) return load();
+  const key = Object.entries(params).filter(([, value]) => value !== undefined).sort(([a], [b]) => a.localeCompare(b));
+  return cachedCatalogRead('products', key, load);
+}
+
+async function queryProductsFromDB(params: ProductQueryParams): Promise<ProductQueryResult> {
   await connectDB();
   const page = Math.max(1, Math.floor(Number(params.page) || 1)), limit = Math.min(100, Math.max(1, Math.floor(Number(params.limit) || 24))), skip = (page - 1) * limit;
   const requested = params.marketplace ? (Array.isArray(params.marketplace) ? params.marketplace : [params.marketplace]).map(s => s.toLowerCase().trim()) : null;
@@ -47,8 +57,26 @@ export async function queryProducts(params: CatalogParams & {categorySlug?:strin
   const price: any = {}; if (Number.isFinite(params.minPrice)) price.$gte = Number(params.minPrice); if (Number.isFinite(params.maxPrice)) price.$lte = Number(params.maxPrice); if (Object.keys(price).length) numeric.price = price;
   if (Number(params.minDiscount) > 0) numeric.discount_percentage = { $gte: Number(params.minDiscount) };
   if (Number(params.rating) > 0) numeric.rating = { $gte: Number(params.rating), $lte: 5 };
-  const pipeline = (store: string): any[] => [...(clauses.length ? [{ $match: { $and: clauses } }] : []), ...normalizePipeline(store), ...(params.priceDropSince ? priceDropPipeline(params.priceDropSince) : []), ...(Object.keys(numeric).length ? [{ $match: numeric }] : [])];
-  const counts = await Promise.all(stores.map(async store => { const rows = await getModelByMarketplace(store)!.aggregate([...pipeline(store), { $count: 'total' }]); return rows[0]?.total || 0; }));
+  const match = clauses.length ? { $and: clauses } : {};
+  const matchStages = clauses.length ? [{ $match: match }] : [];
+  const numericStages = Object.keys(numeric).length ? [{ $match: numeric }] : [];
+  const dropStages = params.priceDropSince ? priceDropPipeline(params.priceDropSince) : [];
+  // Category cards only need listing data. Drop large PDP fields before sorting.
+  const listingStages = params.categorySlug && !params.priceDropSince ? [{ $unset: [
+    'reviews', 'user_reviews', 'customer_photos', 'price_history', 'description_html',
+    'specifications', 'specifications_grouped', 'specsTable', 'variants', 'expiry_date',
+  ] }] : [];
+  const filteredStages = (store: string) => [...normalizePipeline(store), ...dropStages, ...numericStages];
+  const pipeline = (store: string) => [...matchStages, ...listingStages, ...filteredStages(store)];
+  const counts = await Promise.all(stores.map(async store => {
+    const collection = getModelByMarketplace(store)!.collection;
+    if (!numericStages.length && !dropStages.length) {
+      // Native collection preserves the same raw-field matching as aggregation.
+      return collection.countDocuments(match, clauses.length ? {} : { hint: '_id_' });
+    }
+    const rows = await collection.aggregate([...matchStages, ...filteredStages(store), { $count: 'total' }]).toArray();
+    return rows[0]?.total || 0;
+  }));
   const total = Math.min(counts.reduce((a, b) => a + b, 0),params.maxResults??Infinity); if (!total || skip >= total) return { ...empty, total, totalPages: Math.max(1, Math.ceil(total / limit)) };
   let docs: any[];
   if ((!params.sort || params.sort === 'popular') && stores.length > 1) {

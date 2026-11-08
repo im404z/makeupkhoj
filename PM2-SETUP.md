@@ -26,6 +26,8 @@ ADMIN_SESSION_SECRET=your-random-secret-at-least-32-characters-long
 
 Use your actual database connection and domain. Generate a session secret with `node -e "console.log(require('crypto').randomBytes(32).toString('hex'))"`. Keep credentials out of the PM2 config and Git.
 
+For catalog caching, add `REDIS_URL=redis://127.0.0.1:6379` to `website/.env.local` if Redis runs on the same server. Use your server's connection URL for authenticated or TLS Redis. After restarting, open **Admin → Catalog cache** to check the connection, set the expiration time, or clear cached listings. The default is 120 seconds. Catalog requests fall back to MongoDB when Redis is unavailable.
+
 Build and start from the root:
 
 ```sh
