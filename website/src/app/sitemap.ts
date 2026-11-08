@@ -4,7 +4,6 @@ import { getAllBrandsList } from '@/lib/utils/products';
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://www.makeupkhoj.shop';
-  const now = new Date();
 
   // Static core routes
   const staticRoutes: MetadataRoute.Sitemap = [
@@ -57,7 +56,6 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     console.error('Error generating brand sitemap:', e);
   }
 
-  // Product URLs are split by store into 10,000-entry sitemaps.
-  // See /sitemap-index.xml, referenced from robots.txt.
+  // Product URLs are listed separately in /sitemap-products.xml.
   return [...staticRoutes, ...categoryRoutes, ...brandRoutes];
 }
