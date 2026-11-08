@@ -18,15 +18,16 @@ To help shoppers find genuine cosmetics, track real discounts, compare shades, a
 - **Flipkart**: Authorized cosmetics sellers and brand partners.
 - **Myntra**: Curated beauty and personal care flagships.
 
-## Key URL Paths
-- `/`: Homepage with daily price edits, trending cosmetics, and budget curations under ₹500.
-- `/categories`: Full taxonomy of cosmetics categories and subcategories.
-- `/brands`: Directory of verified cosmetic brands (Lakmé, Maybelline, L'Oréal Paris, Swiss Beauty, MAC, etc.).
-- `/compare-products`: Master product comparison catalog with multi-store offers grouped together.
-- `/deals`: Live discount feed of genuine items with at least 15% discount.
-- `/price-drops`: Verified price drop alerts (20%+ discount).
-- `/new-arrivals`: Recently indexed products and beauty launches.
-- `/product/[slug]`: Master comparison detail page with store-by-store offers, price history, customer reviews, and shade specifications.
+## Browse the catalog
+
+- [MakeupKhoj homepage](https://www.makeupkhoj.shop/): Featured products, trending cosmetics, and budget picks.
+- [All products](https://www.makeupkhoj.shop/products): Browse and filter makeup listings by marketplace, brand, and price.
+- [Categories](https://www.makeupkhoj.shop/categories): Explore makeup categories and subcategories.
+- [Brands](https://www.makeupkhoj.shop/brands): Browse the cosmetics brand directory.
+- [Compare products](https://www.makeupkhoj.shop/compare-products): Find matching products and compare recorded store offers. Individual product pages include available specifications, price history, and marketplace reviews.
+- [Deals](https://www.makeupkhoj.shop/deals): Browse recorded discounts.
+- [Price drops](https://www.makeupkhoj.shop/price-drops): Browse recent drops in recorded selling prices.
+- [New arrivals](https://www.makeupkhoj.shop/new-arrivals): Browse recently indexed products.
 
 ## Data Freshness & Methodology
 - Prices are recorded directly from official public listings.
