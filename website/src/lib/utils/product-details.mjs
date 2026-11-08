@@ -7,7 +7,10 @@ export function text(value){
  if(typeof value!=='string'&&typeof value!=='number')return '';
  const raw=String(value).trim();if(!raw||placeholder.test(raw))return '';
  const $=load(raw);$('script,style,iframe,form,button').remove();$('br').replaceWith('\n');$('p,li,div').append('\n');
- return stripEmoji($.root().text()).replace(/\u2014/g,'-').replace(/[ \t]+/g,' ').replace(/\n\s*\n/g,'\n\n').trim();
+ const plain = $.root().text();
+ // Older crawler records can contain script text without its enclosing tag.
+ if (/window\s*\.\s*__PRELOADED_STATE__\s*=/.test(plain)) return '';
+ return stripEmoji(plain).replace(/\u2014/g,'-').replace(/[ \t]+/g,' ').replace(/\n\s*\n/g,'\n\n').trim();
 }
 const list=value=>Array.isArray(value)?value.map(text).filter(Boolean):text(value)?[text(value)]:[];
 const record=value=>value&&typeof value==='object'&&!Array.isArray(value)?value:{};

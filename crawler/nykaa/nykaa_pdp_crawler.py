@@ -611,9 +611,14 @@ class NykaaPDPCrawler:
 
         expiry_date = prod_state.get("expiry")
         if not expiry_date and soup:
-            exp_p = soup.find(string=re.compile(r'Expiry Date:', re.I))
-            if exp_p:
-                expiry_date = clean_text(exp_p).replace("Expiry Date:", "").strip()
+            expiry_pattern = re.compile(r'^Expiry\s+Date\s*:\s*(.+)$', re.I)
+            for node in soup.find_all(string=re.compile(r'^\s*Expiry\s+Date\s*:', re.I)):
+                if node.find_parent(["script", "style", "template", "noscript"]):
+                    continue
+                match = expiry_pattern.match(clean_text(node))
+                if match:
+                    expiry_date = match.group(1)
+                    break
 
         origin_country = prod_state.get("originOfCountryName")
         if not origin_country and soup:
