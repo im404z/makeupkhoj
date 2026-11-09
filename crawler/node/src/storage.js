@@ -2,12 +2,14 @@ import fs from 'node:fs';
 import path from 'node:path';
 import { MongoClient } from 'mongodb';
 import { collections, directory, root } from './config.js';
-import {priceObservation} from './price-observation.js';
+import {numericPrice, priceObservation} from './price-observation.js';
 
 export class Storage {
-  constructor({ dryRun = false, runId, syncMaster = false }) {
+  constructor({ dryRun = false, runId, syncMaster = false, onChange = () => {} }) {
     this.dryRun = dryRun; this.runId = runId; this.syncMaster = syncMaster;
     this.chain = Promise.resolve(); this.saved = 0;
+    this.changes = { newProducts: 0, priceDown: 0, priceUp: 0, unchangedPrice: 0, firstPrice: 0, missingPrice: 0 };
+    this.onChange = onChange;
     this.brands = JSON.parse(fs.readFileSync(path.join(root, 'crawler/brands.json'), 'utf8')).sort((a, b) => b.length - a.length);
   }
   async open() {
@@ -84,7 +86,17 @@ export class Storage {
           }
           const observation=priceObservation(old?.price,row.price,now,store);
           if(observation)update.$push={price_history:{$each:[observation],$slice:-1000}};
-          await col.updateOne(key, update, { upsert: true });
+          const result = await col.updateOne(key, update, { upsert: true });
+          let change;
+          if (result.upsertedCount) change = 'newProducts';
+          else if (!numericPrice(row.price)) change = 'missingPrice';
+          else if (!observation) change = 'unchangedPrice';
+          else if (observation.old_price === null) change = 'firstPrice';
+          else change = observation.price < observation.old_price ? 'priceDown' : 'priceUp';
+          this.changes[change]++;
+          if (['newProducts', 'priceDown', 'priceUp'].includes(change)) {
+            this.onChange({ store, change, id: row.id, title: row.title, price: row.price, previous: observation?.old_price });
+          }
           if (this.syncMaster && row.price > 0) await this.updateMaster(store, row, now);
         } else fs.appendFileSync(path.join(directory, 'state', this.runId, `${store}-${phase}.jsonl`), `${JSON.stringify(row)}\n`);
         this.saved++;

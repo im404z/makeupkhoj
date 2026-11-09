@@ -1,6 +1,18 @@
 # Refresh marketplace prices and reviews
 
-Run from the project root. These commands use the existing Node Crawlee adapters and proxy configuration in `crawler/node/.env`. They do not launch separate terminal windows. Install dependencies once with `npm --prefix crawler/node ci` if needed.
+## Daily listing-only price update
+
+Default listing engines: Amazon uses a browser; Flipkart, Myntra and Nykaa use HTTP. The category sources are each store's `crawler/<store>/<store>_makeup_urls.json`. `--engine browser` explicitly forces browsers for all stores; use `--engine auto` for the normal per-store selection. PDP mode retains its browser defaults.
+
+Use `node crawler/price-update.mjs --parallel-stores 4 --concurrency 2 --rate 30` for all stores together. Myntra's HTTP pagination can repeat the first page or fail on later pages, as documented in the Python crawler. Such categories are marked incomplete. `--browser-stores myntra` opts into a browser for Myntra only, while Amazon continues using a browser by default.
+
+The current Flipkart Python implementation uses Playwright. The Node HTTP mode reuses its HTML extraction approach and was checked against live listing HTML. Nykaa follows its Python HTML parsing and `page_no` pagination; Myntra uses `window.__myx` and `p` pagination in HTTP mode. A successful first-page check does not prove complete catalog coverage.
+
+From the project root, run `node crawler/price-update.mjs` to scan all four marketplaces' configured listing categories and pages. Use `node crawler/price-update.mjs amazon` for one store, or `node crawler/price-update.mjs --plan` to preview. This is also available as `node crawler/refresh.mjs all --mode price-update`.
+
+This mode updates prices and visible rating information without visiting PDPs. Listing cards generally do not provide full customer review text; use the separate PDP commands below for that. A listing scan only refreshes the products it encounters. Add `--proxy` to use the configured proxy; the current runner defaults to direct connections.
+
+Run from the project root. These commands use the Node Crawlee adapters and connect directly by default. Add `--proxy` to use the proxy configuration in `crawler/node/.env`. Install dependencies once with `npm --prefix crawler/node ci` if needed.
 
 ## Refresh all existing products in one marketplace
 
@@ -13,19 +25,31 @@ node crawler/refresh.mjs myntra
 node crawler/refresh.mjs nykaa
 ```
 
-Run only one command at a time. To refresh all four stores sequentially:
+Run one crawler command at a time. To refresh all four stores sequentially:
 
 ```sh
 node crawler/refresh.mjs all
 ```
 
+To refresh multiple marketplaces at once, pass a comma-separated list or `all` with `--parallel-stores`:
+
+```sh
+node crawler/refresh.mjs flipkart,myntra --parallel-stores 2 --limit 200 --concurrency 3 --rate 60 --verbose-changes
+node crawler/refresh.mjs all --mode listing --parallel-stores 2 --pages 3
+```
+
+`--limit`, `--concurrency`, and `--rate` apply to each marketplace. With two stores, concurrency 3, and rate 60, the run can have up to six crawler requests in flight and a combined queue rate of 120 requests per minute. The runner still holds one global lock and keeps listing and PDP work for the same store in sequence.
+
 Start with a limited batch, or adjust concurrent browser requests:
 
 ```sh
 node crawler/refresh.mjs amazon --limit 100 --concurrency 3 --sessions 12 --rate 30
+node crawler/refresh.mjs flipkart --limit 200 --concurrency 4 --rate 60 --block-media --verbose-changes
 ```
 
-`--limit 0` means every stored product in each selected marketplace. `--rate` is the maximum requests per minute. Each browser has one tab. Sessions use the configured proxy; separate sessions do not guarantee different exit IPs. Use a provider-supported rotating endpoint or proxy list for IP rotation.
+`--limit 0` means every stored product in each selected marketplace. `--rate` caps crawler requests per minute. `--concurrency` limits simultaneous requests, and `--delay` controls the browser wait in milliseconds (250 by default for the refresh command). Browser mode is the default. Use `--engine http` for a small trial when the marketplace serves the required data without JavaScript.
+
+Progress shows cumulative saves, new products, price increases, price decreases, unchanged prices, first prices for existing records, and saves without an observed price. `--verbose-changes` adds the product name and old and new price for each increase or decrease, plus a line for each new product. These counts reflect the current process and restart at zero when a run resumes.
 
 ## Refresh category listings
 

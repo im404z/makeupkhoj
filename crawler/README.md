@@ -94,7 +94,7 @@ python crawler/run_master_crawler.py --platform all --type listing --max-pages 0
 # Enrich ALL pending PDP specifications across all marketplaces:
 python crawler/run_master_crawler.py --platform all --type pdp --limit 0
 ```
-
+node crawler/refresh.mjs all --mode listing --pages 0
 ---
 
 ## 4. Individual Marketplace Crawlers

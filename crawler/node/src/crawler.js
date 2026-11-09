@@ -2,8 +2,8 @@ import { PlaywrightCrawler, CheerioCrawler, ProxyConfiguration, RequestQueue, Co
 import { chromium } from 'playwright';
 import path from 'node:path';
 import fs from 'node:fs';
-import { listing, pdp, nextUrl } from './adapters.js';
-import { directory, proxyOptions } from './config.js';
+import { listing, pdp, nextUrl, embedded } from './adapters.js';
+import { directory, proxyOptions,resolveEngine,browserChannel } from './config.js';
 import { minimalSource } from './runtime.js';
 import { amazonPdp } from './amazon-extractor.js';
 
@@ -28,6 +28,8 @@ function validProductUrl(store, doc) {
   throw Error('Flipkart product URL missing');
 }
 export async function crawl({ store, phase, targets, storage, options, runId, signal, onProgress = ()=>{} }) {
+  const engine=resolveEngine(store,phase,options);
+  log.info(`${store} ${phase}: ${engine==='http'?'HTTP (no browser)':'Playwright browser'}`);
   const config = new Configuration({ storageClientOptions: { localDataDirectory: path.join(directory, 'state', runId, 'crawlee') }, persistStorage: true, purgeOnStart: false,
     logLevel: options.debug ? 'DEBUG' : 'INFO' });
   const queue = await RequestQueue.open(`${store}-${phase}`, { config });
@@ -38,10 +40,15 @@ export async function crawl({ store, phase, targets, storage, options, runId, si
       await queue.addRequest({ ...request, uniqueKey: `${request.uniqueKey}:resume:${Date.now()}` });
     }
   }
-  const proxyConfiguration = new ProxyConfiguration(proxyOptions());
+  const proxyConfiguration = options.proxy ? new ProxyConfiguration(proxyOptions()) : undefined;
   let failures = 0;
   let queued=0,handled=0,active=0;
-  const progress=extra=>onProgress({store,phase,queued,handled,failures,saved:storage.saved,active,...extra});
+  let crawler;
+  const progress=extra=>onProgress({
+    store,phase,engine,queued,handled,failures,saved:storage.saved,...storage.changes,
+    active,activeBrowsers:crawler?.browserPool?.activeBrowserControllers?.size||0,
+    concurrentRequests:crawler?.autoscaledPool?.currentConcurrency||0,...extra,
+  });
   progress({stage:'queueing'});
   let feedMore = null;
   if (phase === 'listing') {
@@ -92,7 +99,11 @@ export async function crawl({ store, phase, targets, storage, options, runId, si
     maxRequestsPerMinute: options.rate, maxRequestRetries: options.retries, maxSessionRotations:2,
     autoscaledPoolOptions:{desiredConcurrency:options.concurrency},
     useSessionPool: true, persistCookiesPerSession: true, retryOnBlocked: true,
-    sessionPoolOptions: { maxPoolSize: options.sessions, sessionOptions: { maxUsageCount: options.sessionUses } },
+    sessionPoolOptions: {
+      persistStateKey: `sessions-${store}-${phase}`,
+      maxPoolSize: options.sessions,
+      sessionOptions: { maxUsageCount: options.sessionUses },
+    },
     requestHandlerTimeoutSecs: phase==='listing'?Math.max(600,options.timeout):options.timeout,
     async failedRequestHandler({ request, page, body }) {
       if(signal?.aborted)return;
@@ -119,13 +130,14 @@ export async function crawl({ store, phase, targets, storage, options, runId, si
     const seen = new Set(request.userData.previousIds || []);
     while (true) {
       if(signal?.aborted)return;
-      const rows = listing(store, html, request.url, { ...metadata(target), category_url: target.url, page: pageNo, page_no: pageNo });
+      const rows = listing(store, html, request.url, { ...metadata(target), category_url: target.url, page: pageNo, page_no: pageNo,...(engine==='http'?{http:true}:{}) });
       if (!rows.length) {
-        if (/no products found|no results found|did not match any products/i.test(html)) return;
+        if (/no products found|no results found|did not match any products|no items found/i.test(html)) return;
+        if(store==='myntra'&&engine==='http')throw Error(`Myntra HTTP page ${pageNo} returned no products. Coverage is incomplete; the Python HTTP crawler also documents pagination blocks. Retry with --browser-stores myntra if browser pagination is needed.`);
         throw Error(`${store}: no listing products parsed; refusing to treat unknown HTML as catalog end`);
       }
       const fresh = rows.filter(r => !seen.has(r.id));
-      if (!fresh.length) throw Error(`${store}: repeated product page detected at page ${pageNo}`);
+      if (!fresh.length) throw Error(`${store}: repeated product page detected at page ${pageNo}; category coverage is incomplete.${store==='myntra'&&engine==='http'?' Retry with --browser-stores myntra for browser pagination.':''}`);
       await storage.save(store, fresh, phase);handled++;progress({stage:'crawling'});
       rows.forEach(r => seen.add(r.id));
       log.info(`${store}: category page ${pageNo}, extracted ${rows.length}, saved ${fresh.length}`);
@@ -149,10 +161,16 @@ export async function crawl({ store, phase, targets, storage, options, runId, si
         continue;
       }
       let next = nextUrl(store, html, request.url);
+      if(store==='myntra'&&engine==='http'){
+        const data=embedded(html,'window.__myx').searchData;
+        const total=Number(data?.results?.totalCount??data?.totalCount);
+        if(Number.isFinite(total)&&total>=0&&seen.size>=total)return;
+        const u=new URL(target.url);u.searchParams.set('p',String(pageNo+1));next=u.href;
+      }
       if (!next && store === 'nykaa') {
         const $ = (await import('cheerio')).load(html);
-        const totalText = $('[class*="count"], [class*="Count"]').text();
-        const total = Number(totalText.match(/(\d[\d,]*)\s*products/i)?.[1]?.replace(/,/g, ''));
+        const totalText = $('h1').text() + ' ' + $('[class*="count"], [class*="Count"]').text();
+        const total = Number(totalText.match(/\((\d[\d,]*)\)/)?.[1]?.replace(/,/g, '') || totalText.match(/(\d[\d,]*)\s*products/i)?.[1]?.replace(/,/g, ''));
         if (total && seen.size >= total) return;
         // Nykaa's existing adapter uses page_no, not p/page.
         const u = new URL(request.url); u.searchParams.set('page_no', String(pageNo + 1));
@@ -165,10 +183,24 @@ export async function crawl({ store, phase, targets, storage, options, runId, si
       return;
     }
   };
-  const crawler = options.engine === 'http' ? new CheerioCrawler({ ...common,
+  crawler = engine === 'http' ? new CheerioCrawler({ ...common,
+    navigationTimeoutSecs:options.navigationTimeout||45,
+    preNavigationHooks:[async({request})=>{request.headers={...request.headers,'accept-language':'en-IN,en-US;q=0.9,en;q=0.8'};}],
     async requestHandler({ body, request }) {active++;try{await processHtml(String(body),request);}finally{active--;progress({stage:'crawling'});}} 
   }, config) : new PlaywrightCrawler({ ...common,
-    launchContext: { launcher: chromium, launchOptions: { headless: !options.headful, timeout:30000 }, useIncognitoPages: true },
+    launchContext: { 
+      launcher: chromium, 
+      launchOptions: { 
+        channel:browserChannel(),
+        headless: !options.headful, 
+        timeout: 30000,
+        args: [
+          '--disable-http2',
+          '--disable-blink-features=AutomationControlled'
+        ]
+      }, 
+      useIncognitoPages: true 
+    },
     browserPoolOptions: { maxOpenPagesPerBrowser: options.tabs, retireBrowserAfterPageCount: options.sessionUses },
     navigationTimeoutSecs: options.navigationTimeout||45,
     preNavigationHooks: [async ({ page }, gotoOptions) => {
@@ -194,7 +226,7 @@ export async function crawl({ store, phase, targets, storage, options, runId, si
   let forced;const stop=()=>{crawler.stop('Stop requested');forced=setTimeout(()=>{void crawler.teardown().catch(()=>{});},15000);forced.unref();};
   signal?.addEventListener('abort',stop,{once:true});
   const report=setInterval(()=>{
-    progress({stage:'crawling',activeBrowsers:crawler.browserPool?.activeBrowserControllers?.size||0,concurrentRequests:crawler.autoscaledPool?.currentConcurrency||0});
+    progress({stage:'crawling'});
     checkFeed();
   },2000);report.unref();
   try{progress({stage:'crawling'});if(signal?.aborted)stop();await crawler.run();}finally{clearInterval(report);clearTimeout(forced);signal?.removeEventListener('abort',stop);}

@@ -13,3 +13,22 @@ export function acquireRunnerLock(file,runId){
  }throw Error('Could not acquire crawler lock');
 }
 export function minimalSource(doc){return Object.fromEntries(['id','asin','product_id','url','name','title','brand','image','price','mrp','category','sub_category','sub_sub_category','category_name','category_path','category_url','shade','size','pack_size','sku'].filter(key=>doc[key]!==undefined).map(key=>[key,doc[key]]));}
+
+export async function runStoreJobs(jobs, parallelStores, signal, runJob) {
+  const byStore = new Map();
+  for (const job of jobs) {
+    if (!byStore.has(job.store)) byStore.set(job.store, []);
+    byStore.get(job.store).push(job);
+  }
+  const batches = byStore.values();
+  const workers = await Promise.allSettled(Array.from({ length: Math.min(parallelStores, byStore.size) }, async () => {
+    for (const batch of batches) {
+      for (const job of batch) {
+        if (signal.aborted) return;
+        await runJob(job);
+      }
+    }
+  }));
+  const rejected = workers.find(worker => worker.status === 'rejected');
+  if (rejected) throw rejected.reason;
+}

@@ -24,6 +24,7 @@ export function embedded(html, variable) {
   return {};
 }
 function normalize(store, row, meta = {}) {
+  const {http,...categoryMeta}=meta;
   const title = row.title || row.name || '';
   const price = number(row.price), mrp = number(row.mrp) ?? price;
   const pct = mrp && price != null && mrp > price ? Math.round((mrp - price) / mrp * 100) : 0;
@@ -31,14 +32,14 @@ function normalize(store, row, meta = {}) {
     discount: row.discount || (pct ? `${pct}% OFF` : ''), discount_percentage: pct,
     rating: number(row.rating), rating_count: number(row.rating_count) ?? 0,
     reviews_count: number(row.rating_count) ?? 0, marketplace: store,
-    marketplace_name: store[0].toUpperCase() + store.slice(1), ...meta };
+    marketplace_name: store[0].toUpperCase() + store.slice(1), ...categoryMeta };
 }
 
 export function listing(store, html, url, meta = {}) {
   const $ = load(html), rows = [];
   if (store === 'myntra') {
     // Client-side Next navigation can leave the initial __myx script unchanged.
-    const products = meta.page > 1 ? [] : embedded(html, 'window.__myx').searchData?.results?.products || [];
+    const products = meta.page > 1 && !meta.http ? [] : embedded(html, 'window.__myx').searchData?.results?.products || [];
     for (const p of products) rows.push({ id: String(p.productId || p.id || ''), brand: p.brand,
       name: p.product || p.productName, price: p.price, mrp: p.mrp, rating: p.rating,
       rating_count: p.ratingCount, discount: p.discountDisplayLabel, sizes: p.sizes,
@@ -65,14 +66,17 @@ export function listing(store, html, url, meta = {}) {
       } else if (store === 'flipkart') {
         const pid = $(el).attr('data-id');
         rows.push({ id: pid, pid, title: attr(c, 'a[title]', 'title') || attr(c, 'img', 'alt'),
-          price: text(c, '.hZ3P6w|.Nx9bqj'), mrp: text(c, '.kRYCnD|.yRaY8j'),
-          rating: text(c, '.MKiFS6|.CjyrHS'), rating_count: text(c, '.PvbNMB'),
+          price: text(c, '.hZ3P6w|.QiMO5r > div:nth-of-type(1)|.Nx9bqj'), mrp: text(c, '.kRYCnD|.QiMO5r > div:nth-of-type(2)|.yRaY8j'),
+          rating: text(c, '.MKiFS6|.CjyrHS|[id*="productRating"]'), rating_count: text(c, '.PvbNMB|span[class*="PvbNMB"]'),
           image: image(c), url: absolute(attr(c, 'a[href*="/p/"], a[href]', 'href'), url) });
       } else {
         const href = attr(c, 'a[href*="/p/"]', 'href');
-        const id = href.match(/\/p\/(\d+)/)?.[1];
+        const id = href.match(/\/p\/(\d+)/)?.[1]||href.match(/productId=(\d+)/)?.[1];
+        const accessible=text(c,'.css-1yjfidh');
+        const price=text(c,'.css-111z9ua|span[class*="111z9ua"]')||accessible.match(/Discounted price\s*₹?\s*([\d,]+(?:\.\d+)?)/i)?.[1];
+        const mrp=text(c,'.css-17x46n5|span[class*="17x46n5"]')||accessible.match(/Regular price\s*₹?\s*([\d,]+(?:\.\d+)?)/i)?.[1];
         rows.push({ id: id ? `NYK-${id}` : '', product_id: id, sku_id: href.match(/skuId=(\d+)/)?.[1] || '',
-          title: attr(c, 'img[alt]', 'alt') || text(c, 'h2'), price: text(c, '.css-111z9ua'), mrp: text(c, '.css-17x46n5'),
+          title: [attr(c, 'img[alt]', 'alt'),text(c, 'h2')].sort((a,b)=>b.length-a.length)[0], price:price||mrp, mrp,
           image: image(c), rating: attr(c, '[aria-label*="star rating"]', 'aria-label'),
           rating_count: text(c, '.css-1tbknh0'), url: absolute(href, url) });
       }
@@ -154,6 +158,14 @@ export function pdp(store, html, url, source = {}) {
 
 export function nextUrl(store, html, current) {
   const $ = load(html);
+  if(store==='flipkart'){
+    const page=Number(new URL(current).searchParams.get('page')||1);
+    const link=$('a[href]').toArray().find(el=>{
+      try{const url=new URL($(el).attr('href'),current);return url.hostname===new URL(current).hostname&&url.pathname===new URL(current).pathname&&Number(url.searchParams.get('page'))===page+1;}
+      catch{return false;}
+    });
+    if(link)return absolute($(link).attr('href'),current);
+  }
   const selector = { amazon: 'a.s-pagination-next:not(.s-pagination-disabled)', flipkart: 'a._9QVEpD, a._1LKTO3', myntra: '.pagination-next:not(.pagination-disabled) a', nykaa: 'a[aria-label="Next"], a[rel="next"]' }[store];
   const links = $(selector).toArray();
   const el = links.find(e => /next/i.test($(e).text()) || store !== 'flipkart');

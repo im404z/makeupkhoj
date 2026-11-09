@@ -54,7 +54,7 @@ test('serialized upserts retain PDP enrichment and do not conflict with source h
   const updates = [];
   storage.db = { collection: () => ({
     async findOne() { return { price: 100 }; },
-    async updateOne(key, update) { active++; max = Math.max(max, active); await new Promise(r => setTimeout(r, 5)); updates.push(update); active--; }
+    async updateOne(key, update) { active++; max = Math.max(max, active); await new Promise(r => setTimeout(r, 5)); updates.push(update); active--; return { upsertedCount: 0 }; }
   }) };
   const row = { id: '1', url: 'https://example.com/p', title: 'Test lipstick', price: 90, price_history: [], lowest_recorded_price: 100, highest_recorded_price: 100 };
   await Promise.all([storage.save('myntra', [row], 'pdp'), storage.save('myntra', [row], 'listing')]);
@@ -69,26 +69,48 @@ test('serialized upserts retain PDP enrichment and do not conflict with source h
 test('missing listing prices do not overwrite stored price or check timestamp', async () => {
   const storage = new Storage({ runId: 'test' });
   let update;
-  storage.db = { collection: () => ({ async findOne() { return { price: 100 }; }, async updateOne(k, u) { update = u; } }) };
+  storage.db = { collection: () => ({ async findOne() { return { price: 100 }; }, async updateOne(k, u) { update = u; return { upsertedCount: 0 }; } }) };
   await storage.save('myntra', [{ id: '1', title: 'Lipstick', url: 'https://example.com', price: null, mrp: null }], 'listing');
   assert.ok(!('price' in update.$set)); assert.ok(!('price_last_checked' in update.$set));
   assert.ok(!('$push' in update));
+  assert.equal(storage.changes.missingPrice, 1);
 });
 test('crawler updates preserve categories manually reviewed in the admin panel', async () => {
   const storage = new Storage({ runId: 'test' });
   let update;
-  storage.db = { collection: () => ({ async findOne() { return { price: 100, category_reviewed: true }; }, async updateOne(k, u) { update = u; } }) };
+  storage.db = { collection: () => ({ async findOne() { return { price: 100, category_reviewed: true }; }, async updateOne(k, u) { update = u; return { upsertedCount: 0 }; } }) };
   await storage.save('myntra', [{ id: '1', title: 'Lipstick', url: 'https://example.com', price: 100, category: 'Makeup', sub_category: 'General', sub_sub_category: 'General', category_path: 'Makeup > General', category_reviewed: false }], 'listing');
   for (const field of ['category', 'sub_category', 'sub_sub_category', 'category_path', 'category_reviewed']) assert.ok(!(field in update.$set));
 });
 
 test('refresh preserves existing review details when extraction returns empty fields', async () => {
   const storage=new Storage({runId:'test'});let update;
-  storage.db={collection:()=>({async findOne(){return {price:'100'};},async updateOne(k,u){update=u;}})};
+  storage.db={collection:()=>({async findOne(){return {price:'100'};},async updateOne(k,u){update=u;return {upsertedCount:0};}})};
   await storage.save('nykaa',[{id:'1',title:'Lipstick',url:'https://example.com',price:100,reviews:[],images:[],specifications:{},rating:undefined}], 'pdp');
   for(const field of ['reviews','images','specifications','rating'])assert.ok(!(field in update.$set));
   assert.ok(!update.$push);
   await storage.save('nykaa',[{id:'1',title:'Lipstick',url:'https://example.com',price:90,reviews:[{text:'Updated review'}],rating:4.6}], 'pdp');
   assert.equal(update.$set.reviews[0].text,'Updated review');assert.equal(update.$set.rating,4.6);
   assert.equal(update.$push.price_history.$each[0].old_price,100);
+  assert.equal(storage.changes.unchangedPrice, 1);
+  assert.equal(storage.changes.priceDown, 1);
+});
+
+test('refresh reports new records, price increases, and first prices separately', async () => {
+  const events = [];
+  const storage = new Storage({ runId: 'test', onChange: event => events.push(event) });
+  const previous = { existing: { price: 90 }, unpriced: {} };
+  storage.db = { collection: () => ({
+    async findOne({ id }) { return previous[id]; },
+    async updateOne({ id }) { return { upsertedCount: previous[id] ? 0 : 1 }; },
+  }) };
+  await storage.save('flipkart', ['new', 'existing', 'unpriced'].map(id => ({
+    id, title: 'Lipstick', url: 'https://example.com', price: 100,
+  })), 'listing');
+  assert.equal(storage.changes.newProducts, 1);
+  assert.equal(storage.changes.priceUp, 1);
+  assert.equal(storage.changes.firstPrice, 1);
+  assert.deepEqual(events.map(event => [event.change, event.previous, event.price]), [
+    ['newProducts', null, 100], ['priceUp', 90, 100],
+  ]);
 });

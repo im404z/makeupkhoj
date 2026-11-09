@@ -24,12 +24,33 @@ export function proxyOptions(env=process.env){
  return {proxyUrls:proxyUrls(env)};
 }
 export function targets(store, url, subcategory) {
-  const rows = JSON.parse(fs.readFileSync(path.join(root, 'crawler/makeup_urls.json'), 'utf8')).filter(r => r.marketplace === store);
+  if(!stores.includes(store))throw Error('Invalid marketplace');
+  const source=path.join(root,'crawler',store,`${store}_makeup_urls.json`);
+  const rows = JSON.parse(fs.readFileSync(source, 'utf8'));
+  if(!Array.isArray(rows)||rows.some(r=>r.marketplace!==store||!r.url))throw Error('Invalid category URL file for '+store);
+  const domain = { amazon: 'amazon.in', flipkart: 'flipkart.com', myntra: 'myntra.com', nykaa: 'nykaa.com' }[store];
+  for(const row of rows){const parsed=new URL(row.url);if(!['http:','https:'].includes(parsed.protocol)||(parsed.hostname!==domain&&!parsed.hostname.endsWith('.'+domain)))throw Error('Invalid category domain for '+store);}
   if (url) {
     const host = new URL(url).hostname;
     const domain = { amazon: 'amazon.in', flipkart: 'flipkart.com', myntra: 'myntra.com', nykaa: 'nykaa.com' }[store];
     if (host !== domain && !host.endsWith(`.${domain}`)) throw Error('--url must belong to selected marketplace');
     return [rows.find(r => r.url === url) || { marketplace: store, category: 'Makeup', url }];
   }
-  return rows.filter(r => !subcategory || r.sub_category.toLowerCase() === subcategory.toLowerCase());
+  return rows.filter(r => !subcategory || String(r.sub_category||'').toLowerCase() === subcategory.toLowerCase());
+}
+
+export function resolveEngine(store,phase,options){
+  if(options.engine&&options.engine!=='auto')return options.engine;
+  if(options.browserStores?.includes(store))return 'browser';
+  return phase==='listing'&&store!=='amazon'?'http':'browser';
+}
+
+export function browserChannel(env=process.env){
+  if(env.CRAWLER_BROWSER_CHANNEL)return env.CRAWLER_BROWSER_CHANNEL==='bundled'?undefined:env.CRAWLER_BROWSER_CHANNEL;
+  if(process.platform==='win32'){
+    for(const base of [env.PROGRAMFILES,env['PROGRAMFILES(X86)'],env.LOCALAPPDATA].filter(Boolean)){
+      if(fs.existsSync(path.join(base,'Google/Chrome/Application/chrome.exe')))return 'chrome';
+    }
+  }
+  return undefined;
 }
