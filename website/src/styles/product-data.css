@@ -22,3 +22,20 @@
 .product-card__footer--comparison { flex-wrap:wrap; gap:8px; }.product-card__footer--comparison .comparison-card__stores { flex-basis:100%; max-width:none; }.product-card__footer--comparison .product-card__offer { margin-left:auto; }
 @media(max-width:640px) { .product-card__rating>.comparison-card__summary { display:block; font-size:9px; line-height:1.5; } }
 @media(max-width:700px) { .product-data__heading,.product-data__store { padding:20px 16px; }.product-data__facts,.product-data__reviews { grid-template-columns:1fr; }.product-data__heading h2 { font-size:21px; }.product-data__source { gap:14px; align-items:start; }.product-data__source p { font-size:12px; }.product-data__rating { gap:16px; padding:14px; }.product-data__rating p { font-size:11px; }.product-data__rating>strong { font-size:28px; } }
+
+.price-history { border-color:#dce1d2; border-radius:12px; }
+.price-history .product-data__heading { background:#f5f7f0; border-color:#dce1d2; border-radius:12px 12px 0 0; }
+.price-history .product-data__heading h2 { font-family:Georgia,serif; font-weight:400; }
+.price-history .product-data__source p { overflow-wrap:anywhere; }
+.price-history .product-data__range { gap:12px; }
+.price-history .product-data__range p { flex:1 1 120px; border-radius:8px; background:#f5f7f0; }
+.price-history__table { width:100%; border-collapse:collapse; font-size:13px; font-variant-numeric:tabular-nums; }
+.price-history__table th,.price-history__table td { padding:10px 8px; border-bottom:1px solid #e1e5ed; text-align:right; }
+.price-history__table th:first-child,.price-history__table td:first-child { text-align:left; }
+.price-history__table th { background:#f5f7f0; font-weight:600; }
+.price-history__table td:nth-child(2) { font-weight:600; }
+@media(max-width:520px) {
+ .price-history .product-data__heading,.price-history .product-data__store { padding:16px; }
+ .price-history__table { font-size:12px; }
+ .price-history__table th,.price-history__table td { padding:8px 4px; }
+}

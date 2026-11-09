@@ -3,11 +3,17 @@ import CustomerPhotoGallery from './CustomerPhotoGallery';
 import {productDetails} from '@/lib/utils/product-details.mjs';
 import {formatPrice,formatRating} from '@/lib/utils/format';
 import type {Product} from '@/types/product';
+type Sources = Array<{product:Product;data:ReturnType<typeof productDetails>}>;
+
+export function recordedPriceSources(sources: Sources) {
+ return sources.filter(({data}) => data.history.length || Number(data.lowest) > 0 || Number(data.highest) > 0);
+}
+
 function date(value:string){const d=new Date(value);return Number.isFinite(d.getTime())?d.toLocaleString('en-IN',{timeZone:'Asia/Kolkata',day:'numeric',month:'short',year:'numeric'}):value;}
 function Facts({rows}:{rows:Array<string[]>}){return <dl className="product-data__facts">{rows.map(([label,value])=><div key={label}><dt>{label}</dt><dd>{value}</dd></div>)}</dl>;}
 function Source({product}:{product:Product}){return <header className="product-data__source"><MarketplaceLogo store={product.marketplace}/><p>{product.name}</p></header>;}
-export default function ProductDataSections({sources,relatedLink}:{sources:Array<{product:Product;data:ReturnType<typeof productDetails>}>;relatedLink?:React.ReactNode}){
- const hasReviews=sources.some(s=>s.data.reviews.length||s.data.photos.length||s.data.rating),hasHistory=sources.some(s=>s.data.history.length||Number(s.data.lowest)>0||Number(s.data.highest)>0);
+export default function ProductDataSections({sources,hasHistory,relatedLink}:{sources:Sources;hasHistory:boolean;relatedLink?:React.ReactNode}){
+ const hasReviews=sources.some(s=>s.data.reviews.length||s.data.photos.length||s.data.rating);
  return <div className="product-data">
   <nav className="product-detail__section-nav" aria-label="Product information sections"><a href="#product-information">Product details</a>{hasReviews&&<a href="#customer-reviews">Ratings & reviews</a>}{hasHistory&&<a href="#price-history">Price history</a>}{relatedLink}</nav>
   <section id="product-information" className="product-data__section"><div className="product-data__heading"><p className="eyebrow">Know your product</p><h2>Product details</h2><p>Specifications and store information from the latest saved marketplace data.</p></div>
@@ -26,6 +32,34 @@ export default function ProductDataSections({sources,relatedLink}:{sources:Array
    {data.photos.length>0&&<div><h3>Customer photos</h3><CustomerPhotoGallery photos={data.photos} name={product.name} store={product.marketplace_name||product.marketplace}/></div>}
    {data.reviews.length>0&&<><p className="product-data__note">Showing {data.reviews.length} saved written reviews. Store totals may include reviews that have not been collected.</p><div className="product-data__reviews">{data.reviews.map((r,i)=><article key={i} className="product-data__review"><header><strong>{r.author}</strong><p>{r.date}{r.verified?' · Store marks purchase verified':''}</p></header>{formatRating(r.rating)&&<span className="product-data__review-rating">{formatRating(r.rating)} / 5</span>}{r.title&&<h4>{r.title}</h4>}<p>{r.text}</p>{Number(r.likes)>0&&<small>{r.likes} found this helpful on the store</small>}</article>)}</div></>}
   </article>)}</section>}
-  {hasHistory&&<section id="price-history" className="product-data__section"><div className="product-data__heading"><p className="eyebrow">Saved prices</p><h2>Recorded price history</h2><p>These are stored observations from this site, not a complete price history.</p></div>{sources.filter(s=>s.data.history.length||Number(s.data.lowest)>0||Number(s.data.highest)>0).map(({product,data})=><article key={product.marketplace+product._id} className="product-data__store"><Source product={product}/><div className="product-data__range">{Number(data.lowest)>0&&<p>Lowest recorded <strong>{formatPrice(data.lowest)}</strong></p>}{Number(data.highest)>0&&<p>Highest recorded <strong>{formatPrice(data.highest)}</strong></p>}</div>{data.history.length>0&&<div className="overflow-x-auto"><table className="admin-table"><thead><tr><th>Date</th><th>Recorded price</th><th>Previous recorded price</th></tr></thead><tbody>{data.history.map((h:any,i:number)=><tr key={i}><td>{date(h.date)||'Date unavailable'}</td><td>{formatPrice(h.price)}</td><td>{Number(h.oldPrice)>0?formatPrice(h.oldPrice):'-'}</td></tr>)}</tbody></table></div>}</article>)}</section>}
+
  </div>;
+}
+
+export function RecordedPriceHistory({sources}: {sources: Sources}) {
+ if (!sources.length) return null;
+ return <section id="price-history" className="product-data__section price-history" aria-labelledby="price-history-heading">
+  <header className="product-data__heading">
+   <p className="eyebrow">Saved prices</p>
+   <h2 id="price-history-heading">Recorded price history</h2>
+   <p>Prices observed during previous store checks.</p>
+  </header>
+  {sources.map(({product,data}) => <article key={product.marketplace + ':' + product._id} className="product-data__store">
+   <Source product={product}/>
+   {(Number(data.lowest)>0 || Number(data.highest)>0) && <div className="product-data__range">
+    {Number(data.lowest)>0 && <p>Lowest recorded <strong>{formatPrice(data.lowest)}</strong></p>}
+    {Number(data.highest)>0 && <p>Highest recorded <strong>{formatPrice(data.highest)}</strong></p>}
+   </div>}
+   {data.history.length>0 && <div className="overflow-x-auto">
+    <table className="price-history__table" aria-label={product.marketplace + ' price observations'}>
+     <thead><tr><th scope="col">Date</th><th scope="col">Recorded price</th><th scope="col">Previous price</th></tr></thead>
+     <tbody>{data.history.map((entry: {date:string;price:number;oldPrice?:number}, index: number) => <tr key={index}>
+      <td>{date(entry.date) || 'Date unavailable'}</td>
+      <td>{formatPrice(entry.price)}</td>
+      <td>{entry.oldPrice && entry.oldPrice > 0 ? formatPrice(entry.oldPrice) : '—'}</td>
+     </tr>)}</tbody>
+    </table>
+   </div>}
+  </article>)}
+ </section>;
 }
