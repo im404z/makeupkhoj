@@ -16,3 +16,35 @@ h1,h2,h3 { text-wrap:balance; } button,input,select,textarea { font:inherit; } b
 .admin-input { width:100%; border:1px solid #d9dad3; background:white; padding:11px 12px; min-height:43px; } .admin-button { display:inline-flex; align-items:center; justify-content:center; gap:8px; padding:11px 18px; background:#272e26; color:white; border:1px solid #272e26; font-size:12px; } .admin-secondary { background:transparent; color:#272e26; border-color:#d9dad3; }
 .admin-table { width:100%; border-collapse:collapse; text-align:left; font-size:12px; } .admin-table th { font-weight:500; text-transform:uppercase; letter-spacing:.1em; font-size:10px; color:#686b62; } .admin-table th,.admin-table td { padding:16px; border-bottom:1px solid #e2e3dc; } .admin-label { display:block; font-size:11px; margin-bottom:7px; color:#5e645b; }
 @media(prefers-reduced-motion:reduce) { *,*::before,*::after { animation:none!important; transition:none!important; } }
+
+.route-loader {
+  min-height: 96px;
+  display: grid;
+  place-content: center;
+  justify-items: center;
+}
+.route-loader p {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: #874737;
+  font-size: 13px;
+}
+.route-loader__spinner {
+  width: 15px;
+  height: 15px;
+  border: 2px solid #e5d4ca;
+  border-top-color: currentColor;
+  border-radius: 50%;
+  animation: route-loader-spin 750ms linear infinite;
+}
+@keyframes route-loader-spin {
+  to { transform: rotate(1turn); }
+}
+@media (prefers-reduced-motion: no-preference) {
+  .route-loader p { animation: route-loader-show 1ms 150ms backwards; }
+  @keyframes route-loader-show {
+    from { opacity: 0; }
+    to { opacity: 1; }
+  }
+}
