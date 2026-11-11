@@ -49,7 +49,7 @@ export function parseCatalogFilters(sp: Record<string, string | string[] | undef
   return { page: Math.max(1, Math.floor(numeric('page') || 1)),
     brand: sp.brand, marketplace: sp.marketplace,
     minPrice: numeric('minPrice'), maxPrice: numeric('maxPrice'), minDiscount: numeric('minDiscount'), rating: numeric('rating'),
-    inStockOnly: value('inStock') === 'true', finish: value('finish'), coverage: value('coverage'), skinType: value('skinType'),
+    inStockOnly: value('inStock') === 'true', hasImageOnly: value('hasImage') === 'true' || value('hasImageOnly') === 'true', finish: value('finish'), coverage: value('coverage'), skinType: value('skinType'),
     search: value('q') || value('search'), category: value('category'), sub_category: value('sub_category'),
   };
 }

@@ -324,6 +324,10 @@ def save_nykaa_to_mongodb(
                 "price_last_checked": now_iso,
                 "updated_at": now_iso
             }
+            if not doc_to_save.get("image") and existing and existing.get("image"):
+                doc_to_save["image"] = existing["image"]
+                doc_to_save["high_res_image"] = existing.get("high_res_image") or existing["image"]
+                doc_to_save["images"] = existing.get("images") or [existing["image"]]
 
             update_op = {"$set": doc_to_save}
 
@@ -480,6 +484,20 @@ class NykaaCrawler:
         cards = soup.select(".productWrapper, div[class*='productWrapper']")
         products = []
 
+        # Build fallback image map from preloaded listing state
+        state_images = {}
+        for script_match in re.finditer(r'window\.__PRELOADED_STATE__\s*=\s*({.*?});?\s*</script>', html, re.DOTALL):
+            try:
+                state_data = json.loads(script_match.group(1))
+                prods = state_data.get("categoryListing", {}).get("listingData", {}).get("products", [])
+                for p in prods:
+                    pid = str(p.get("id") or p.get("productId") or p.get("childId") or "")
+                    img_url = p.get("imageUrl")
+                    if pid and img_url:
+                        state_images[pid] = img_url
+            except Exception:
+                pass
+
         cat = category_meta or lookup_category_by_url(self.start_url) or {}
         category = cat.get('category', 'Makeup')
         sub_category = cat.get('sub_category', 'General')
@@ -521,7 +539,9 @@ class NykaaCrawler:
                     continue
 
                 raw_image = img_el.get("src", "").strip() if img_el else ""
-                high_res_image = re.sub(r'tr:w-\d+,h-\d+[^/]*/', '', raw_image) if raw_image else ""
+                if not raw_image and raw_pid and str(raw_pid) in state_images:
+                    raw_image = state_images[str(raw_pid)]
+                high_res_image = re.sub(r'tr:[^/]+/', '', raw_image) if raw_image else ""
 
                 # 3. Brand Extraction
                 brand = self.brand_matcher.extract_brand(product_title, href)

@@ -681,6 +681,7 @@ class NykaaPDPCrawler:
 
             # Visuals
             "image": hero_image,
+            "high_res_image": hero_image,
             "images": gallery_images,
             "customer_photos": customer_photos,
             "videos": video_urls,
@@ -707,18 +708,24 @@ class NykaaPDPCrawler:
 
     def _extract_preloaded_state(self, html: str) -> Dict[str, Any]:
         """Extract and parse window.__PRELOADED_STATE__ JSON object from HTML"""
+        for m in re.finditer(r'window\.__PRELOADED_STATE__\s*=\s*({.*?});?\s*</script>', html, re.DOTALL):
+            try:
+                data = json.loads(m.group(1))
+                if "productPage" in data or "product" in data or "categoryListing" in data:
+                    return data
+            except Exception:
+                continue
         try:
             idx = html.find("window.__PRELOADED_STATE__")
-            if idx == -1:
-                return {}
-            end_idx = html.find("</script>", idx)
-            if end_idx == -1:
-                return {}
-            raw_js = html[idx:end_idx].strip()
-            raw_json = re.sub(r'^window\.__PRELOADED_STATE__\s*=\s*', '', raw_js).rstrip(';')
-            return json.loads(raw_json)
+            if idx != -1:
+                end_idx = html.find("</script>", idx)
+                if end_idx != -1:
+                    raw_js = html[idx:end_idx].strip()
+                    raw_json = re.sub(r'^window\.__PRELOADED_STATE__\s*=\s*', '', raw_js).rstrip(';').strip()
+                    return json.loads(raw_json)
         except Exception:
-            return {}
+            pass
+        return {}
 
     def run(
         self,
@@ -730,14 +737,15 @@ class NykaaPDPCrawler:
         dry_run: bool = False
     ) -> int:
         """Run batch PDP extraction for pending or targeted Nykaa products"""
+        is_missing_images_mode = (mode == "missing_images")
         is_all_mode = (mode == "all" or force)
-        active_mode = "all" if is_all_mode else "pending"
+        active_mode = "missing_images" if is_missing_images_mode else ("all" if is_all_mode else "pending")
 
         logger.info("=" * 75)
         logger.info(f"       MAKEUPKHOJ NYKAA PDP & CATALOG EXTRACTOR")
         logger.info("=" * 75)
         logger.info(f"Target DB: {DEFAULT_DB}.{DEFAULT_COLLECTION} | Master: {DEFAULT_DB}.products")
-        logger.info(f"Execution Mode: {active_mode.upper()} {'(Re-checking all products)' if is_all_mode else '(Pending un-scraped items only)'}")
+        logger.info(f"Execution Mode: {active_mode.upper()} {'(Targeting products without images)' if is_missing_images_mode else ('(Re-checking all products)' if is_all_mode else '(Pending un-scraped items only)')}")
         logger.info(f"Run Type: {'DRY RUN' if dry_run else 'LIVE MONGODB SYNC'}")
         logger.info(f"Limit: {limit if limit > 0 else 'All available'} | Force: {force}")
         logger.info("-" * 75)
@@ -767,7 +775,18 @@ class NykaaPDPCrawler:
                 logger.warning(f"Product ID {single_id} not found in {DEFAULT_COLLECTION}.")
                 return 0
         elif col is not None:
-            query = {} if is_all_mode else {"$or": [{"pdp_scraped": {"$ne": True}}, {"pdp_scraped": {"$exists": False}}]}
+            if is_missing_images_mode:
+                query = {
+                    "$or": [
+                        {"image": {"$in": ["", None]}},
+                        {"images": {"$size": 0}},
+                        {"images": {"$exists": False}}
+                    ]
+                }
+            elif is_all_mode:
+                query = {}
+            else:
+                query = {"$or": [{"pdp_scraped": {"$ne": True}}, {"pdp_scraped": {"$exists": False}}]}
             cursor = col.find(query)
             if limit > 0:
                 cursor = cursor.limit(limit)
@@ -1027,9 +1046,10 @@ class NykaaPDPCrawler:
 # --- CLI ENTRYPOINT ---
 def main():
     parser = argparse.ArgumentParser(description="MakeupKhoj Nykaa PDP / Catalog Details Extractor")
-    parser.add_argument("--mode", choices=["all", "pending"], default=None, help="Crawl mode: 'all' to re-crawl entire catalog (update prices, price history, reviews), 'pending' for unscraped products only")
+    parser.add_argument("--mode", choices=["all", "pending", "missing_images"], default=None, help="Crawl mode: 'all' to re-crawl entire catalog, 'pending' for unscraped products, 'missing_images' for products without image")
     parser.add_argument("--all", dest="run_all", action="store_true", help="Re-crawl ALL catalog products (check price changes, record price history, update reviews/ratings)")
     parser.add_argument("--pending", dest="run_pending", action="store_true", help="Crawl ONLY pending / unscraped products")
+    parser.add_argument("--missing-images", dest="run_missing_images", action="store_true", help="Crawl products that currently have missing images")
     parser.add_argument("--limit", type=int, default=50, help="Max products to scrape (0 for all) [default: 50]")
     parser.add_argument("--url", type=str, default=None, help="Scrape a single Nykaa PDP URL directly")
     parser.add_argument("--id", type=str, default=None, help="Scrape a specific product ID")
@@ -1041,7 +1061,9 @@ def main():
 
     # Determine mode
     mode = "pending"
-    if args.run_all or args.force or args.mode == "all":
+    if args.run_missing_images or args.mode == "missing_images":
+        mode = "missing_images"
+    elif args.run_all or args.force or args.mode == "all":
         mode = "all"
     elif args.run_pending or args.mode == "pending":
         mode = "pending"

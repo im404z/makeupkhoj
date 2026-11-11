@@ -10,7 +10,7 @@ import { ObjectId } from 'mongodb';
 import { categoryLeafMatch } from '@/lib/constants/category-leaves';
 import { cachedCatalogRead } from '@/lib/catalog-cache';
 export interface ProductQueryResult { products: Product[]; total: number; page: number; limit: number; totalPages: number; facets?: { brands: Array<{ name: string; count: number }>; categories: Array<{ name: string; count: number }>; marketplaces: Array<{ name: string; count: number }>; priceRange: { min: number; max: number } } }
-export interface CatalogParams { page?: number; limit?: number; category?: string; sub_category?: string; brand?: string | string[]; marketplace?: string | string[]; minPrice?: number; maxPrice?: number; minDiscount?: number; rating?: number; inStockOnly?: boolean; finish?: string; coverage?: string; skinType?: string; search?: string; sort?: string }
+export interface CatalogParams { page?: number; limit?: number; category?: string; sub_category?: string; brand?: string | string[]; marketplace?: string | string[]; minPrice?: number; maxPrice?: number; minDiscount?: number; rating?: number; inStockOnly?: boolean; hasImageOnly?: boolean; finish?: string; coverage?: string; skinType?: string; search?: string; sort?: string }
 export function normalizeProduct(doc: any, store?: string): Product {
   const cleanTitle = (v: unknown) => stripEmoji(v).replace(/\u2014/g, '-').replace(/^(?:sponsored\s*ad\s*[-–\u2014:]*\s*|sponsored\s*[-–\u2014:]*\s*|deal\s+of\s+the\s+day\s*[-–\u2014:]*\s*|buy\s+)/i, '').trim();
   const raw = { ...doc, _id: String(doc._id), id: String(doc.id || doc.asin || doc.product_id || doc._id), name: cleanTitle(doc.name || doc.title) || 'Makeup', marketplace: store || doc.marketplace };
@@ -52,6 +52,15 @@ async function queryProductsFromDB(params: ProductQueryParams): Promise<ProductQ
   if (params.sub_category) clauses.push(textGroup(['sub_category', 'sub_sub_category', 'category_name'], params.sub_category));
   if (params.brand) { const values = Array.isArray(params.brand) ? params.brand : [params.brand]; const directory = await getAllBrandsList(); const aliases = values.flatMap(value => directory.find(b => b.slug === slugify(value))?.aliases || [value]); clauses.push({ brand: { $in: aliases.map(b => new RegExp('^' + escapeRegex(b.trim()) + '$', 'i')) } }); }
   if (params.inStockOnly) clauses.push({ in_stock: { $ne: false } });
+  if (params.hasImageOnly) {
+    clauses.push({
+      $or: [
+        { image: { $exists: true, $nin: ['', null] } },
+        { mainImage: { $exists: true, $nin: ['', null] } },
+        { 'images.0': { $exists: true, $nin: ['', null] } }
+      ]
+    });
+  }
   for (const [key, value] of Object.entries({ finish: params.finish, coverage: params.coverage, skin_type: params.skinType })) if (value) clauses.push({ [key]: { $regex: escapeRegex(value), $options: 'i' } });
   const numeric: any = {};
   const price: any = {}; if (Number.isFinite(params.minPrice)) price.$gte = Number(params.minPrice); if (Number.isFinite(params.maxPrice)) price.$lte = Number(params.maxPrice); if (Object.keys(price).length) numeric.price = price;
@@ -79,7 +88,8 @@ async function queryProductsFromDB(params: ProductQueryParams): Promise<ProductQ
     const groups = await Promise.all(stores.map(store => readPopular(store, 0)));
     const docs = interleave(groups).slice(0, limit);
     const { decorateProductComparisons } = await import('@/lib/matching/catalog');
-    const products = await decorateProductComparisons(docs.map(doc => normalizeProduct(doc)));
+    let products = await decorateProductComparisons(docs.map(doc => normalizeProduct(doc)));
+    if (params.hasImageOnly) products = products.filter(p => Boolean(p.image && p.image.trim()));
     return { ...empty, products, total: products.length };
   }
   const countsPromise = Promise.all(stores.map(async store => {
@@ -114,7 +124,9 @@ async function queryProductsFromDB(params: ProductQueryParams): Promise<ProductQ
     docs = await getModelByMarketplace(stores[0])!.aggregate(combined).allowDiskUse(true);
   }
   const { decorateProductComparisons } = await import('@/lib/matching/catalog');
-  return { products: await decorateProductComparisons(docs.map(doc => normalizeProduct(doc))), total, page, limit, totalPages: Math.ceil(total / limit) };
+  let products = await decorateProductComparisons(docs.map(doc => normalizeProduct(doc)));
+  if (params.hasImageOnly) products = products.filter(p => Boolean(p.image && p.image.trim()));
+  return { products, total, page, limit, totalPages: Math.ceil(total / limit) };
 }
 
 export async function getProductBySlugOrId(slugOrId: string, store?: string): Promise<Product | null> {
