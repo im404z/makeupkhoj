@@ -178,16 +178,6 @@ export function ItemListJsonLd({
     '@type': 'Brand',
     '@id': canonical + '#brand',
     name: brand,
-    ...(brandStats?.avgRating ? {
-      aggregateRating: {
-        '@type': 'AggregateRating',
-        ratingValue: brandStats.avgRating,
-        reviewCount: brandStats.ratingCount || brandStats.ratedProductsCount,
-        bestRating: 5,
-        worstRating: 1,
-      },
-    } : {}),
-    ...(brandStats?.priceRange ? { priceRange: brandStats.priceRange } : {}),
   } : undefined;
 
   const brandCatalogProduct = brand && brandStats && (brandStats.minPrice !== null || brandStats.avgRating !== null) ? {

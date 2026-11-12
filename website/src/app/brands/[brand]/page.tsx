@@ -91,7 +91,7 @@ export default async function BrandDetailPage({ params, searchParams }: BrandDet
             Verified Brand Catalog
           </span>
           <h1 className="text-2xl sm:text-4xl font-black text-neutral-900 tracking-tight">
-            {brandName}
+            {brandName} Makeup & Cosmetics
           </h1>
           <p className="text-xs sm:text-sm text-neutral-500 mt-2 leading-relaxed">
             Compare prices for {brandName} cosmetics. Find authentic listings, customer ratings, shades and maximum discounts across leading stores.

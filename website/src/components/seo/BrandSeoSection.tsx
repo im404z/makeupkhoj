@@ -80,9 +80,9 @@ export default function BrandSeoSection({ brandName }: BrandSeoSectionProps) {
           <HelpCircle size={18} strokeWidth={2} />
           <span className="text-xs font-bold uppercase tracking-wider">Frequently Asked</span>
         </div>
-        <h3 className="text-xl sm:text-2xl font-black text-neutral-900 tracking-tight mb-4">
+        <h2 className="text-xl sm:text-2xl font-black text-neutral-900 tracking-tight mb-4">
           Common Questions About {brandName} Products
-        </h3>
+        </h2>
 
         <div className="space-y-3">
           {faqs.map((faq, index) => (
