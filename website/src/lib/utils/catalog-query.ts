@@ -3,9 +3,21 @@ export const CATALOG_STORES = ['nykaa', 'amazon', 'flipkart', 'myntra'] as const
 export const escapeRegex = (value: string) => value.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
 
 export function numericExpression(input: unknown) {
-  return { $convert: { input: { $let: { vars: { value: { $regexFind: {
-    input: { $replaceAll: { input: { $convert: { input, to: 'string', onError: '', onNull: '' } }, find: ',', replacement: '' } }, regex: '[0-9]+(?:\\.[0-9]+)?',
-  } } }, in: '$$value.match' } }, to: 'double', onError: null, onNull: null } };
+  return {
+    $convert: {
+      input: {
+        $let: {
+          vars: {
+            value: {
+              $regexFind: {
+                input: { $replaceAll: { input: { $convert: { input, to: 'string', onError: '', onNull: '' } }, find: ',', replacement: '' } }, regex: '[0-9]+(?:\\.[0-9]+)?',
+              }
+            }
+          }, in: '$$value.match'
+        }
+      }, to: 'double', onError: null, onNull: null
+    }
+  };
 }
 
 export const catalogRatingFields = {
@@ -14,19 +26,27 @@ export const catalogRatingFields = {
 };
 
 export function normalizePipeline(store: string, ratingNormalized = false) {
-  return [{ $set: {
-    marketplace: store, marketplace_name: store === 'nykaa' ? 'Nykaa' : store[0].toUpperCase() + store.slice(1),
-    id: { $convert: { input: { $ifNull: ['$id', { $ifNull: ['$asin', '$_id'] }] }, to: 'string', onError: '', onNull: '' } },
-    name: { $ifNull: ['$name', { $ifNull: ['$title', 'Makeup'] }] },
-    price: numericExpression({ $ifNull: ['$price', '$currentPrice'] }), mrp: numericExpression('$mrp'),
-    ...(ratingNormalized ? {} : catalogRatingFields),
-    discount_percentage: numericExpression('$discount_percentage'),
-  } }, { $set: {
-    discount_percentage: { $cond: [{ $gt: ['$discount_percentage', 0] }, '$discount_percentage', { $cond: [
-      { $and: [{ $gt: ['$mrp', 0] }, { $gt: ['$price', 0] }, { $gt: ['$mrp', '$price'] }] },
-      { $round: [{ $multiply: [{ $divide: [{ $subtract: ['$mrp', '$price'] }, '$mrp'] }, 100] }, 0] }, 0,
-    ] }] },
-  } }];
+  return [{
+    $set: {
+      marketplace: store, marketplace_name: store === 'nykaa' ? 'Nykaa' : store[0].toUpperCase() + store.slice(1),
+      id: { $convert: { input: { $ifNull: ['$id', { $ifNull: ['$asin', '$_id'] }] }, to: 'string', onError: '', onNull: '' } },
+      name: { $ifNull: ['$name', { $ifNull: ['$title', 'Makeup'] }] },
+      price: numericExpression({ $ifNull: ['$price', '$currentPrice'] }), mrp: numericExpression('$mrp'),
+      ...(ratingNormalized ? {} : catalogRatingFields),
+      discount_percentage: numericExpression('$discount_percentage'),
+    }
+  }, {
+    $set: {
+      discount_percentage: {
+        $cond: [{ $gt: ['$discount_percentage', 0] }, '$discount_percentage', {
+          $cond: [
+            { $and: [{ $gt: ['$mrp', 0] }, { $gt: ['$price', 0] }, { $gt: ['$mrp', '$price'] }] },
+            { $round: [{ $multiply: [{ $divide: [{ $subtract: ['$mrp', '$price'] }, '$mrp'] }, 100] }, 0] }, 0,
+          ]
+        }]
+      },
+    }
+  }];
 }
 
 // Number of completed round-robin rows before a global offset. This lets each
@@ -46,7 +66,8 @@ export function interleave<T>(groups: T[][]): T[] {
 export function parseCatalogFilters(sp: Record<string, string | string[] | undefined>) {
   const value = (key: string) => typeof sp[key] === 'string' ? sp[key] as string : undefined;
   const numeric = (key: string) => { const v = value(key); return v !== undefined && v !== '' && Number.isFinite(Number(v)) ? Number(v) : undefined; };
-  return { page: Math.max(1, Math.floor(numeric('page') || 1)),
+  return {
+    page: Math.max(1, Math.floor(numeric('page') || 1)),
     brand: sp.brand, marketplace: sp.marketplace,
     minPrice: numeric('minPrice'), maxPrice: numeric('maxPrice'), minDiscount: numeric('minDiscount'), rating: numeric('rating'),
     inStockOnly: value('inStock') === 'true', hasImageOnly: value('hasImage') === 'true' || value('hasImageOnly') === 'true', finish: value('finish'), coverage: value('coverage'), skinType: value('skinType'),

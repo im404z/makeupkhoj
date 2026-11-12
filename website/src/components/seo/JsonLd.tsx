@@ -1,8 +1,9 @@
 import React from 'react';
 import type { Product } from '@/types/product';
+import type { BrandStats } from '@/lib/utils/brand-stats';
 import { formatRating } from '@/lib/utils/format';
 
-const BASE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://makeupkhoj.com';
+const BASE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://www.makeupkhoj.shop';
 
 interface JsonLdProps {
   data: Record<string, unknown>;
@@ -93,6 +94,7 @@ export function ProductJsonLd({ product }: { product: Product }) {
       itemCondition: 'https://schema.org/NewCondition',
       ...(typeof product.in_stock === 'boolean' ? { availability: product.in_stock ? 'https://schema.org/InStock' : 'https://schema.org/OutOfStock' } : {}),
       url: product.url,
+      priceValidUntil: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString().split('T')[0],
       seller: {
         '@type': 'Organization',
         name: product.marketplace_name || product.marketplace,
@@ -144,6 +146,7 @@ export function ItemListJsonLd({
   total,
   page = 1,
   brand,
+  brandStats,
 }: {
   name: string;
   description: string;
@@ -152,6 +155,7 @@ export function ItemListJsonLd({
   total?: number;
   page?: number;
   brand?: string;
+  brandStats?: BrandStats | null;
 }) {
   const data = {
     '@context': 'https://schema.org',
@@ -169,11 +173,64 @@ export function ItemListJsonLd({
   };
   if (!url) return <JsonLd data={data} />;
   const canonical = new URL(url, BASE_URL).href;
+
+  const brandEntity = brand ? {
+    '@type': 'Brand',
+    '@id': canonical + '#brand',
+    name: brand,
+    ...(brandStats?.avgRating ? {
+      aggregateRating: {
+        '@type': 'AggregateRating',
+        ratingValue: brandStats.avgRating,
+        reviewCount: brandStats.ratingCount || brandStats.ratedProductsCount,
+        bestRating: 5,
+        worstRating: 1,
+      },
+    } : {}),
+    ...(brandStats?.priceRange ? { priceRange: brandStats.priceRange } : {}),
+  } : undefined;
+
+  const brandCatalogProduct = brand && brandStats && (brandStats.minPrice !== null || brandStats.avgRating !== null) ? {
+    '@type': 'Product',
+    '@id': canonical + '#catalog-product',
+    name: `${brand} Cosmetics & Makeup`,
+    description: `Compare ${brand} cosmetics and makeup prices across Nykaa, Amazon, Flipkart and Myntra.${brandStats.priceRange ? ` Starting from ${brandStats.priceRange}.` : ''}`,
+    url: canonical,
+    brand: {
+      '@type': 'Brand',
+      name: brand,
+    },
+    ...(products[0]?.high_res_image || products[0]?.image ? {
+      image: products[0].high_res_image || products[0].image,
+    } : {}),
+    ...(brandStats.avgRating ? {
+      aggregateRating: {
+        '@type': 'AggregateRating',
+        ratingValue: brandStats.avgRating,
+        reviewCount: brandStats.ratingCount || brandStats.ratedProductsCount,
+        bestRating: 5,
+        worstRating: 1,
+      },
+    } : {}),
+    ...(brandStats.minPrice !== null ? {
+      offers: {
+        '@type': 'AggregateOffer',
+        priceCurrency: 'INR',
+        lowPrice: brandStats.minPrice,
+        highPrice: brandStats.maxPrice ?? brandStats.minPrice,
+        offerCount: brandStats.productCount || total || products.length,
+        priceRange: brandStats.priceRange || undefined,
+        url: canonical,
+      },
+    } : {}),
+  } : undefined;
+
   return <JsonLd data={{ '@context': 'https://schema.org', '@graph': [
     { '@type': 'CollectionPage', '@id': canonical + '#collection', url: canonical, name, description,
       isPartOf: { '@id': `${BASE_URL}/#website` }, mainEntity: { '@id': canonical + '#items' },
-      ...(brand ? { about: { '@type': 'Brand', name: brand } } : {}),
+      ...(brandEntity ? { about: brandEntity } : {}),
     },
+    ...(brandCatalogProduct ? [brandCatalogProduct] : []),
     { ...data, '@id': canonical + '#items' },
   ] }} />;
 }

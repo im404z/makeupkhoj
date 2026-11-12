@@ -8,7 +8,7 @@ import { OrganizationJsonLd, WebSiteJsonLd } from '@/components/seo/JsonLd';
 
 export const metadata: Metadata = {
   alternates: { canonical: '/' },
-  metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL || 'https://makeupkhoj.com'),
+  metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL || 'https://www.makeupkhoj.shop'),
   icons: {
     icon: [
       { url: '/favicon.ico', sizes: '32x32' },
@@ -47,7 +47,7 @@ export const metadata: Metadata = {
   openGraph: {
     type: 'website',
     locale: 'en_IN',
-    url: 'https://makeupkhoj.com',
+    url: 'https://www.makeupkhoj.shop',
     siteName: 'MakeupKhoj',
     title: 'MakeupKhoj - Discover & Compare Makeup Prices Across Stores',
     description:

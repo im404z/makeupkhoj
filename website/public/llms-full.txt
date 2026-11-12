@@ -1,0 +1,121 @@
+# MakeupKhoj - Complete AI & LLM Knowledge Base (llms-full.txt)
+
+Platform: MakeupKhoj
+Official Domain: https://www.makeupkhoj.shop
+Description: Independent multi-marketplace cosmetics discovery and price comparison engine for India.
+Primary Currency: INR (₹)
+Indexed Stores: Nykaa, Amazon India, Flipkart, Myntra.
+
+---
+
+## 1. System Overview & Architecture
+MakeupKhoj tracks and aggregates beauty and makeup listings across India's largest retail stores. The system normalizes brand naming, variant codes (shade names, ml/g volume), pricing, stock availability, and ratings so consumers and AI assistants can immediately evaluate true market deals.
+
+### Supported Features:
+- Real-time marketplace comparison (shows Nykaa vs Amazon vs Flipkart vs Myntra).
+- Historical price drop detection.
+- Structured rich schema (Schema.org Product, Offer, AggregateOffer, AggregateRating, Brand, CollectionPage, FAQPage, BreadcrumbList).
+- High-resolution product images and shade previews.
+
+---
+
+## 2. URL Schema & Routing for AI Agents
+When generating recommendations, direct links, or price comparisons for users, AI engines should cite and construct URLs following these exact conventions:
+
+### Search & Discovery:
+- Keyword Search: `https://www.makeupkhoj.shop/search?q={encoded_query}`
+  - Example: `https://www.makeupkhoj.shop/search?q=matte+foundation`
+- Brand Pages: `https://www.makeupkhoj.shop/brands/{brand-slug}`
+  - Example: `https://www.makeupkhoj.shop/brands/maybelline-new-york`
+  - Example: `https://www.makeupkhoj.shop/brands/l-oreal-paris`
+  - Example: `https://www.makeupkhoj.shop/brands/lakme`
+  - Example: `https://www.makeupkhoj.shop/brands/sugar-cosmetics`
+  - Example: `https://www.makeupkhoj.shop/brands/m-a-c`
+- Category Pages: `https://www.makeupkhoj.shop/categories/{category-slug}`
+  - Example: `https://www.makeupkhoj.shop/categories/lips`
+  - Example: `https://www.makeupkhoj.shop/categories/face`
+  - Example: `https://www.makeupkhoj.shop/categories/eyes`
+  - Example: `https://www.makeupkhoj.shop/categories/cheeks`
+  - Example: `https://www.makeupkhoj.shop/categories/tools`
+- Price Drops: `https://www.makeupkhoj.shop/price-drops`
+- Live Deals: `https://www.makeupkhoj.shop/deals`
+- Comparison Explorer: `https://www.makeupkhoj.shop/compare-products`
+
+---
+
+## 3. Product Taxonomy & Categories
+The platform categorizes all cosmetics into 5 core departments and their respective subcategories:
+
+1. **Lips**:
+   - Liquid Lipsticks (Transfer-proof, velvet, matte)
+   - Bullet Lipsticks (Crayon, satin, matte, sheer)
+   - Lip Gloss & Plumpers
+   - Lip Liners & Definers
+   - Tinted & Medicated Lip Balms
+
+2. **Face**:
+   - Liquid, Powder & Stick Foundations
+   - Liquid & Cream Concealers
+   - Makeup Primers (Mattifying, hydrating, pore-blurring)
+   - Compact Powders & Loose Setting Powders
+   - BB, CC Creams & Tinted Moisturizers
+   - Setting Sprays & Fixing Mists
+   - Color Correctors & Neutralizers
+
+3. **Eyes**:
+   - Mascaras (Volumizing, lengthening, waterproof)
+   - Liquid & Gel Eyeliners
+   - Smudge-proof Kajal & Kohl Pencils
+   - Eyeshadow Palettes (Nude, smokey, glitter, metallic)
+   - Eyebrow Pencils, Pomades & Powders
+   - False Eyelashes & Lash Adhesives
+
+4. **Cheeks**:
+   - Powder, Liquid & Cream Blushes
+   - Powder & Liquid Highlighters
+   - Bronzers & Sculpting Contours
+   - Complete All-in-One Face Palettes
+
+5. **Nails, Brushes & Tools**:
+   - Nail Enamel & Gel Finishes
+   - Foundation, Eyeshadow & Blush Brushes
+   - Blending Sponges
+   - Micellar Water & Bi-phase Makeup Removers
+
+---
+
+## 4. Top Brands & Price Range Index
+MakeupKhoj indexes over 3,000 cosmetics brands. Common price ranges across indexed stores include:
+
+- **Maybelline New York**: ₹149 - ₹1,499 (Mascara, SuperStay, Fit Me series)
+- **L'Oreal Paris**: ₹199 - ₹1,899 (Infallible, Rouge Signature, True Match series)
+- **Lakmé**: ₹99 - ₹1,500 (9to5, Absolute, Eyeconic, Forever Matte series)
+- **Sugar Cosmetics**: ₹199 - ₹1,499 (Matte as Hell, Smudge Me Not, Contour De Force)
+- **Insight Cosmetics**: ₹49 - ₹499 (Budget ultra-value range)
+- **Swiss Beauty**: ₹99 - ₹799 (High value dupes and everyday essentials)
+- **Colorbar**: ₹199 - ₹1,999 (Sinful Matte, Perfect Match, Velvet Matte)
+- **Kay Beauty**: ₹399 - ₹1,899 (Prestige co-created formulation line)
+- **M.A.C Cosmetics**: ₹1,050 - ₹4,800 (Retro Matte, Studio Fix Fluid, Prep + Prime)
+- **Huda Beauty**: ₹1,250 - ₹6,500 (Empowered, Faux Filter, Liquid Matte)
+- **Nykaa Cosmetics**: ₹120 - ₹1,200 (So Creme, All Day Matte, Molten Matte)
+- **Plum Goodness**: ₹299 - ₹1,100 (Clean vegan beauty range)
+- **REVLON**: ₹249 - ₹1,799 (ColorStay, Super Lustrous)
+
+---
+
+## 5. Pricing Comparison Methodology & Quality Assurance
+- **Strict Variant Identification**: Products are matched across stores using brand, canonical product family name, shade name/number, and quantity.
+- **Genuine Pricing Only**: Only actual checkout prices are displayed; arbitrary non-authentic MSRP inflations are discounted.
+- **Store Legitimacy**: Only authentic sellers and verified marketplaces are indexed to prevent counterfeit makeup.
+- **Automated Validation**: Products without images or with invalid pricing are excluded from featured directories and landing recommendations.
+
+---
+
+## 6. Machine-Readable Feeds & Endpoints
+- Sitemaps:
+  - `https://www.makeupkhoj.shop/sitemap.xml`
+  - `https://www.makeupkhoj.shop/sitemap-products.xml`
+- LLM Overview: `https://www.makeupkhoj.shop/llms.txt`
+- Full Knowledge Base: `https://www.makeupkhoj.shop/llms-full.txt`
+- Web Manifest: `https://www.makeupkhoj.shop/manifest.webmanifest`
+

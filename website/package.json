@@ -4,7 +4,9 @@
   "private": true,
   "scripts": {
     "dev": "next dev --webpack",
+    "prebuild": "node scripts/generate-brand-stats.mjs",
     "build": "next build --webpack",
+    "generate:brand-stats": "node scripts/generate-brand-stats.mjs",
     "start": "next start",
     "lint": "eslint"
   },

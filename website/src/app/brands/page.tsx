@@ -5,6 +5,7 @@ import Link from 'next/link';
 import Breadcrumb from '@/components/layout/Breadcrumb';
 import { getAllBrandsList } from '@/lib/utils/products';
 import { constructMetadata } from '@/lib/utils/seo';
+import { getAllBrandStatsMap } from '@/lib/utils/brand-stats';
 
 export const metadata: Metadata = constructMetadata({
   title: 'Makeup and cosmetics brand directory',
@@ -15,6 +16,7 @@ export const metadata: Metadata = constructMetadata({
 
 export default async function AllBrandsPage() {
   const brands = await getAllBrandsList();
+  const brandStatsMap = getAllBrandStatsMap();
 
   // Group brands alphabetically
   const grouped: Record<string, typeof brands> = {};
@@ -34,7 +36,37 @@ export default async function AllBrandsPage() {
   const base=process.env.NEXT_PUBLIC_SITE_URL||'https://makeupkhoj.com';
   return (
     <div>
-      <JsonLd data={{'@context':'https://schema.org','@type':'CollectionPage',name:'Makeup brands',url:base+'/brands',mainEntity:{'@type':'ItemList',itemListElement:brands.map((b,i)=>({'@type':'ListItem',position:i+1,item:{'@type':'Brand',name:b.name,url:base+'/brands/'+b.slug}}))}}}/>
+      <JsonLd data={{
+        '@context': 'https://schema.org',
+        '@type': 'CollectionPage',
+        name: 'Makeup brands',
+        url: base + '/brands',
+        mainEntity: {
+          '@type': 'ItemList',
+          itemListElement: brands.map((b, i) => {
+            const st = brandStatsMap[b.slug];
+            return {
+              '@type': 'ListItem',
+              position: i + 1,
+              item: {
+                '@type': 'Brand',
+                name: b.name,
+                url: base + '/brands/' + b.slug,
+                ...(st?.avgRating ? {
+                  aggregateRating: {
+                    '@type': 'AggregateRating',
+                    ratingValue: st.avgRating,
+                    reviewCount: st.ratingCount || st.ratedProductsCount,
+                    bestRating: 5,
+                    worstRating: 1,
+                  },
+                } : {}),
+                ...(st?.priceRange ? { priceRange: st.priceRange } : {}),
+              },
+            };
+          }),
+        },
+      }} />
       <Breadcrumb items={[{ label: 'All Brands' }]} />
 
       <div className="mb-8">
@@ -70,20 +102,35 @@ export default async function AllBrandsPage() {
             </h2>
 
             <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-3">
-              {grouped[letter].map((b) => (
-                <Link
-                  key={b.slug}
-                  href={`/brands/${b.slug}`}
-                  className="bg-white rounded-2xl border border-pink-100 p-3 hover-lift flex flex-col justify-between"
-                >
-                  <span className="text-xs font-bold text-neutral-800 line-clamp-1 hover:text-pink-600 transition-colors">
-                    {b.name}
-                  </span>
-                  <span className="text-[11px] text-pink-600 font-semibold mt-1">
-                    {b.count} products →
-                  </span>
-                </Link>
-              ))}
+              {grouped[letter].map((b) => {
+                const st = brandStatsMap[b.slug];
+                return (
+                  <Link
+                    key={b.slug}
+                    href={`/brands/${b.slug}`}
+                    className="bg-white rounded-2xl border border-pink-100 p-3 hover-lift flex flex-col justify-between"
+                  >
+                    <div>
+                      <span className="text-xs font-bold text-neutral-800 line-clamp-1 hover:text-pink-600 transition-colors">
+                        {b.name}
+                      </span>
+                      {st?.priceRange && (
+                        <span className="text-[10px] text-neutral-500 block line-clamp-1 mt-0.5 font-medium">
+                          {st.priceRange}
+                        </span>
+                      )}
+                    </div>
+                    <div className="text-[11px] text-pink-600 font-semibold mt-2 flex items-center justify-between">
+                      <span>{b.count} products</span>
+                      {st?.avgRating && (
+                        <span className="text-amber-700 font-bold text-[10px] bg-amber-50 px-1 py-0.5 rounded border border-amber-100/80">
+                          ★ {st.avgRating}
+                        </span>
+                      )}
+                    </div>
+                  </Link>
+                );
+              })}
             </div>
           </div>
         ))}

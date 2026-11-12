@@ -3,7 +3,7 @@ import {stripEmoji} from './plain-text.mjs';
 import {catalogUrl,hasCatalogFilters,catalogParams} from './catalog-urls';
 import type { Metadata } from 'next';
 
-const BASE_URL = (process.env.NEXT_PUBLIC_SITE_URL || 'https://makeupkhoj.com').replace(/\/+$/, '');
+const BASE_URL = (process.env.NEXT_PUBLIC_SITE_URL || 'https://www.makeupkhoj.shop').replace(/\/+$/, '');
 const SITE_NAME = 'MakeupKhoj';
 
 interface SeoProps {

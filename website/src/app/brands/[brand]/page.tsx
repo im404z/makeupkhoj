@@ -13,6 +13,7 @@ import { ItemListJsonLd } from '@/components/seo/JsonLd';
 import BrandSeoSection from '@/components/seo/BrandSeoSection';
 import { queryProducts, resolveBrandSlug } from '@/lib/utils/products';
 import { collectionMetadata } from '@/lib/utils/seo';
+import { getBrandStats } from '@/lib/utils/brand-stats';
 
 interface BrandDetailPageProps {
   params: Promise<{ brand: string }>;
@@ -23,7 +24,15 @@ export async function generateMetadata({ params, searchParams }: BrandDetailPage
   const { brand } = await params;
   const entry = await resolveBrandSlug(brand);
   if (!entry) notFound();
-  return collectionMetadata(`${entry.name} makeup prices`, `Compare ${entry.name} cosmetics across Nykaa, Amazon, Flipkart and Myntra. Browse product details, available shades and current store prices.`, `/brands/${entry.slug}`, await searchParams);
+  const stats = getBrandStats(entry.slug) || getBrandStats(entry.name);
+  const priceSnippet = stats?.priceRange ? ` (Prices: ${stats.priceRange})` : '';
+  const ratingSnippet = stats?.avgRating ? ` Rated ${stats.avgRating}/5 stars.` : '';
+  return collectionMetadata(
+    `${entry.name} makeup prices${priceSnippet}`,
+    `Compare ${entry.name} cosmetics across Nykaa, Amazon, Flipkart and Myntra.${ratingSnippet} Browse authentic products, available shades and current store prices.`,
+    `/brands/${entry.slug}`,
+    await searchParams
+  );
 }
 
 export default async function BrandDetailPage({ params, searchParams }: BrandDetailPageProps) {
@@ -36,6 +45,7 @@ export default async function BrandDetailPage({ params, searchParams }: BrandDet
   const sp=prepareListingRequest('/brands/'+entry.slug,rawParams);
   const decodedBrand = entry.name;
   const brandName = entry.name;
+  const stats = getBrandStats(entry.slug) || getBrandStats(entry.name);
 
   const page = Number(sp.page) || 1;
   const sort = typeof sp.sort === 'string' ? sp.sort : 'popular';
@@ -68,7 +78,11 @@ export default async function BrandDetailPage({ params, searchParams }: BrandDet
         name={`${brandName} Cosmetics`}
         description={`Compare all ${brandName} makeup prices and discounts`}
         products={result.products}
-        brand={brandName} total={result.total} page={result.page} url={catalogUrl(`/brands/${entry.slug}`,sp)}
+        brand={brandName}
+        brandStats={stats}
+        total={result.total}
+        page={result.page}
+        url={catalogUrl(`/brands/${entry.slug}`,sp)}
       />
 
       <div className="mb-6 bg-white rounded-3xl border border-pink-100 p-6 sm:p-8 shadow-sm">
@@ -82,6 +96,34 @@ export default async function BrandDetailPage({ params, searchParams }: BrandDet
           <p className="text-xs sm:text-sm text-neutral-500 mt-2 leading-relaxed">
             Compare prices for {brandName} cosmetics. Find authentic listings, customer ratings, shades and maximum discounts across leading stores.
           </p>
+
+          {/* Dynamic Brand Rating & Price Range Stats */}
+          {stats && (stats.priceRange || stats.avgRating) && (
+            <div className="flex flex-wrap items-center gap-2.5 mt-4 pt-4 border-t border-pink-100/60">
+              {stats.priceRange && (
+                <div className="inline-flex items-center gap-1.5 text-xs font-bold text-pink-700 bg-pink-50/80 border border-pink-100 px-3 py-1.5 rounded-xl shadow-2xs">
+                  <span className="text-pink-500">Price Range:</span>
+                  <span className="text-neutral-900">{stats.priceRange}</span>
+                </div>
+              )}
+              {stats.avgRating && (
+                <div className="inline-flex items-center gap-1.5 text-xs font-bold text-amber-800 bg-amber-50/80 border border-amber-200/60 px-3 py-1.5 rounded-xl shadow-2xs">
+                  <span className="text-amber-500">★</span>
+                  <span>{stats.avgRating} / 5</span>
+                  {stats.ratingCount > 0 && (
+                    <span className="text-neutral-500 font-normal text-[11px]">
+                      ({stats.ratingCount.toLocaleString('en-IN')} ratings)
+                    </span>
+                  )}
+                </div>
+              )}
+              {stats.productCount > 0 && (
+                <div className="inline-flex items-center gap-1 text-xs font-medium text-neutral-600 bg-neutral-50 border border-neutral-100 px-3 py-1.5 rounded-xl">
+                  <span>{stats.productCount.toLocaleString('en-IN')} products</span>
+                </div>
+              )}
+            </div>
+          )}
         </div>
       </div>
 
