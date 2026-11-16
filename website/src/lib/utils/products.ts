@@ -133,10 +133,16 @@ export async function getProductBySlugOrId(slugOrId: string, store?: string): Pr
   await connectDB();
   const models = getAllModels().filter(model => !store || model.collection.name === store + '_makeupkhoj');
 
-  // 1. Exact match on id, slug, product_id, asin, or _id
+  // 1. Fast path: Direct index lookup by slug first
+  for (const model of models) {
+    const doc = await model.collection.findOne({ slug: slugOrId });
+    if (doc) return normalizeProduct(doc, model.collection.name.replace('_makeupkhoj', ''));
+  }
+
+  // 2. Exact match on id, asin, product_id, or _id
   // Crawler collections contain both string and ObjectId IDs. Use native reads
   // here so Mongoose cannot cast a slug (or an ID regex) to ObjectId.
-  const exact: any[] = [{ id: slugOrId }, { slug: slugOrId }, { product_id: slugOrId }, { asin: slugOrId }, { _id: slugOrId }];
+  const exact: any[] = [{ id: slugOrId }, { asin: slugOrId }, { product_id: slugOrId }, { _id: slugOrId }];
   if (/^\d+$/.test(slugOrId) && Number.isSafeInteger(Number(slugOrId))) exact.push({ id: Number(slugOrId) }, { product_id: Number(slugOrId) });
   if (ObjectId.isValid(slugOrId) && slugOrId.length === 24) exact.push({ _id: new ObjectId(slugOrId) });
 

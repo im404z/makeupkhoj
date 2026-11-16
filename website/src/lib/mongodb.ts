@@ -26,6 +26,11 @@ export async function connectDB() {
     cached.promise = mongoose.connect(uri, {
       dbName: process.env.MASTER_DB ?? 'makeupkhoj',
       bufferCommands: false,
+      maxPoolSize: 20,
+      minPoolSize: 5,
+      maxIdleTimeMS: 30000,
+      serverSelectionTimeoutMS: 5000,
+      socketTimeoutMS: 20000,
     });
   }
 

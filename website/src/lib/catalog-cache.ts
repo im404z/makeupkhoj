@@ -112,36 +112,93 @@ export async function catalogCacheStatus() {
 
 const pending = new Map<string, Promise<unknown>>();
 
-export async function cachedCatalogRead<T>(scope: string, args: unknown, load: () => Promise<T>): Promise<T> {
-  if (!process.env.REDIS_URL) return load();
-  const settings = await getCatalogCacheSettings().catch(() => undefined);
-  if (!settings?.enabled) return load();
+// High-speed in-memory LRU / TTL cache fallback when Redis is not configured
+interface MemoryCacheEntry {
+  value: unknown;
+  expires: number;
+}
+const memoryCache = new Map<string, MemoryCacheEntry>();
+const MAX_MEMORY_ENTRIES = 2000;
+const DEFAULT_MEMORY_TTL_MS = 5 * 60 * 1000; // 5 minutes
 
+function getMemoryCached<T>(key: string): T | undefined {
+  const entry = memoryCache.get(key);
+  if (!entry) return undefined;
+  if (Date.now() > entry.expires) {
+    memoryCache.delete(key);
+    return undefined;
+  }
+  // LRU bump
+  memoryCache.delete(key);
+  memoryCache.set(key, entry);
+  return entry.value as T;
+}
+
+function setMemoryCached(key: string, value: unknown, ttlMs = DEFAULT_MEMORY_TTL_MS) {
+  if (memoryCache.size >= MAX_MEMORY_ENTRIES) {
+    // Evict oldest 100 entries
+    const iter = memoryCache.keys();
+    for (let i = 0; i < 100; i++) {
+      const k = iter.next().value;
+      if (k) memoryCache.delete(k);
+      else break;
+    }
+  }
+  memoryCache.set(key, { value, expires: Date.now() + ttlMs });
+}
+
+export async function cachedCatalogRead<T>(scope: string, args: unknown, load: () => Promise<T>): Promise<T> {
   const hash = createHash('sha256').update(BSON.EJSON.stringify([
     process.env.MONGODB_URI, process.env.MASTER_DB, args,
   ])).digest('hex');
-  const key = `makeupkhoj:catalog:v1:${settings.generation}:${scope}:${hash}`;
-  const existing = pending.get(key) as Promise<T> | undefined;
-  if (existing) return existing;
+
+  // 1. If Redis is configured, use Redis + settings
+  if (process.env.REDIS_URL) {
+    const settings = await getCatalogCacheSettings().catch(() => undefined);
+    if (!settings?.enabled) return load();
+
+    const key = `makeupkhoj:catalog:v1:${settings.generation}:${scope}:${hash}`;
+    const existing = pending.get(key) as Promise<T> | undefined;
+    if (existing) return existing;
+
+    const result = (async () => {
+      try {
+        const value = await redisCommand(client => client.get(key));
+        if (value) return BSON.EJSON.parse(value) as T;
+      } catch {
+        // A cache outage or invalid entry falls back to MongoDB.
+      }
+      const value = await load();
+      try {
+        const encoded = BSON.EJSON.stringify(value);
+        if (Buffer.byteLength(encoded) <= 1_048_576) {
+          await redisCommand(client => client.set(key, encoded, { expiration: { type: 'EX', value: settings.ttlSeconds } }));
+        }
+      } catch {
+        // The successful database result can still be served.
+      }
+      return value;
+    })().finally(() => pending.delete(key));
+    pending.set(key, result);
+    return result;
+  }
+
+  // 2. Built-in In-Memory LRU Cache (Shields MongoDB from duplicate/frequent queries)
+  const memKey = `${scope}:${hash}`;
+  const cachedVal = getMemoryCached<T>(memKey);
+  if (cachedVal !== undefined) {
+    return cachedVal;
+  }
+
+  const existingPending = pending.get(memKey) as Promise<T> | undefined;
+  if (existingPending) return existingPending;
 
   const result = (async () => {
-    try {
-      const value = await redisCommand(client => client.get(key));
-      if (value) return BSON.EJSON.parse(value) as T;
-    } catch {
-      // A cache outage or invalid entry falls back to MongoDB.
-    }
     const value = await load();
-    try {
-      const encoded = BSON.EJSON.stringify(value);
-      if (Buffer.byteLength(encoded) <= 1_048_576) {
-        await redisCommand(client => client.set(key, encoded, { expiration: { type: 'EX', value: settings.ttlSeconds } }));
-      }
-    } catch {
-      // The successful database result can still be served.
-    }
+    setMemoryCached(memKey, value, DEFAULT_MEMORY_TTL_MS);
     return value;
-  })().finally(() => pending.delete(key));
-  pending.set(key, result);
+  })().finally(() => pending.delete(memKey));
+
+  pending.set(memKey, result);
   return result;
 }

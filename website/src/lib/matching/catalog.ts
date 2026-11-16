@@ -4,6 +4,7 @@ import {normalizeProduct,getProductBySlugOrId} from '@/lib/utils/products';
 import {root,members,liveMembers,rootKeyStages,groupPath,queryGroups} from './engine.mjs';
 import {fingerprint,identity} from './title-matcher.mjs';
 import {cache} from 'react';
+import {cachedCatalogRead} from '@/lib/catalog-cache';
 export async function catalogDB():Promise<any>{const c=await connectDB();const db=c.connection.db;if(!db)throw Error('Database unavailable');return db;}
 export async function catalogEnabled(){return (await (await catalogDB()).collection('catalog_control').findOne({_id:'settings'}))?.enabled===true;}
 async function ensureProductSlug(db:any,node:any,product:any){
@@ -34,12 +35,20 @@ export const getComparison=cache(async(slug:string)=>{
  node=await ensureProductSlug(db,node,offers[0]);
  return {node,path:groupPath(node),offers,held:rows.length-eligible.length};
 });
-export const getProductPage=cache(async(slug:string):Promise<any>=>{
- const comparison=await getComparison(slug);if(comparison)return comparison;
- const product=await getProductBySlugOrId(slug);if(!product)return null;
- const path=await sourceComparisonPath(product);if(path){const matched=await getComparison(path.split('/').at(-1)!);if(matched)return matched;}
- const source=await (await catalogDB()).collection('catalog_sources').findOne({_id:product.marketplace+':'+product._id});
- return {node:{_id:source?.siteSku||product.sku||product.id,title:product.name},path:'/product/'+product.slug,offers:[product],held:0};
+export const getProductPage = cache(async (slug: string): Promise<any> => {
+ return cachedCatalogRead('pdp', slug, async () => {
+  const comparison = await getComparison(slug);
+  if (comparison) return comparison;
+  const product = await getProductBySlugOrId(slug);
+  if (!product) return null;
+  const path = await sourceComparisonPath(product);
+  if (path) {
+    const matched = await getComparison(path.split('/').at(-1)!);
+    if (matched) return matched;
+  }
+  const source = await (await catalogDB()).collection('catalog_sources').findOne({ _id: product.marketplace + ':' + product._id });
+  return { node: { _id: source?.siteSku || product.sku || product.id, title: product.name }, path: '/product/' + product.slug, offers: [product], held: 0 };
+ });
 });
 export async function sourceComparisonPath(product:{marketplace:string;_id:string}){
  if(!await catalogEnabled())return null;
