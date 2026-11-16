@@ -70,11 +70,12 @@ async function queryProductsFromDB(params: ProductQueryParams): Promise<ProductQ
   const matchStages = clauses.length ? [{ $match: match }] : [];
   const numericStages = Object.keys(numeric).length ? [{ $match: numeric }] : [];
   const dropStages = params.priceDropSince ? priceDropPipeline(params.priceDropSince) : [];
-  // Category and recommendation cards only need listing data.
-  const listingStages = (params.categorySlug || params.relatedOnly) && !params.priceDropSince ? [{ $unset: [
+  // Projection: strip heavy fields (reviews, description, specs, variants) from listing queries
+  const listingStages = [{ $unset: [
     'reviews', 'user_reviews', 'customer_photos', 'price_history', 'description_html',
-    'specifications', 'specifications_grouped', 'specsTable', 'variants', 'expiry_date',
-  ] }] : [];
+    'description', 'specifications', 'specifications_grouped', 'specsTable', 'variants',
+    'expiry_date', 'bulletPoints', 'raw_specs', 'details'
+  ] }];
   const filteredStages = (store: string) => [...normalizePipeline(store), ...dropStages, ...numericStages];
   const pipeline = (store: string) => [...matchStages, ...listingStages, ...filteredStages(store)];
   const canDeferNormalization = Boolean(params.categorySlug || params.relatedOnly) && !numericStages.length && !dropStages.length;
@@ -133,9 +134,18 @@ export async function getProductBySlugOrId(slugOrId: string, store?: string): Pr
   await connectDB();
   const models = getAllModels().filter(model => !store || model.collection.name === store + '_makeupkhoj');
 
+  // Projection: Exclude heavy unneeded blob fields
+  const pdpProjection = {
+    reviews: { $slice: 10 },        // Limit reviews to first 10 instead of hundreds
+    customer_photos: { $slice: 10 }, // Limit photos to first 10
+    raw_specs: 0,
+    specsTable: 0,
+    description_html: 0
+  };
+
   // 1. Fast path: Direct index lookup by slug first
   for (const model of models) {
-    const doc = await model.collection.findOne({ slug: slugOrId });
+    const doc = await model.collection.findOne({ slug: slugOrId }, { projection: pdpProjection });
     if (doc) return normalizeProduct(doc, model.collection.name.replace('_makeupkhoj', ''));
   }
 
@@ -147,7 +157,7 @@ export async function getProductBySlugOrId(slugOrId: string, store?: string): Pr
   if (ObjectId.isValid(slugOrId) && slugOrId.length === 24) exact.push({ _id: new ObjectId(slugOrId) });
 
   for (const model of models) {
-    const doc = await model.collection.findOne({ $or: exact });
+    const doc = await model.collection.findOne({ $or: exact }, { projection: pdpProjection });
     if (doc) return normalizeProduct(doc, model.collection.name.replace('_makeupkhoj', ''));
   }
 
