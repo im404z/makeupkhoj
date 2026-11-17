@@ -56,9 +56,20 @@ function loadEnv() {
 async function generateBrandStats() {
   loadEnv();
 
-  const uri = process.env.MONGODB_URI || 'mongodb://admin:8ko92AWggrY2%21@38.45.64.201:27017/?authSource=admin';
-  const dbName = process.env.MASTER_DB || 'makeupkhoj';
   const outputPath = path.join(rootDir, 'src', 'data', 'brand-stats.json');
+
+  if (process.env.MAINTENANCE_MODE === 'true' || !process.env.MONGODB_URI) {
+    console.log(`[Brand Stats Generator] Maintenance mode active or MONGODB_URI not set. Skipping DB connection and reusing existing brand-stats.json.`);
+    if (!fs.existsSync(outputPath)) {
+      const outputDir = path.dirname(outputPath);
+      if (!fs.existsSync(outputDir)) fs.mkdirSync(outputDir, { recursive: true });
+      fs.writeFileSync(outputPath, JSON.stringify({}, null, 2), 'utf8');
+    }
+    return;
+  }
+
+  const uri = process.env.MONGODB_URI;
+  const dbName = process.env.MASTER_DB || 'makeupkhoj';
 
   console.log(`[Brand Stats Generator] Starting 100% dynamic aggregation from MongoDB across all collections...`);
 

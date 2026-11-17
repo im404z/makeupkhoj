@@ -30,7 +30,7 @@ DEFAULT_MONGO_URI = (
     os.getenv('MONGODB_URI') or
     os.getenv('MONGO_URI') or
     os.getenv('MONGO') or
-    'mongodb://admin:8ko92AWggrY2%21@38.45.64.201:27017/?authSource=admin'
+    ''
 )
 
 # Dedicated Single Database for all MakeupKhoj data

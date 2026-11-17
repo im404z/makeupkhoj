@@ -15,9 +15,14 @@ const cached: GlobalMongoose = global._mongoose ?? { conn: null, promise: null }
 if (!global._mongoose) global._mongoose = cached;
 
 export async function connectDB() {
+  // Guard: If maintenance mode is active or MONGODB_URI is absent, prevent any connection
+  if (process.env.MAINTENANCE_MODE === 'true') {
+    throw new Error('DATABASE_DISABLED: Maintenance mode is active. Database connections are disabled.');
+  }
+
   const uri = process.env.MONGODB_URI;
   if (!uri) {
-    throw new Error('Please define MONGODB_URI in .env.local');
+    throw new Error('DATABASE_DISABLED: MONGODB_URI is not defined. Database connections are disabled.');
   }
 
   if (cached.conn) return cached.conn;
@@ -45,4 +50,3 @@ export async function connectDB() {
 }
 
 export default connectDB;
-
