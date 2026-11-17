@@ -9,6 +9,7 @@ import { cache } from 'react';
 import { ObjectId } from 'mongodb';
 import { categoryLeafMatch } from '@/lib/constants/category-leaves';
 import { cachedCatalogRead } from '@/lib/catalog-cache';
+import { getAllBrandStatsMap } from './brand-stats';
 export interface ProductQueryResult { products: Product[]; total: number; page: number; limit: number; totalPages: number; facets?: { brands: Array<{ name: string; count: number }>; categories: Array<{ name: string; count: number }>; marketplaces: Array<{ name: string; count: number }>; priceRange: { min: number; max: number } } }
 export interface CatalogParams { page?: number; limit?: number; category?: string; sub_category?: string; brand?: string | string[]; marketplace?: string | string[]; minPrice?: number; maxPrice?: number; minDiscount?: number; rating?: number; inStockOnly?: boolean; hasImageOnly?: boolean; finish?: string; coverage?: string; skinType?: string; search?: string; sort?: string }
 export function normalizeProduct(doc: any, store?: string): Product {
@@ -39,11 +40,16 @@ export async function queryProducts(params: ProductQueryParams): Promise<Product
 }
 
 async function queryProductsFromDB(params: ProductQueryParams): Promise<ProductQueryResult> {
-  await connectDB();
   const page = Math.max(1, Math.floor(Number(params.page) || 1)), limit = Math.min(100, Math.max(1, Math.floor(Number(params.limit) || 24))), skip = (page - 1) * limit;
   const requested = params.marketplace ? (Array.isArray(params.marketplace) ? params.marketplace : [params.marketplace]).map(s => s.toLowerCase().trim()) : null;
   const stores = CATALOG_STORES.filter(s => !requested || requested.includes(s));
   const empty = { products: [], total: 0, page, limit, totalPages: 1 }; if (!stores.length) return empty;
+
+  try {
+    await connectDB();
+  } catch {
+    return empty;
+  }
   const clauses: any[] = [];
   if (params.categorySlug) clauses.push(categoryLeafMatch(params.categorySlug,params.subSlug));
   const textGroup = (fields: string[], term: string) => ({ $or: fields.map(f => ({ [f]: { $regex: escapeRegex(term.trim().replace(/-/g, ' ')), $options: 'i' } })) });
@@ -131,7 +137,11 @@ async function queryProductsFromDB(params: ProductQueryParams): Promise<ProductQ
 }
 
 export async function getProductBySlugOrId(slugOrId: string, store?: string): Promise<Product | null> {
-  await connectDB();
+  try {
+    await connectDB();
+  } catch {
+    return null;
+  }
   const models = getAllModels().filter(model => !store || model.collection.name === store + '_makeupkhoj');
 
   // Projection: Exclude heavy unneeded blob fields
@@ -226,8 +236,12 @@ export async function getProductBySlugOrId(slugOrId: string, store?: string): Pr
 }
 
 export async function getCrossMarketplaceOffers(product: Product): Promise<Product[]> {
-  await connectDB();
   const offers: Product[] = [product];
+  try {
+    await connectDB();
+  } catch {
+    return offers;
+  }
   const normalize = (v: unknown) => String(v || '').normalize('NFKD').replace(/[\u0300-\u036f]/g, '').toLowerCase().replace(/[^a-z0-9]+/g, ' ').trim();
   const productName = normalize(product.name);
   // Only exact name/brand/variant matches are offers. Similar product titles are
@@ -249,34 +263,45 @@ export const getAllBrandsList = cache(async (): Promise<Array<{ name: string; co
   if (cachedBrandsList && Date.now() - cachedBrandsTime < BRANDS_CACHE_TTL_MS) {
     return cachedBrandsList;
   }
-  await connectDB();
-  const models = getAllModels();
-  const brandMap: Record<string, number> = {};
+  try {
+    await connectDB();
+    const models = getAllModels();
+    const brandMap: Record<string, number> = {};
 
-  for (const model of models) {
-    const brands = await model.aggregate([
-      { $match: { brand: { $exists: true, $ne: '' } } },
-      { $group: { _id: '$brand', count: { $sum: 1 } } },
-      { $sort: { count: -1 } },
-    ]);
-    for (const b of brands) {
-      const name = typeof b._id === 'string' ? b._id.trim() : '';
-      if (!name || name === 'Unknown') continue;
-      brandMap[name] = (brandMap[name] || 0) + b.count;
+    for (const model of models) {
+      const brands = await model.aggregate([
+        { $match: { brand: { $exists: true, $ne: '' } } },
+        { $group: { _id: '$brand', count: { $sum: 1 } } },
+        { $sort: { count: -1 } },
+      ]);
+      for (const b of brands) {
+        const name = typeof b._id === 'string' ? b._id.trim() : '';
+        if (!name || name === 'Unknown') continue;
+        brandMap[name] = (brandMap[name] || 0) + b.count;
+      }
     }
-  }
 
-  const grouped = new Map<string, { name: string; count: number; slug: string; aliases: string[] }>();
-  for (const [name, count] of Object.entries(brandMap).sort((a, b) => b[1] - a[1])) {
-    const slug = slugify(name); if (!slug) continue;
-    const existing = grouped.get(slug);
-    if (existing) { existing.count += count; existing.aliases.push(name); }
-    else grouped.set(slug, { name, count, slug, aliases: [name] });
+    const grouped = new Map<string, { name: string; count: number; slug: string; aliases: string[] }>();
+    for (const [name, count] of Object.entries(brandMap).sort((a, b) => b[1] - a[1])) {
+      const slug = slugify(name); if (!slug) continue;
+      const existing = grouped.get(slug);
+      if (existing) { existing.count += count; existing.aliases.push(name); }
+      else grouped.set(slug, { name, count, slug, aliases: [name] });
+    }
+    const result = [...grouped.values()].sort((a, b) => b.count - a.count);
+    cachedBrandsList = result;
+    cachedBrandsTime = Date.now();
+    return result;
+  } catch {
+    const stats = getAllBrandStatsMap();
+    const list = Object.values(stats).map(s => ({
+      name: s.name,
+      count: s.productCount || 0,
+      slug: s.slug,
+      aliases: s.aliases || [s.name],
+    }));
+    return list;
   }
-  const result = [...grouped.values()].sort((a, b) => b.count - a.count);
-  cachedBrandsList = result;
-  cachedBrandsTime = Date.now();
-  return result;
 });
 
 export async function resolveBrandSlug(slug: string) {

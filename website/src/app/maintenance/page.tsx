@@ -1,5 +1,6 @@
 import React from 'react';
 import Image from 'next/image';
+import Link from 'next/link';
 import type { Metadata } from 'next';
 
 export const metadata: Metadata = {
@@ -74,13 +75,12 @@ export default function MaintenancePage() {
         {/* Contact info / refresh button */}
         <div className="pt-2 border-t border-[#f0e6e0] flex flex-col sm:flex-row items-center justify-between gap-3 text-xs text-[#8c7367]">
           <span>Need help? <a href="mailto:support@makeupkhoj.com" className="text-[#b34026] hover:underline font-medium">support@makeupkhoj.com</a></span>
-          <button 
-            type="button" 
-            onClick={() => { if (typeof window !== 'undefined') window.location.reload(); }}
+          <Link 
+            href="/"
             className="px-3 py-1.5 rounded-lg bg-[#2c1810] text-white hover:bg-[#1a0f0a] transition-colors font-medium text-xs shadow-sm cursor-pointer"
           >
             Check Status
-          </button>
+          </Link>
         </div>
       </div>
 

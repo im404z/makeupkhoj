@@ -20,7 +20,7 @@ export function getCatalogCacheSettings() {
       value: settingsCollection().then(async collection => {
         const row = await collection.findOne(settingsId);
         return row ? { enabled: row.enabled, ttlSeconds: row.ttlSeconds, generation: row.generation } : defaults;
-      }),
+      }).catch(() => defaults),
     };
   }
   return settingsCache.value;

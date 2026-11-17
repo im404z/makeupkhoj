@@ -7,7 +7,11 @@ import {CATALOG_STORES} from './catalog-query';
 import {cachedCatalogRead} from '@/lib/catalog-cache';
 
 export const categoryNavigation = cache((category:string) => cachedCatalogRead('category-navigation', category, async () => {
-  await connectDB();
+  try {
+    await connectDB();
+  } catch {
+    return { items: [], total: 0 };
+  }
   const results = await Promise.all(CATALOG_STORES.map(store =>
     getModelByMarketplace(store)!.aggregate([
       {$match:categoryLeafMatch(category)},

@@ -14,7 +14,11 @@ export function sitemapIndexResponse(paths: string[]) {
   });
 }
 export async function productSitemapPaths(){
-  await connectDB();
-  const groups=await Promise.all(CATALOG_STORES.map(async store=>({store,count:await getModelByMarketplace(store)!.estimatedDocumentCount()})));
-  return [...groups.flatMap(({store,count})=>Array.from({length:Math.ceil(count/SITEMAP_SIZE)},(_,i)=>`/sitemaps/${store}/${i}.xml`)),...Array.from({length:Math.ceil(await comparisonSitemapCount()/SITEMAP_SIZE)},(_,i)=>`/sitemaps/compare/${i}.xml`)];
+  try {
+    await connectDB();
+    const groups=await Promise.all(CATALOG_STORES.map(async store=>({store,count:await getModelByMarketplace(store)!.estimatedDocumentCount()})));
+    return [...groups.flatMap(({store,count})=>Array.from({length:Math.ceil(count/SITEMAP_SIZE)},(_,i)=>`/sitemaps/${store}/${i}.xml`)),...Array.from({length:Math.ceil(await comparisonSitemapCount()/SITEMAP_SIZE)},(_,i)=>`/sitemaps/compare/${i}.xml`)];
+  } catch {
+    return [];
+  }
 }
