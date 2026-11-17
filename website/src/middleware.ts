@@ -1,5 +1,4 @@
-import { NextResponse } from 'next/server';
-import type { NextRequest } from 'next/request';
+import { NextResponse, type NextRequest } from 'next/server';
 
 // Maintenance Mode switch
 // Can be toggled via MAINTENANCE_MODE=true in .env / .env.local
